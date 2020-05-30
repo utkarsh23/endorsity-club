@@ -1,0 +1,26 @@
+{% extends 'noauth/base.html' %}
+{% block main %}
+    <form method="post">
+        {% csrf_token %}
+        <table class="login-form-table">
+            {{ form.as_table }}
+        </table>
+        <div class="mdl-grid login-card-grid">
+            <div class="mdl-cell mdl-cell--6-col">
+                <a href="{% url 'accounts:password_reset' %}">
+                    <button type="button" class="mdl-button mdl-js-button mdl-js-ripple-effect">
+                        Forgot Password?
+                    </button>
+                </a>
+            </div>
+            <div class="mdl-cell mdl-cell--6-col">
+                <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+                    type="submit" value="Login" />
+            </div>
+            {% load socialaccount %}
+            <a href="{% provider_login_url 'google' %}">Google Sign In</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="{% url 'accounts:brand_registration' %}">Sign Up As a Brand</a>&nbsp;&nbsp;&nbsp;
+            <a href="{% url 'accounts:influencer_registration' %}">Sign Up As an Influencer</a>
+        </div>
+    </form>
+{% endblock %}

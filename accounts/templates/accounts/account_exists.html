@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+    <h1>
+        Looks like you already have an endorsity account with this email ID.<br />
+        Do not attempt a Google Sign In, rather enter your email ID and password in the login page.
+    </h1>
+    <a href="{% url 'accounts:password_reset' %}">Forgot Password</a>
+    <a href="{% url 'accounts:login' %}">Login</a>
+</body>
+</html>

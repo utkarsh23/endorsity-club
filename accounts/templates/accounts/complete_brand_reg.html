@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head></head>
+    <body>
+        <div class="mdl-layout">
+            <h3 class="main-heading">Complete Brand Registration</h3>
+            <div class="choose-card-wide mdl-card mdl-shadow--2dp">
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="submit" value="Complete Registration" />
+                </form>
+            </div>
+        </div> 
+    </body>
+</html>

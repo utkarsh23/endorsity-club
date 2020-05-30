@@ -1,0 +1,10 @@
+{% extends 'noauth/base.html' %}
+{% block main %}
+            Great! You have successfully registered.<br />
+            You may go ahead and log in now.<br /><br />
+            <a href="{% url 'accounts:login' %}">
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                  Log In
+                </button>
+            </a>
+{% endblock %}

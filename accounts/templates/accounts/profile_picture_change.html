@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script
+        src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8="
+        crossorigin="anonymous">
+    </script>
+</head>
+<body>
+    <h1 class="main-heading">Change Profile Picture</h1>
+    <div class="container">
+        <div class="change-card-wide mdl-card mdl-shadow--2dp">
+            {% if request.user.get_profile_picture %}
+                    <img class="profile-picture-display" src="{{ request.user.get_profile_picture.url }}" />
+            {% endif %}
+            <br />
+            <form method="post" enctype="multipart/form-data" id="profile_picture_form">
+                {% csrf_token %}
+                <label class="edit-profile-picture" for="id_profile_picture">
+                    <i class="material-icons">edit</i>&nbsp;&nbsp;Select Picture
+                    <input type="file" name="profile_picture" id="id_profile_picture" />
+                </label><br /><br />
+            </form>
+        </div>
+    </div>
+    <script>
+        $('#id_profile_picture').change(function() {
+            $('#profile_picture_form').submit();
+        });
+    </script>
+</body>
+</html>

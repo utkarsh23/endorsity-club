@@ -1,0 +1,10 @@
+{% extends 'noauth/base.html' %}
+{% block main %}
+<form method="post" class="register-form">
+    {% csrf_token %}
+    {{ forms.brand_form.as_p }}
+    {{ forms.user_form.as_p }}
+    <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="submit"
+        value="Register" />
+</form>
+{% endblock %}
