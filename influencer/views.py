@@ -62,40 +62,40 @@ class FacebookConfirmationView(NotFbConnectedInfluencerLoginRequiredMixin, View)
         except:
             return HttpResponseRedirect('/influencer/verify/failed/')
 
-        PAGE_ID_AND_TOKEN_URI = (settings.FACEBOOK_GRAPH_URI +
-            "me/accounts?" +
-            "" +
-            f"access_token={token}")
-        try:
-            page_id_and_token_response = json.loads(requests.get(PAGE_ID_AND_TOKEN_URI).text)
-            print(page_id_and_token_response)
-            page_id = page_id_and_token_response['data'][0]['id']
-            page_token = page_id_and_token_response['data'][0]['access_token']
-        except:
-            pass
+        # PAGE_ID_AND_TOKEN_URI = (settings.FACEBOOK_GRAPH_URI +
+        #     "me/accounts?" +
+        #     "" +
+        #     f"access_token={token}")
+        # try:
+        #     page_id_and_token_response = json.loads(requests.get(PAGE_ID_AND_TOKEN_URI).text)
+        #     print(page_id_and_token_response)
+        #     page_id = page_id_and_token_response['data'][0]['id']
+        #     page_token = page_id_and_token_response['data'][0]['access_token']
+        # except:
+        #     pass
 
-        PAGE_FAN_COUNT_URI = (settings.FACEBOOK_GRAPH_URI +
-            f"{page_id}?fields=instagram_business_account&" +
-            f"access_token={token}") # +
-            # "&fields=fan_count,name")
-        try:
-            page_fan_count_response = json.loads(requests.get(PAGE_FAN_COUNT_URI).text)
-            print(page_fan_count_response)
-            insta_page_id = page_fan_count_response['instagram_business_account']['id']
-        except:
-            pass
+        # PAGE_FAN_COUNT_URI = (settings.FACEBOOK_GRAPH_URI +
+        #     f"{page_id}?fields=instagram_business_account&" +
+        #     f"access_token={token}") # +
+        #     # "&fields=fan_count,name")
+        # try:
+        #     page_fan_count_response = json.loads(requests.get(PAGE_FAN_COUNT_URI).text)
+        #     print(page_fan_count_response)
+        #     insta_page_id = page_fan_count_response['instagram_business_account']['id']
+        # except:
+        #     pass
         
-        URI = (settings.FACEBOOK_GRAPH_URI +
-            f"{insta_page_id}/media?" +
-            f"access_token={token}")
-        page_fan_count_response = json.loads(requests.get(URI).text)['data']
-        print(page_fan_count_response)
-        for idd in page_fan_count_response:
-            URL = (settings.FACEBOOK_GRAPH_URI +
-            f"{idd['id']}/" +
-            "insights?metric=engagement,impressions,reach&" +
-            f"access_token={token}")
-            print(json.loads(requests.get(URL).text))
+        # URI = (settings.FACEBOOK_GRAPH_URI +
+        #     f"{insta_page_id}/media?" +
+        #     f"access_token={token}")
+        # page_fan_count_response = json.loads(requests.get(URI).text)['data']
+        # print(page_fan_count_response)
+        # for idd in page_fan_count_response:
+        #     URL = (settings.FACEBOOK_GRAPH_URI +
+        #     f"{idd['id']}/" +
+        #     "insights?metric=engagement,impressions,reach&" +
+        #     f"access_token={token}")
+        #     print(json.loads(requests.get(URL).text))
         influencer = Influencer.objects.get(user=request.user)
         fb_permissions = FacebookPermissions.objects.get(influencer=influencer)
         my_id = json.loads(requests.get(settings.FACEBOOK_GRAPH_URI + f'me?access_token={token}').text)['id']

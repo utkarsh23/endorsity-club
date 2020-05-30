@@ -14,7 +14,7 @@ urlpatterns = [
     path('facebook-connect/', FacebookConnectView.as_view(), name='fb_connect'),
     path('connect/facebook/', FacebookVerificationView.as_view(), name="fb_verification"),
     path('connect/facebook/confirm/', FacebookConfirmationView.as_view(), name="fb_confirmation"),
-    path('await-verification/', AwaitVerificationView.as_view(), name='await_verification')
+    path('await-verification/', AwaitVerificationView.as_view(), name='await_verification'),
 ]
 
 app_name = 'influencer'
