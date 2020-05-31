@@ -96,6 +96,10 @@ class FacebookPermissions(models.Model):
     pages_read_engagement = models.BooleanField(default=False)
     instagram_basic = models.BooleanField(default=False)
     instagram_manage_insights = models.BooleanField(default=False)
+    user_token = models.TextField(default="")
+    user_id = models.TextField(default="")
+    fb_page_id = models.TextField(default="")
+    ig_page_id = models.TextField(default="")
 
     class Meta:
         verbose_name_plural = 'Facebook Permissions'

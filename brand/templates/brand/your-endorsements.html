@@ -1,9 +1,5 @@
-<!DOCTYPE html>
-<html>
-    <head></head>
-    <body>
-        <h1>Your Endorsements</h1><br>
-        <a href="{% url 'accounts:logout' %}">Logout</a><br>
-        <a href="{% url 'accounts:settings' %}">Settings</a>
-    </body>
-</html>
+{% extends 'brand/base.html' %}
+{% block main %}
+<h1>Your Endorsements</h1><br>
+<a href="{% url 'accounts:settings' %}">Settings</a>
+{% endblock %}

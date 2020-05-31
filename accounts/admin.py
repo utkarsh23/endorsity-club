@@ -65,11 +65,36 @@ class InfluencerAdmin(admin.ModelAdmin):
 
 
 class FacebookPermissionsAdmin(admin.ModelAdmin):
-    list_display = ('influencer', 'pages_read_engagement', 'instagram_basic', 'instagram_manage_insights')
+    list_display = (
+        'influencer',
+        'pages_read_engagement',
+        'instagram_basic',
+        'instagram_manage_insights'
+    )
     list_filter = ('pages_read_engagement', 'instagram_basic', 'instagram_manage_insights')
     fieldsets = (
         (None, {'fields': ('influencer',)}),
-        ('Personal Details', {'fields': ('pages_read_engagement', 'instagram_basic', 'instagram_manage_insights')}),
+        (
+            'Facebook Details',
+            {
+                'fields': (
+                    'user_token',
+                    'user_id',
+                    'fb_page_id',
+                    'ig_page_id',
+                )
+            }
+        ),
+        (
+            'Facebook API Permissions',
+            {
+                'fields': (
+                    'pages_read_engagement',
+                    'instagram_basic',
+                    'instagram_manage_insights'
+                )
+            }
+        ),
     )
 
 admin.site.register(Brand, BrandAdmin)
