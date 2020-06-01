@@ -44,4 +44,5 @@ for provider in providers.registry.get_list():
         provider_urlpatterns += prov_urlpatterns
 urlpatterns += provider_urlpatterns
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += (static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) +
+                static(settings.STATIC_URL, document_root=settings.STATIC_ROOT))
