@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head></head>
+
+<body>
+    <style>
+        .container {
+            width: 45vw;
+            margin: auto;
+        }
+
+        .main-heading {
+            font-family: 'Assistant', sans-serif;
+        }
+
+        .notifications-list * {
+            cursor: pointer;
+            width: 100%;
+        }
+
+        a {
+            text-decoration: none;
+        }
+    </style>
+    <div class="container">
+        <h1 class="main-heading">
+            Notifications
+        </h1>
+        <ul class="notifications-list mdl-list">
+            {% for notification in all_notifications %}
+            <a href="{{ notification.link }}">
+                <li class="mdl-list__item mdl-card mdl-shadow--2dp">
+                    <span class="mdl-list__item-primary-content">
+                        {{ notification.message }}
+                    </span>
+                </li>
+            </a>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+
+</html>

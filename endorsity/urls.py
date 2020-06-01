@@ -28,6 +28,7 @@ urlpatterns = [
     path('socialaccount/signup/', RedirectView.as_view(url=reverse_lazy('accounts:account_exists')), name='socialaccount_signup'),
     path('brand/', include('brand.urls')),
     path('influencer/', include('influencer.urls')),
+    path("notifications/", include('notifications.urls')),
     path('', include('accounts.urls', namespace='accounts')),
 ]
 

@@ -4,6 +4,7 @@ import os
 import requests
 
 from django.conf import settings
+from django.db.models import Q
 from django.views.generic.base import TemplateView, View
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -18,6 +19,8 @@ from influencer.mixins import (
     NotVerifiedAndFbConnectedInfluencerLoginRequiredMixin,
     VerifiedAndFbConnectedInfluencerLoginRequiredMixin,
 )
+
+from notifications.models import Notification
 
 
 class FacebookConnectView(NotFbConnectedInfluencerLoginRequiredMixin, TemplateView):
@@ -132,3 +135,12 @@ class AwaitVerificationView(NotVerifiedAndFbConnectedInfluencerLoginRequiredMixi
 
 class BrandsView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, TemplateView):
     template_name = 'influencer/brands.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['notifications'] = (Notification.objects
+            .filter(user=self.request.user)
+            .order_by('-created_at'))[:8]
+        context['notifs_unread'] = (Notification.objects
+            .filter(Q(user=self.request.user) & Q(is_seen=False)).count())
+        return context

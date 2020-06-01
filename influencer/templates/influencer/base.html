@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html>
 
+{% load static %}
+
 <head>
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css" />
     <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.js" integrity="sha256-DrT5NfxfbHvMHux31Lkhxg42LY6of8TaYyK50jnxRnM=" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -19,7 +22,12 @@
                     <span class="mdl-layout-title">Endorsity</span>
                 </a>
                 <div class="mdl-layout-spacer"></div>
-                <a class="mdl-navigation__link" href="{% url 'accounts:logout' %}">Logout</a>
+                <nav class="mdl-navigation mdl-layout--large-screen-only">
+                    <div id="notifications"
+                        class="material-icons {% if notifs_unread > 0 %}mdl-badge{% endif %} mdl-badge--overlap"
+                        data-badge="{{ notifs_unread }}">notifications</div>
+                    <a class="mdl-navigation__link" href="{% url 'accounts:logout' %}">Logout</a>
+                </nav>
             </div>
         </header>
         <div class="mdl-layout__drawer">
@@ -36,6 +44,17 @@
             </div>
         </main>
     </div>
+    <ul id="notif-log" class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="notifications">
+        {% for notification in notifications %}
+        <a href="{{ notification.link }}">
+            <li class="mdl-menu__item">{{ notification.message }}</li>
+        </a>
+        {% endfor %}
+        <a href="/notifications/">
+            <li class="mdl-menu__item view-all-notifs">View All Notifications</li>
+        </a>
+    </ul>
+    <script src="{% static 'js/notifications.js' %}"></script>
 </body>
 
 </html>
