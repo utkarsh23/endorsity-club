@@ -1,15 +1,11 @@
 import json
 
-from django.core import serializers
-
 from asgiref.sync import async_to_sync
 
 from channels.layers import get_channel_layer
 from channels.generic.websocket import WebsocketConsumer
 
 from notifications.models import Notification
-
-from accounts.models import User
 
 
 class NotificationConsumer(WebsocketConsumer):
@@ -49,19 +45,11 @@ class NotificationConsumer(WebsocketConsumer):
         Requires the following properties in args:
         1. notifs : List of notifications received
         """
-        user_id = args['user_id']
-        message = args['message']
-        link = args['link']
-        channel_layer = get_channel_layer()
-        notification = Notification.objects.create(
-            user=User.objects.get(pk=user_id),
-            message=message,
-            link=link,
-        )
+        notification = args['notification']
         self.send(text_data=json.dumps({
             "function": "new_notifications_received",
             "arguments": {
-                "notifs": [serializers.serialize('json', [notification, ]), ],
+                "notifs": notification,
             }
         }))
     
