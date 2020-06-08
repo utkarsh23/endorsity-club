@@ -9,6 +9,8 @@ from django.views.generic.base import TemplateView, View
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 
+from django_celery_beat.models import PeriodicTask, IntervalSchedule
+
 from accounts.models import (
     FacebookPermissions,
     Influencer,
@@ -126,6 +128,17 @@ class FacebookConfirmationView(NotFbConnectedInfluencerLoginRequiredMixin, View)
             return redirect(reverse_lazy('influencer:fb_failed'))
 
         fb_permissions.save()
+
+        schedule, created = IntervalSchedule.objects.get_or_create(
+            every=30,
+            period=IntervalSchedule.DAYS,
+        )
+        PeriodicTask.objects.create(
+            interval=schedule,
+            name=f'Influencer {fb_permissions.influencer.user.pk} Update User Token',
+            task='accounts.tasks.update_fb_user_token',
+            args=json.dumps([fb_permissions.influencer.user.pk,]),
+        )
         return redirect(reverse_lazy('accounts:landing'))
 
 
