@@ -1,4 +1,28 @@
-{% extends 'noauth/base.html' %}
+{% extends base_template %}
 {% block main %}
-<h1>How It Works</h1>
+<div class="container">
+    <h1>How It Works</h1>
+</div>
+<style>
+    h1 {
+        font-family: 'Eczar', serif !important;
+        font-weight: 300 !important;
+        color: #E0E0E0;
+        margin-top: 5vh;
+    }
+
+    h1::after {
+        content: "";
+        display: block;
+        border-bottom: 4px solid #BDBDBD;
+        width: 15%;
+        position: relative;
+        bottom: -2px;
+    }
+
+    .container {
+        width: 64vw;
+        margin-left: 18vw;
+    }
+</style>
 {% endblock %}

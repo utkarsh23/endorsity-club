@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 
@@ -5,25 +6,109 @@
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css" />
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
     <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 </head>
 
 <body>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500&family=Eczar&family=Rubik:wght@300;400&display=swap');
 
+        * {
+            font-family: 'Rubik', sans-serif;
+            font-weight: 400;
+        }
+
+        button {
+            color: #EEEEEE !important;
+            font-family: 'Rubik', sans-serif !important;
+            padding-top: 1px !important;
+        }
+
+        button.mdl-button--colored {
+            color: #161A1D !important;
+            background-color: #EEEEEE !important;
+        }
+
+        body {
+            background-color: #161A1D;
+        }
+
+        .mdl-layout__header {
+            background-color: transparent;
+            box-shadow: none;
+            margin-top: 3vh;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            padding-top: 5px;
+        }
+
+        .logo-img {
+            height: 4vw;
+        }
+
+        .logo-text {
+            font-size: 2em;
+            padding-left: 10px;
+            font-family: 'Roboto Slab', serif;
+            color: #E0E0E0;
+        }
+
+        .mdl-layout__drawer-button {
+            margin-top: 4.5vh;
+        }
+
+        .mdl-layout__drawer-button>i {
+            font-size: 1.2em;
+            color: #EEEEEE;
+        }
     </style>
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
         <header class="mdl-layout__header">
             <div class="mdl-layout__header-row">
-                <a href="{% url 'accounts:landing' %}">
-                    <span class="mdl-layout-title">Endorsity</span>
+                <a href="{% url 'accounts:landing' %}" class="logo-container">
+                    <img src="{% static 'logo.png' %}" alt="Endorsity" class="logo-img" />
+                    <div class="logo-text">ENDORSITY</div>
+                    <!-- <span class="mdl-layout-title">Endorsity</span> -->
                 </a>
                 <div class="mdl-layout-spacer"></div>
-                <a class="mdl-navigation__link" href="{% url 'accounts:login' %}">Login / Sign Up</a>
+                <a href="{% url 'accounts:how_it_works' %}" class="mdl-navigation__link">
+                    <button class="mdl-button mdl-js-button">
+                        How It Works
+                    </button>
+                </a>
+                <a href="#" class="mdl-navigation__link">
+                    <button class="mdl-button mdl-js-button">
+                        How Are We Different
+                    </button>
+                </a>
+                <a class="mdl-navigation__link" href="{% url 'accounts:contact_us' %}">
+                    <button class="mdl-button mdl-js-button">
+                        <i class="material-icons">question_answer</i>
+                        &nbsp;&nbsp;Contact Us
+                    </button>
+                </a>
+                <a class="mdl-navigation__link" href="{% url 'accounts:faq' %}">
+                    <button class="mdl-button mdl-js-button">
+                        <i class="material-icons">help</i>
+                        &nbsp;&nbsp;FAQ
+                    </button>
+                </a>
+                <a class="mdl-navigation__link" href="{% url 'accounts:login' %}">
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                        <i class="material-icons">login</i>
+                        &nbsp;&nbsp;Login or Sign Up
+                    </button>
+                </a>
             </div>
         </header>
-        <div class="mdl-layout__drawer">
-            <span class="mdl-layout-title">Endorsity</span>
+        <div class="mdl-layout__drawer mdl-layout--small-screen-only">
+            <!-- <span class="mdl-layout-title">Endorsity</span> -->
             <nav class="mdl-navigation">
                 <a class="mdl-navigation__link" href="{% url 'accounts:how_it_works' %}">How It Works</a>
                 <a class="mdl-navigation__link" href="{% url 'accounts:contact_us' %}">Contact Us</a>

@@ -8,6 +8,7 @@ from django.contrib.auth.views import (
     PasswordChangeDoneView,
     PasswordContextMixin,
 )
+from django.db.models import Q
 from django.shortcuts import render, redirect, resolve_url
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -41,6 +42,8 @@ from accounts.utils import (
     center_crop_and_square_image,
     resize_image,
 )
+
+from notifications.models import Notification
 
 
 class LandingPageView(View):
@@ -260,3 +263,32 @@ class ProfilePictureChangeView(RegisteredLoginRequiredMixin, FormView):
         center_crop_and_square_image(os.path.join(settings.BASE_DIR, user.profile_picture.url[1:]))
         resize_image(os.path.join(settings.BASE_DIR, user.profile_picture.url[1:]))
         return super().form_valid(form)
+
+
+class NoAuthView(TemplateView):
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            context['notifications'] = (Notification.objects
+                .filter(user=self.request.user)
+                .order_by('-created_at'))[:8]
+            context['notifs_unread'] = (Notification.objects
+                .filter(Q(user=self.request.user) & Q(is_seen=False)).count())
+            if self.request.user.is_it_brand:
+                base_template = 'brand/base.html'
+            else:
+                base_template = 'influencer/base.html'
+        else:
+            base_template = 'noauth/base.html'
+        context['base_template'] = base_template
+        return context
+
+
+class AccountExistsView(View):
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect(reverse_lazy('accounts:landing'))
+        else:
+            return render(request, 'accounts/account_exists.html')

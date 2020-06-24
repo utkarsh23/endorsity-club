@@ -1,12 +1,38 @@
-<!DOCTYPE html>
-<html>
-<head></head>
-<body>
-    <h1>
-        Looks like you already have an endorsity account with this email ID.<br />
-        Do not attempt a Google Sign In, rather enter your email ID and password in the login page.
-    </h1>
-    <a href="{% url 'accounts:password_reset' %}">Forgot Password</a>
-    <a href="{% url 'accounts:login' %}">Login</a>
-</body>
-</html>
+{% extends 'noauth/base.html' %}
+{% block main %}
+<div class="container">
+    Looks like you already have an endorsity account with this email ID.<br /><br />
+    Do not attempt a Google Sign In, rather enter your email ID and password in the login page.
+    <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--12-col">
+            <a href="{% url 'accounts:login' %}">
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                Go To Login
+            </button>
+            </a>
+        </div>
+    </div>
+</div>
+<style>
+    .container {
+        font-size: 1.5em;
+        width: 40vw;
+        margin-left: 30vw;
+        margin-top: 10vh;
+        background-color: #EEEEEE;
+        padding: 2vh 2vw;
+        border-radius: 5px;
+    }
+    .mdl-grid {
+        margin-top: 2vh;
+    }
+    .mdl-grid button.mdl-button {
+        background-color: #161A1D !important;
+        color: #EEEEEE !important;
+        font-family: 'Rubik', sans-serif !important;
+        padding-top: 1px !important;
+        text-align: center;
+        width: 100%;
+    }
+</style>
+{% endblock %}

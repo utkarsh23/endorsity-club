@@ -17,6 +17,8 @@ from accounts.views import (
     ProfilePictureChangeView,
     BrandCreationView,
     InfluencerCreationView,
+    NoAuthView,
+    AccountExistsView,
 )
 
 urlpatterns = [
@@ -45,10 +47,10 @@ urlpatterns = [
     path('password_change/', PasswordChangeView.as_view(), name='password_change'),
     path('password_change/done/', PasswordChangeDoneView.as_view(), name='password_change_done'),
     path('profile_picture_change/', ProfilePictureChangeView.as_view(), name='profile_picture_change'),
-    path('account-exists/', TemplateView.as_view(template_name='accounts/account_exists.html'), name='account_exists'),
-    path('howitworks/', TemplateView.as_view(template_name='noauth/howitworks.html'), name='how_it_works'),
-    path('faq/', TemplateView.as_view(template_name='noauth/faq.html'), name='faq'),
-    path('contactus/', TemplateView.as_view(template_name='noauth/contactus.html'), name='contact_us'),
+    path('account-exists/', AccountExistsView.as_view(), name='account_exists'),
+    path('howitworks/', NoAuthView.as_view(template_name='noauth/howitworks.html'), name='how_it_works'),
+    path('faq/', NoAuthView.as_view(template_name='noauth/faq.html'), name='faq'),
+    path('contactus/', NoAuthView.as_view(template_name='noauth/contactus.html'), name='contact_us'),
 ]
 
 app_name = 'accounts'
