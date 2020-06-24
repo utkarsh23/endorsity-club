@@ -32,6 +32,11 @@ urlpatterns = [
     path('', include('accounts.urls', namespace='accounts')),
 ]
 
+handler404 = 'accounts.views.handler404'
+handler500 = 'accounts.views.handler500'
+handler403 = 'accounts.views.handler403'
+handler400 = 'accounts.views.handler400'
+
 
 provider_urlpatterns = []
 for provider in providers.registry.get_list():

@@ -1,6 +1,7 @@
 {% extends 'noauth/base.html' %}
 {% block main %}
 <div class="form-wrapper">
+    <div class="heading">Brand Registration</div>
     <form method="post" class="register-form">
         {% csrf_token %}
         {{ forms.brand_form.as_p }}
@@ -34,6 +35,12 @@
 
     .button-container {
         width: 100%;
+        text-align: center;
+    }
+
+    .heading {
+        font-size: 2em;
+        margin-bottom: 3vh;
         text-align: center;
     }
 </style>

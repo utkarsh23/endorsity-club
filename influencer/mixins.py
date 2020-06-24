@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import AccessMixin
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
 from django.urls import reverse
 
@@ -16,8 +17,10 @@ from accounts.models import FacebookPermissions, Influencer
 
 class NotFbConnectedInfluencerLoginRequiredMixin(AccessMixin):
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated or request.user.is_brand:
+        if not request.user.is_authenticated:
             return redirect(reverse('accounts:landing'))
+        if request.user.is_brand:
+            raise PermissionDenied
         if not request.user.is_registered:
             return redirect(reverse('accounts:check_registration'))
         influencer = Influencer.objects.get(user=request.user)
@@ -29,8 +32,10 @@ class NotFbConnectedInfluencerLoginRequiredMixin(AccessMixin):
 
 class NotVerifiedAndFbConnectedInfluencerLoginRequiredMixin(AccessMixin):
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated or request.user.is_brand:
+        if not request.user.is_authenticated:
             return redirect(reverse('accounts:landing'))
+        if request.user.is_brand:
+            raise PermissionDenied
         if not request.user.is_registered:
             return redirect(reverse('accounts:check_registration'))
         influencer = Influencer.objects.get(user=request.user)
@@ -44,8 +49,10 @@ class NotVerifiedAndFbConnectedInfluencerLoginRequiredMixin(AccessMixin):
 
 class VerifiedAndFbConnectedInfluencerLoginRequiredMixin(AccessMixin):
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated or request.user.is_brand:
+        if not request.user.is_authenticated:
             return redirect(reverse('accounts:landing'))
+        if request.user.is_brand:
+            raise PermissionDenied
         if not request.user.is_registered:
             return redirect(reverse('accounts:check_registration'))
         influencer = Influencer.objects.get(user=request.user)
