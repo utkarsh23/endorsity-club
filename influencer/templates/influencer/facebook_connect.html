@@ -1,6 +1,84 @@
-{% extends 'influencer/base.html' %}
+{% extends 'influencer/inactive_base.html' %}
 {% block main %}
-You need to add your facebook page to your instagram creator account and connect to facebook.
-<a href="/influencer/connect/facebook/">Facebook Connect</a>
-<a href="/settings">Settings</a>
+<div class="container">
+    <div class="i-container"><i class="material-icons">integration_instructions</i></div><br />
+    <div class="heading">
+        We require all the permissions asked for while connecting to facebook for the following reasons.
+        <ul>
+            <li>We need permissions to allow influencers to add their posts onto our platform so that brands can see them.</li>
+            <li>We need permissions to show statistical insights for these posts to brands.</li>
+        </ul>
+        To successfully connect to facebook:
+        <ol>
+            <li>
+                Add your facebook page to your instagram creator account. You need to follow the instructions linked
+                below. You may skip this step if you have already added a facebook page to your instagram creator
+                account.
+                <div class="button-container">
+                    <a target="__blank" href="https://help.instagram.com/399237934150902">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                            <i class="material-icons">open_in_new</i>
+                            &nbsp;&nbsp;Instructions
+                        </button>
+                    </a>
+                </div>
+            </li>
+            <li>
+                Connect to facebook. Select your facebook page
+                <div class="button-container">
+                    <a href="{% url 'influencer:fb_verification' %}">
+                        <button class="fb-button mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                            Connect To Facebook
+                        </button>
+                    </a>
+                </div>
+            </li>
+        </ol>
+    </div>
+</div>
+<style>
+    .container {
+        background-color: #EEEEEE;
+        color: #161A1D;
+        padding: 2vh 2vh;
+        width: 40vw;
+        margin-left: 30vw;
+        border-radius: 5px;
+        font-size: 1.5em;
+        margin-top: 10vh;
+    }
+
+    ol,
+    ul {
+        font-size: 1em;
+        line-height: 1.2;
+    }
+
+    .container i {
+        font-size: 1.5em;
+    }
+
+    .i-container>i {
+        font-size: 4em;
+        width: 100%;
+        text-align: center;
+    }
+
+    .container .mdl-button {
+        color: #EEEEEE !important;
+        background-color: #161A1D !important;
+        margin-top: 2vh;
+        margin-bottom: 2vh;
+        width: 100%;
+    }
+
+    .container .fb-button {
+        background-color: #4267B2 !important;
+        color: #ffffff !important;
+    }
+
+    .button-container {
+        text-align: center;
+    }
+</style>
 {% endblock %}

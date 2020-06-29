@@ -1,0 +1,46 @@
+{% extends 'accounts/activation/base.html' %}
+{% block main %}
+<div class="container">
+    <div class="i-container"><i class="material-icons">hourglass_top</i></div><br />
+    <div class="heading">
+        Account activation pending.<br />
+        Please go to your email inbox and click on the account activation link.<br /><br />
+        Sometimes it may several minutes to receive the activation mail.<br />
+        Still don't see it?<br /><br />
+    </div>
+    <div class="button-container">
+        <a href="{% url 'accounts:activation_resend' %}">
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                Resend Activation Mail
+            </button>
+        </a>
+    </div>
+</div>
+<style>
+    .container {
+        background-color: #EEEEEE;
+        color: #161A1D;
+        padding: 2vh 2vh;
+        width: 40vw;
+        margin-left: 30vw;
+        border-radius: 5px;
+        font-size: 1.5em;
+        margin-top: 10vh;
+    }
+
+    .i-container>i {
+        font-size: 4em;
+        width: 100%;
+        text-align: center;
+    }
+
+    .container .mdl-button {
+        background-color: #161A1D !important;
+        color: #EEEEEE !important;
+    }
+
+    .button-container {
+        text-align: center;
+    }
+</style>
+{% endblock %}

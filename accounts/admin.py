@@ -31,7 +31,7 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ('is_admin', 'is_brand')
     fieldsets = (
         (None, {'fields': ('created_at', 'profile_picture', 'email', 'password')}),
-        ('Permissions', {'fields': ('is_admin', 'is_brand', 'is_registered', 'is_google_account')}),
+        ('Permissions', {'fields': ('is_admin', 'is_brand', 'is_account_activated', 'is_registered', 'is_google_account')}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
@@ -69,9 +69,10 @@ class FacebookPermissionsAdmin(admin.ModelAdmin):
         'influencer',
         'pages_read_engagement',
         'instagram_basic',
-        'instagram_manage_insights'
+        'instagram_manage_insights',
+        'pages_show_list',
     )
-    list_filter = ('pages_read_engagement', 'instagram_basic', 'instagram_manage_insights')
+    list_filter = ('pages_read_engagement', 'instagram_basic', 'instagram_manage_insights', 'pages_show_list')
     fieldsets = (
         (None, {'fields': ('influencer',)}),
         (
@@ -91,7 +92,8 @@ class FacebookPermissionsAdmin(admin.ModelAdmin):
                 'fields': (
                     'pages_read_engagement',
                     'instagram_basic',
-                    'instagram_manage_insights'
+                    'instagram_manage_insights',
+                    'pages_show_list',
                 )
             }
         ),

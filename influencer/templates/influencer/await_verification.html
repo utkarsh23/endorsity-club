@@ -1,5 +1,28 @@
-{% extends 'influencer/base.html' %}
+{% extends 'influencer/inactive_base.html' %}
 {% block main %}
-<h1>You have to await verification from endorsity.</h1>
-<a href="/settings">Settings</a>
+<div class="container">
+    <div class="i-container"><i class="material-icons">pending</i></div><br />
+    <div class="heading">
+        Pending Verification from Endorsity.<br />
+    </div>
+</div>
+<style>
+    .container {
+        background-color: #EEEEEE;
+        color: #161A1D;
+        padding: 2vh 2vh;
+        width: 40vw;
+        margin-left: 30vw;
+        border-radius: 5px;
+        font-size: 1.5em;
+        margin-top: 10vh;
+        text-align: center;
+    }
+
+    .i-container>i {
+        font-size: 4em;
+        width: 100%;
+        text-align: center;
+    }
+</style>
 {% endblock %}

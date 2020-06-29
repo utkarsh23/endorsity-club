@@ -41,6 +41,8 @@ class FacebookVerificationView(NotFbConnectedInfluencerLoginRequiredMixin, View)
             permissions.append('instagram_basic')
         if not fb_permissions.instagram_manage_insights:
             permissions.append('instagram_manage_insights')
+        if not fb_permissions.pages_show_list:
+            permissions.append('pages_show_list')
         permissions_string = '%2C'.join(permissions)
         # https://developers.google.com/identity/protocols/oauth2/openid-connect?hl=fr#python
         # handle state by saving random state in session state variable & checking in the view
@@ -108,6 +110,8 @@ class FacebookConfirmationView(NotFbConnectedInfluencerLoginRequiredMixin, View)
                         fb_permissions.instagram_manage_insights = True
                     elif permissionobj['permission'] == 'pages_read_engagement':
                         fb_permissions.pages_read_engagement = True
+                    elif permissionobj['permission'] == 'pages_show_list':
+                        fb_permissions.pages_show_list = True
 
             # fb page id
             FB_PAGE_ID_URI = (settings.FACEBOOK_GRAPH_URI +
@@ -133,6 +137,11 @@ class FacebookConfirmationView(NotFbConnectedInfluencerLoginRequiredMixin, View)
             every=30,
             period=IntervalSchedule.DAYS,
         )
+        current_task = PeriodicTask.objects.filter(
+            name=f'Influencer {fb_permissions.influencer.user.pk} Update User Token'
+        )
+        if current_task.exists():
+            current_task.delete()
         PeriodicTask.objects.create(
             interval=schedule,
             name=f'Influencer {fb_permissions.influencer.user.pk} Update User Token',

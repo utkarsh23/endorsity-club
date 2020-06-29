@@ -1,0 +1,58 @@
+{% extends 'accounts/account_change/base.html' %}
+{% block main %}
+<div class="container">
+    <div class="heading">Change Profile Picture</div>
+    <div>
+        {% if request.user.get_profile_picture %}
+        <img class="profile-picture-display" src="{{ request.user.get_profile_picture.url }}" />
+        {% endif %}
+        <br />
+        <form method="post" enctype="multipart/form-data" id="profile_picture_form">
+            {% csrf_token %}
+            <label class="edit-profile-picture" for="id_profile_picture">
+                <i class="material-icons">edit</i>&nbsp;&nbsp;Select Picture
+                <input type="file" name="profile_picture" id="id_profile_picture" />
+            </label><br /><br />
+        </form>
+    </div>
+</div>
+<script>
+    $('#id_profile_picture').change(function () {
+        $('#profile_picture_form').submit();
+    });
+    $('.edit-profile-picture').addClass('mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent')
+</script>
+<style>
+    .container {
+        background-color: #EEEEEE;
+        color: #161A1D;
+        border-radius: 5px;
+        width: 40vw;
+        margin-left: 30vw;
+        padding: 2vh 2vw;
+        text-align: center;
+        margin-top: 10vh;
+    }
+
+    .heading {
+        font-size: 2em;
+        margin-bottom: 3vh;
+        text-align: center;
+    }
+
+    .edit-profile-picture>input {
+        display: none;
+    }
+
+    .profile-picture-display {
+        margin-bottom: 2vh;
+    }
+
+    .container .mdl-button {
+        color: #EEEEEE !important;
+        background-color: #161A1D !important;
+        margin-top: 1vh;
+        margin-bottom: 2vh;
+    }
+</style>
+{% endblock %}

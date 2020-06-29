@@ -78,49 +78,6 @@
             vertical-align: middle;
             font-size: 1.3em;
         }
-
-        .top-menu {
-            width: 40vw;
-            text-align: center;
-            margin-top: 3vh;
-            border: 2px solid #EEEEEE;
-            border-radius: 5px;
-            padding: 0;
-            background-color: #EEEEEE;
-            color: #161A1D;
-        }
-
-        .top-menu i {
-            vertical-align: middle;
-        }
-
-        .top-menu a {
-            text-decoration: none;
-            color: inherit;
-            width: 100%;
-        }
-
-        .top-menu .mdl-cell {
-            padding: 8px;
-            border-radius: 5px;
-        }
-
-        .top-menu .is-active {
-            background-color: #161A1D;
-            color: #EEEEEE;
-        }
-
-        .view-all-notifs {
-            background-color: #161A1D !important;
-            color: #EEEEEE !important;
-            margin: 10px 10px;
-            border-radius: 10px;
-        }
-
-        #notifications {
-            margin-left: 2vw;
-            margin-right: 1vw;
-        }
     </style>
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
         <header class="mdl-layout__header">
@@ -152,58 +109,29 @@
                         &nbsp;&nbsp;FAQ
                     </button>
                 </a>
-                <div id="notifications"
-                    class="material-icons {% if notifs_unread > 0 %}mdl-badge{% endif %} mdl-badge--overlap"
-                    data-badge="{{ notifs_unread }}">
-                    notifications
-                </div>
-                <a class="mdl-navigation__link" href="{% url 'accounts:logout' %}">
-                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                        <i class="material-icons">exit_to_app</i>
-                        &nbsp;&nbsp;Logout
-                    </button>
-                </a>
+                <button id="settings-menu" class="mdl-button mdl-js-button mdl-button--icon">
+                    <i class="material-icons">account_circle</i>
+                </button>
             </div>
         </header>
-        <ul id="notif-log" class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="notifications">
-            {% for notification in notifications %}
-            <a href="{{ notification.link }}">
-                <li class="mdl-menu__item">{{ notification.message }}</li>
+        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="settings-menu">
+            <a href="{% url 'accounts:settings' %}">
+                <li class="mdl-menu__item">
+                    Settings
+                </li>
             </a>
-            {% endfor %}
-            <a class="all-notifs-link" href="/notifications/">
-                <li class="mdl-menu__item view-all-notifs">View All Notifications</li>
+            <a href="{% url 'accounts:logout' %}">
+                <li class="mdl-menu__item">
+                    Logout
+                </li>
             </a>
         </ul>
-        <div class="top-menu mdl-grid">
-            <div class="mdl-cell mdl-cell--4-col is-active">
-                <a href="{% url 'influencer:brands' %}">
-                    <i class="material-icons">local_offer</i>
-                    &nbsp;BRANDS
-                </a>
-            </div>
-            <div class="mdl-cell mdl-cell--4-col">
-                <a href="#">
-                    <i class="material-icons">favorite</i>
-                    &nbsp;POST
-                </a>
-            </div>
-            <div class="mdl-cell mdl-cell--4-col">
-                <a href="#">
-                    <i class="material-icons">account_circle</i>
-                    &nbsp;PROFILE
-                </a>
-            </div>
-        </div>
         <main class="mdl-layout__content">
             <div class="page-content">
                 {% block main %}{% endblock %}
-                <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-                <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
             </div>
         </main>
     </div>
-    <script src="{% static 'js/notifications.js' %}"></script>
 </body>
 
 </html>

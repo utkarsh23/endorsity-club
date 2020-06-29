@@ -1,0 +1,81 @@
+{% extends 'accounts/account_change/base.html' %}
+{% block main %}
+<div class="container">
+    <div class="heading">Settings</div>
+    <div class="sub-heading">Account Details</div>
+    <div class="button-container">
+        <a href="{% url 'accounts:profile_picture_change' %}">
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                <i class="material-icons">person</i>
+                &nbsp;&nbsp;Change Profile Picture
+            </button>
+        </a>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <p>Email address<br />
+            <span class="email-val">{{ user.get_username }}</span></p>
+        {{ form.as_p }}
+        <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="submit"
+            value="Save" />
+    </form>
+    {% if not user.is_it_google_account %}
+    <div class="sub-heading">Security</div>
+    <div class="button-container">
+        <a href="{% url 'accounts:password_change' %}">
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                <i class="material-icons">security</i>
+                &nbsp;&nbsp;Change Password
+            </button>
+        </a>
+    </div>
+    {% endif %}
+</div>
+<script>
+    $('p input').addClass('mdl-textfield__input');
+</script>
+<style>
+    .container {
+        width: 40vw;
+        background-color: #EEEEEE;
+        border-radius: 5px;
+        color: #161A1D;
+        padding: 2vh 2vw;
+        margin-top: 10vh;
+        margin-left: 30vw;
+    }
+
+    .heading {
+        font-size: 2em;
+        text-align: center;
+        margin-bottom: 3vh;
+    }
+
+    .sub-heading {
+        font-size: 1.3em;
+        margin-top: 2vh;
+    }
+
+    .button-container {
+        text-align: center;
+        width: 100%;
+    }
+
+    .button-container .mdl-button {
+        color: #EEEEEE !important;
+        background-color: #161A1D !important;
+        margin-top: 2vh;
+        margin-bottom: 2vh;
+        text-align: center;
+        width: 100%;
+    }
+
+    form .mdl-button {
+        color: #EEEEEE !important;
+        background-color: #161A1D !important;
+        margin-top: 1vh;
+        margin-bottom: 2vh;
+        width: 100%;
+    }
+</style>
+{% endblock %}

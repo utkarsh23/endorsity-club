@@ -1,10 +1,26 @@
 {% extends 'noauth/base.html' %}
 {% block main %}
-            Great! You have successfully registered.<br />
-            You may go ahead and log in now.<br /><br />
-            <a href="{% url 'accounts:login' %}">
-                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                  Log In
-                </button>
-            </a>
+<div class="container">
+    <i class="material-icons">check_circle</i><br /><br />
+    Great! You have successfully registered.<br /><br />
+    We have emailed you the account activation link. Visit your inbox and click on this activation link to activate your
+    account.
+</div>
+<style>
+    .container {
+        background-color: #EEEEEE;
+        color: #161A1D;
+        width: 40vw;
+        margin-left: 30vw;
+        padding: 2vh 2vw;
+        border-radius: 5px;
+        margin-top: 10vh;
+        font-size: 1.5em;
+        text-align: center;
+    }
+
+    .container i {
+        font-size: 4em;
+    }
+</style>
 {% endblock %}

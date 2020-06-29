@@ -1,0 +1,42 @@
+{% extends 'accounts/complete_registration/base.html' %}
+{% block main %}
+<div class="container">
+    <div class="heading">Complete Registration</div>
+    <div>
+        <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+            href="{% url 'accounts:complete_brand_reg' %}">
+            <i class="material-icons">local_offer</i>
+            &nbsp;&nbsp;I'm A Brand
+        </a>
+        <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+            href="{% url 'accounts:complete_influencer_reg' %}">
+            <i class="material-icons">how_to_reg</i>
+            &nbsp;&nbsp;I'm An Influencer
+        </a>
+    </div>
+</div>
+<style>
+    .container {
+        background-color: #EEEEEE;
+        border-radius: 5px;
+        color: #161A1D;
+        width: 40vw;
+        margin-left: 30vw;
+        margin-top: 10vh;
+        padding: 2vh 2vw;
+    }
+
+    .heading {
+        text-align: center;
+        font-size: 2em;
+        margin-bottom: 2vh;
+    }
+
+    .container .mdl-button {
+        color: #EEEEEE !important;
+        background-color: #161A1D !important;
+        margin-top: 2vh;
+        width: 100%;
+    }
+</style>
+{% endblock %}

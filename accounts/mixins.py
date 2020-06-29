@@ -9,6 +9,8 @@ class RegisteredLoginRequiredMixin(AccessMixin):
             return redirect(reverse('accounts:landing'))
         if not request.user.is_registered:
             return redirect(reverse('accounts:check_registration'))
+        if not request.user.is_account_activated:
+            return redirect(reverse('accounts:activation_pending'))
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -24,5 +26,13 @@ class NoGoogleAuthLoginRequiredMixin(AccessMixin):
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated or \
             request.user.is_google_account:
+            return redirect(reverse('accounts:landing'))
+        return super().dispatch(request, *args, **kwargs)
+
+
+class NotActivatedLoginRequiredMixin(AccessMixin):
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated or \
+            request.user.is_account_activated:
             return redirect(reverse('accounts:landing'))
         return super().dispatch(request, *args, **kwargs)

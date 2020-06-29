@@ -1,6 +1,7 @@
 import os
 
 from django.conf import settings
+from django.contrib.auth import get_user_model, login
 from django.contrib.auth.views import (
     LoginView,
     PasswordResetView,
@@ -8,10 +9,13 @@ from django.contrib.auth.views import (
     PasswordChangeDoneView,
     PasswordContextMixin,
 )
+from django.contrib.sites.shortcuts import get_current_site
 from django.db.models import Q
 from django.shortcuts import render, redirect, resolve_url
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
+from django.utils.encoding import force_text
+from django.utils.http import urlsafe_base64_decode
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic.base import TemplateView, View
@@ -31,13 +35,16 @@ from accounts.forms import (
 from accounts.mixins import (
     NoGoogleAuthLoginRequiredMixin,
     RegisteredLoginRequiredMixin,
-    UnregisteredLoginRequiredMixin
+    UnregisteredLoginRequiredMixin,
+    NotActivatedLoginRequiredMixin,
 )
 from accounts.models import (
     Brand,
     FacebookPermissions,
     Influencer,
 )
+from accounts.tasks import send_activation_email
+from accounts.tokens import account_activation_token
 from accounts.utils import (
     center_crop_and_square_image,
     resize_image,
@@ -45,6 +52,8 @@ from accounts.utils import (
 
 from notifications.models import Notification
 
+
+user_model = get_user_model()
 
 def handler404(request, exception):
     return render(request, 'errors/404.html', status=404)
@@ -87,9 +96,9 @@ class LoginView(LoginView):
 
 
 class PasswordResetView(PasswordResetView):
-    template_name = 'accounts/password_reset_form.html'
-    email_template_name = 'accounts/password_reset_email.html'
-    subject_template_name = 'accounts/password_reset_subject.txt'
+    template_name = 'accounts/password_reset/password_reset_form.html'
+    email_template_name = 'accounts/password_reset/password_reset_email.html'
+    subject_template_name = 'accounts/password_reset/password_reset_subject.txt'
     form_class = PasswordResetForm
     success_url = reverse_lazy('accounts:password_reset_done')
 
@@ -112,7 +121,7 @@ class PasswordResetView(PasswordResetView):
 
 
 class PasswordResetDoneView(PasswordContextMixin, TemplateView):
-    template_name = 'accounts/password_reset_done.html'
+    template_name = 'accounts/password_reset/password_reset_done.html'
     title = 'Password reset sent'
 
     def get(self, request, *args, **kwargs):
@@ -144,14 +153,16 @@ class BrandCreationView(MultiModelFormView):
         return reverse_lazy('accounts:registration_complete')
     
     def forms_valid(self, forms):
-        brand = forms['brand_form'].save(commit=False)
         user = forms['user_form'].save(commit=False)
         user.is_brand = True
         user.is_registered = True
         user.is_google_account = False
+        user.is_account_activated = False
         user.save()
+        brand = forms['brand_form'].save(commit=False)
         brand.user = user
         brand.save()
+        send_activation_email.delay(user.pk, get_current_site(self.request))
         return super().forms_valid(forms)
 
 
@@ -170,12 +181,43 @@ class InfluencerCreationView(MultiModelFormView):
         user = forms['user_form'].save(commit=False)
         user.is_registered = True
         user.is_google_account = False
+        user.is_account_activated = False
         user.save()
         influencer = forms['influencer_form'].save(commit=False)
         influencer.user = user
         influencer.save()
         fb_permissions = FacebookPermissions.objects.create(influencer=influencer)
+        send_activation_email.delay(user.pk, get_current_site(self.request))
         return super().forms_valid(forms)
+
+
+class ActivateAccount(View):
+
+    def get(self, request, uidb64, token, *args, **kwargs):
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = user_model.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, user_model.DoesNotExist):
+            user = None
+
+        if user is not None and account_activation_token.check_token(user, token):
+            user.is_account_activated = True
+            user.save()
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            return redirect(reverse_lazy('accounts:landing'))
+        else:
+            return redirect(reverse_lazy('accounts:activation_failed'))
+
+
+class AuthActivationView(NotActivatedLoginRequiredMixin, TemplateView):
+    pass
+
+
+class ResendActivationMail(NotActivatedLoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        send_activation_email.delay(request.user.pk, get_current_site(request))
+        return redirect(reverse_lazy('accounts:activation_resend_done'))
 
 
 class CheckRegistrationView(UnregisteredLoginRequiredMixin, View):
@@ -188,11 +230,11 @@ class CheckRegistrationView(UnregisteredLoginRequiredMixin, View):
 
 
 class SelectRegistrationView(UnregisteredLoginRequiredMixin, TemplateView):
-    template_name = 'accounts/select_registration.html'
+    template_name = 'accounts/complete_registration/select_registration.html'
 
 
 class CompleteBrandRegistrationView(UnregisteredLoginRequiredMixin, FormView):
-    template_name = 'accounts/complete_brand_reg.html'
+    template_name = 'accounts/complete_registration/complete_brand_reg.html'
     form_class = BrandCreationForm
     success_url = reverse_lazy('accounts:landing')
 
@@ -208,7 +250,7 @@ class CompleteBrandRegistrationView(UnregisteredLoginRequiredMixin, FormView):
 
 
 class CompleteInfluencerRegistrationView(UnregisteredLoginRequiredMixin, FormView):
-    template_name = 'accounts/complete_influencer_reg.html'
+    template_name = 'accounts/complete_registration/complete_influencer_reg.html'
     form_class = InfluencerCreationForm
     success_url = reverse_lazy('accounts:landing')
 
@@ -224,16 +266,16 @@ class CompleteInfluencerRegistrationView(UnregisteredLoginRequiredMixin, FormVie
 
 
 class PasswordChangeView(NoGoogleAuthLoginRequiredMixin, PasswordChangeView):
-    template_name = 'accounts/password_change_form.html'
+    template_name = 'accounts/account_change/password_change_form.html'
     success_url = reverse_lazy('accounts:password_change_done')
 
 
 class PasswordChangeDoneView(NoGoogleAuthLoginRequiredMixin, PasswordChangeDoneView):
-    template_name = 'accounts/password_change_done.html'
+    template_name = 'accounts/account_change/password_change_done.html'
 
 
 class SettingsView(RegisteredLoginRequiredMixin, FormView):
-    template_name = 'accounts/settings.html'
+    template_name = 'accounts/account_change/settings.html'
     success_url = reverse_lazy('accounts:settings')
 
     def get_form_class(self):
@@ -248,6 +290,17 @@ class SettingsView(RegisteredLoginRequiredMixin, FormView):
             if self.request.user.is_brand else
             Influencer.objects.get(user=self.request.user))
         return form_class(**self.get_form_kwargs(), instance=instance)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_registered and self.request.user.is_account_activated:
+            if self.request.user.is_brand:
+                context['base_template'] = 'brand/base.html'
+            else:
+                context['base_template'] = 'influencer/base.html'
+        else:
+            context['base_template'] = 'accounts/inactive_base.html'
+        return context
     
     def form_valid(self, form):
         form.save()
@@ -255,7 +308,7 @@ class SettingsView(RegisteredLoginRequiredMixin, FormView):
 
 
 class ProfilePictureChangeView(RegisteredLoginRequiredMixin, FormView):
-    template_name = 'accounts/profile_picture_change.html'
+    template_name = 'accounts/account_change/profile_picture_change.html'
     success_url = reverse_lazy('accounts:profile_picture_change')
     form_class = ProfilePictureChangeForm
 
@@ -288,10 +341,7 @@ class NoAuthView(TemplateView):
                 .order_by('-created_at'))[:8]
             context['notifs_unread'] = (Notification.objects
                 .filter(Q(user=self.request.user) & Q(is_seen=False)).count())
-            if self.request.user.is_it_brand:
-                base_template = 'brand/base.html'
-            else:
-                base_template = 'influencer/base.html'
+            base_template = 'noauth/inactive_base.html'
         else:
             base_template = 'noauth/base.html'
         context['base_template'] = base_template

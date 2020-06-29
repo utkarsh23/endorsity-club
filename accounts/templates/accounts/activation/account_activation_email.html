@@ -1,0 +1,11 @@
+{% autoescape off %}
+Hi,
+
+You need to activate your user account at {{ site_name }}.
+
+Please go to the following page to activate your account:
+https://{{ domain }}{% url 'accounts:activate' uidb64=uid token=token %}
+
+Thanks for using our platform!
+The Endorsity Team
+{% endautoescape %}

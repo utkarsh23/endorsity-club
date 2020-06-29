@@ -1,0 +1,39 @@
+{% extends 'accounts/complete_registration/base.html' %}
+{% block main %}
+<div class="container">
+    <div class="heading">Complete Brand Registration</div>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="submit"
+            value="Complete Registration" />
+    </form>
+</div>
+<script>
+    $('p input').addClass('mdl-textfield__input');
+</script>
+<style>
+    .container {
+        width: 40vw;
+        margin-left: 30vw;
+        background-color: #EEEEEE;
+        color: #161A1D;
+        border-radius: 5px;
+        margin-top: 10vh;
+        padding: 2vh 2vw;
+    }
+
+    .heading {
+        font-size: 2em;
+        text-align: center;
+        margin-bottom: 4vh;
+    }
+
+    .container .mdl-button {
+        color: #EEEEEE !important;
+        background-color: #161A1D !important;
+        margin-top: 2vh;
+        width: 100%;
+    }
+</style>
+{% endblock %}

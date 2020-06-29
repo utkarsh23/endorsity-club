@@ -12,4 +12,6 @@ class RegisteredBrandLoginRequiredMixin(AccessMixin):
             raise PermissionDenied
         if not request.user.is_registered:
             return redirect(reverse('accounts:check_registration'))
+        if not request.user.is_account_activated:
+            return redirect(reverse('accounts:activation_pending'))
         return super().dispatch(request, *args, **kwargs)

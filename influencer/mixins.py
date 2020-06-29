@@ -23,6 +23,8 @@ class NotFbConnectedInfluencerLoginRequiredMixin(AccessMixin):
             raise PermissionDenied
         if not request.user.is_registered:
             return redirect(reverse('accounts:check_registration'))
+        if not request.user.is_account_activated:
+            return redirect(reverse('accounts:activation_pending'))
         influencer = Influencer.objects.get(user=request.user)
         fb_permissions = FacebookPermissions.objects.get(influencer=influencer)
         if fb_permissions.has_all_permissions:
@@ -38,6 +40,8 @@ class NotVerifiedAndFbConnectedInfluencerLoginRequiredMixin(AccessMixin):
             raise PermissionDenied
         if not request.user.is_registered:
             return redirect(reverse('accounts:check_registration'))
+        if not request.user.is_account_activated:
+            return redirect(reverse('accounts:activation_pending'))
         influencer = Influencer.objects.get(user=request.user)
         fb_permissions = FacebookPermissions.objects.get(influencer=influencer)
         if not fb_permissions.has_all_permissions:
@@ -55,6 +59,8 @@ class VerifiedAndFbConnectedInfluencerLoginRequiredMixin(AccessMixin):
             raise PermissionDenied
         if not request.user.is_registered:
             return redirect(reverse('accounts:check_registration'))
+        if not request.user.is_account_activated:
+            return redirect(reverse('accounts:activation_pending'))
         influencer = Influencer.objects.get(user=request.user)
         fb_permissions = FacebookPermissions.objects.get(influencer=influencer)
         if not fb_permissions.has_all_permissions:

@@ -7,6 +7,8 @@ from django.dispatch import receiver
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
+from django_celery_beat.models import PeriodicTask
+
 from accounts.managers import UserManager
 
 
@@ -31,6 +33,7 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     is_brand = models.BooleanField(default=False)
+    is_account_activated = models.BooleanField(default=True)
     is_google_account = models.BooleanField(default=True)
     is_registered = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -59,15 +62,23 @@ class User(AbstractBaseUser):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
-    
+
     @property
     def is_it_brand(self):
         return self.is_brand
-    
+
+    @property
+    def is_it_account_activated(self):
+        return self.is_account_activated
+
+    @property
+    def is_it_registered(self):
+        return self.is_registered
+
     @property
     def is_it_google_account(self):
         return self.is_google_account
-    
+
     @property
     def get_profile_picture(self):
         return self.profile_picture
@@ -96,6 +107,7 @@ class FacebookPermissions(models.Model):
     pages_read_engagement = models.BooleanField(default=False)
     instagram_basic = models.BooleanField(default=False)
     instagram_manage_insights = models.BooleanField(default=False)
+    pages_show_list = models.BooleanField(default=False)
     user_token = models.TextField(default="")
     user_id = models.TextField(default="")
     fb_page_id = models.TextField(default="")
@@ -111,6 +123,7 @@ class FacebookPermissions(models.Model):
     def has_all_permissions(self):
         return (self.pages_read_engagement and
             self.instagram_basic and
+            self.pages_show_list and
             self.instagram_manage_insights)
 
 
@@ -123,3 +136,13 @@ def auto_delete_file_on_delete(sender, instance, **kwargs):
     if instance.profile_picture:
         if os.path.isfile(instance.profile_picture.path):
             os.remove(instance.profile_picture.path)
+
+
+@receiver(models.signals.post_delete, sender=Influencer)
+def auto_delete_celery_task_on_delete(sender, instance, **kwargs):
+    user_pk = instance.user.pk
+    celery_periodic_task = PeriodicTask.objects.filter(
+        name=f'Influencer {user_pk} Update User Token'
+    )
+    if celery_periodic_task.exists():
+        celery_periodic_task.delete()
