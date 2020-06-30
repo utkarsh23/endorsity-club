@@ -3,15 +3,17 @@
 <div class="container">
     <div class="heading">Complete Registration</div>
     <div>
-        <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
-            href="{% url 'accounts:complete_brand_reg' %}">
-            <i class="material-icons">local_offer</i>
-            &nbsp;&nbsp;I'm A Brand
+        <a href="{% url 'accounts:complete_brand_reg' %}">
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                <i class="material-icons">local_offer</i>
+                &nbsp;&nbsp;I'm A Brand
+            </button>
         </a>
-        <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
-            href="{% url 'accounts:complete_influencer_reg' %}">
-            <i class="material-icons">how_to_reg</i>
-            &nbsp;&nbsp;I'm An Influencer
+        <a href="{% url 'accounts:complete_influencer_reg' %}">
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                <i class="material-icons">how_to_reg</i>
+                &nbsp;&nbsp;I'm An Influencer
+            </button>
         </a>
     </div>
 </div>

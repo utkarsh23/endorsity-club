@@ -6,6 +6,8 @@
         {% csrf_token %}
         {{ forms.influencer_form.as_p }}
         {{ forms.user_form.as_p }}
+        <div class="h-captcha" data-sitekey="563ac64e-bb9b-47a7-8729-162c2ecf7dda"></div>
+        <script src="https://hcaptcha.com/1/api.js" async defer></script>
         <div class="button-container">
             <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
                 type="submit" value="Register" />
@@ -14,13 +16,15 @@
 </div>
 <script>
     $('p input').addClass('mdl-textfield__input');
+    $('label[for="id_phone_number"]').html('Phone number (10-digit):');
 </script>
 <style>
     .form-wrapper {
         background-color: #EEEEEE;
         width: 40vw;
         margin-left: 30vw;
-        margin-top: 10vh;
+        margin-top: 4vh;
+        margin-bottom: 4vh;
         border-radius: 5px;
         padding: 2vh 2vw;
     }

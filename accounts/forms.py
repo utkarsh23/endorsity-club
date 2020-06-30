@@ -80,31 +80,65 @@ class UserCreationForm(forms.ModelForm):
 
 
 class BrandCreationForm(forms.ModelForm):
+    store_location = forms.CharField(max_length=500)
 
     class Meta(object):
         model = Brand
-        fields = ['name']
+        fields = ['name', 'phone_number', 'website', 'instagram_handle']
+
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get("phone_number")
+        if len(phone_number) != 10:
+            raise forms.ValidationError("Please enter a 10-digit phone number.")
+        if not phone_number.isdigit():
+            raise forms.ValidationError("Please enter all digits only.")
+        return phone_number
 
 
 class InfluencerCreationForm(forms.ModelForm):
 
     class Meta(object):
         model = Influencer
-        fields = ['first_name', 'last_name']
+        fields = ['first_name', 'last_name', 'phone_number']
+
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get("phone_number")
+        if len(phone_number) != 10:
+            raise forms.ValidationError("Please enter a 10-digit phone number.")
+        if not phone_number.isdigit():
+            raise forms.ValidationError("Please enter all digits only.")
+        return phone_number
 
 
 class BrandChangeForm(forms.ModelForm):
+    store_location = forms.CharField(max_length=500)
 
     class Meta(object):
         model = Brand
-        fields = ['name']
+        fields = ['name', 'phone_number', 'website', 'instagram_handle']
+
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get("phone_number")
+        if len(phone_number)  != 10:
+            raise forms.ValidationError("Please enter a 10-digit phone number.")
+        if not phone_number.isdigit():
+            raise forms.ValidationError("Please enter all digits only.")
+        return phone_number
 
 
 class InfluencerChangeForm(forms.ModelForm):
 
     class Meta(object):
         model = Influencer
-        fields = ['first_name', 'last_name']
+        fields = ['first_name', 'last_name', 'phone_number']
+
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get("phone_number")
+        if len(phone_number) != 10:
+            raise forms.ValidationError("Please enter a 10-digit phone number.")
+        if not phone_number.isdigit():
+            raise forms.ValidationError("Please enter all digits only.")
+        return phone_number
 
 
 class ProfilePictureChangeForm(forms.ModelForm):

@@ -1,4 +1,5 @@
 import os
+import uuid
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser
@@ -86,16 +87,33 @@ class User(AbstractBaseUser):
 
 class Brand(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    name = models.CharField(max_length=100, blank=True, null=True)
+    name = models.CharField(max_length=100, null=True)
+    phone_number = models.CharField(max_length=10)
+    website = models.URLField(max_length=200, blank=True, null=True)
+    instagram_handle = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return self.user.email
+
+
+class Location(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
+    name = models.CharField(max_length=500)
+    latitude = models.CharField(max_length=100)
+    longitude = models.CharField(max_length=100)
+    active = models.BooleanField(default=False)
+    city = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name
 
 
 class Influencer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=10)
     is_verified = models.BooleanField(default=False)
 
     def __str__(self):

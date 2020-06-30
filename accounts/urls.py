@@ -40,7 +40,7 @@ urlpatterns = [
     path('register/brand/', BrandCreationView.as_view(), name='brand_registration'),
     path('register/influencer/', InfluencerCreationView.as_view(), name='influencer_registration'),
     path('register/done/', TemplateView.as_view(
-        template_name="accounts/complete_registration/registration_complete.html",
+        template_name="accounts/registration_complete.html",
         ), name='registration_complete'),
     path('activate/pending/', AuthActivationView.as_view(
         template_name='accounts/activation/account_activation_pending.html'

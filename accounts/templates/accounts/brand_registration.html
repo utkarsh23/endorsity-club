@@ -6,21 +6,40 @@
         {% csrf_token %}
         {{ forms.brand_form.as_p }}
         {{ forms.user_form.as_p }}
+        <div class="h-captcha" data-sitekey="563ac64e-bb9b-47a7-8729-162c2ecf7dda"></div>
+        <script src="https://hcaptcha.com/1/api.js" async defer></script>
         <div class="button-container">
             <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
                 type="submit" value="Register" />
         </div>
     </form>
 </div>
+<div class="mdl-tooltip mdl-tooltip--large mdl-tooltip--right" for="store-location-label">
+    If you have multiple stores, you can add other store locations from the dashboard after registration.
+</div>
 <script>
     $('p input').addClass('mdl-textfield__input');
+    $('label[for="id_phone_number"]').html('Phone number (10-digit):');
+    $('label[for="id_website"]').html('Website (Optional):');
+    $('label[for="id_instagram_handle"]').html('Instagram handle (Optional):');
+    $('label[for="id_store_location"]').attr('id', 'store-location-label');
+    $('label[for="id_store_location"]').append('&nbsp;<i class="material-icons">info</i>');
+    var initializeMaps = () => {
+        var maps_input = document.getElementById('id_store_location');
+        new google.maps.places.Autocomplete(maps_input);
+        $('#id_store_location').attr('placeholder', '');
+    };
 </script>
+<script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpgqiVV0SVKh5pRtddZkxtrMD4Gtty3xk&libraries=places&callback=initializeMaps"
+    async defer></script>
 <style>
     .form-wrapper {
         background-color: #EEEEEE;
         width: 40vw;
         margin-left: 30vw;
-        margin-top: 10vh;
+        margin-top: 4vh;
+        margin-bottom: 4vh;
         border-radius: 5px;
         padding: 2vh 2vw;
     }
@@ -31,11 +50,13 @@
         font-family: 'Rubik', sans-serif !important;
         padding-top: 1px !important;
         text-align: center;
+        width: 100%;
     }
 
     .button-container {
         width: 100%;
         text-align: center;
+        margin-top: 2vh;
     }
 
     .heading {
@@ -48,6 +69,16 @@
         background-color: #DD2C00;
         border-radius: 5px;
         color: #EEEEEE;
+    }
+
+    .mdl-tooltip {
+        font-size: 0.8em;
+    }
+
+    p>label>i.material-icons {
+        font-size: 1.2em;
+        vertical-align: middle;
+        padding-bottom: 3px;
     }
 </style>
 {% endblock %}

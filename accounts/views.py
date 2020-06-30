@@ -1,4 +1,7 @@
+import json
 import os
+import requests
+import urllib.parse
 
 from django.conf import settings
 from django.contrib.auth import get_user_model, login
@@ -40,6 +43,7 @@ from accounts.mixins import (
 )
 from accounts.models import (
     Brand,
+    Location,
     FacebookPermissions,
     Influencer,
 )
@@ -119,6 +123,19 @@ class PasswordResetView(PasswordResetView):
             return redirect(redirect_to)
         return super().dispatch(*args, **kwargs)
 
+    def form_valid(self, form):
+        try:
+            data = {
+                'secret': settings.HCAPTCHA_SECRET,
+                'response': self.request.POST['h-captcha-response'],
+            }
+            response = requests.post('https://hcaptcha.com/siteverify', data=data).json()
+            if response['success'] == False:
+                return self.form_invalid(form)
+        except:
+            return self.form_invalid(form)
+        return super().form_valid(form)
+
 
 class PasswordResetDoneView(PasswordContextMixin, TemplateView):
     template_name = 'accounts/password_reset/password_reset_done.html'
@@ -153,6 +170,26 @@ class BrandCreationView(MultiModelFormView):
         return reverse_lazy('accounts:registration_complete')
     
     def forms_valid(self, forms):
+        store_location = forms['brand_form'].cleaned_data['store_location']
+        try:
+            GEOCODE_URI = (settings.GOOGLE_MAPS_URI +
+                f'?address={urllib.parse.quote_plus(store_location)}' +
+                f'&key={settings.GOOGLE_MAPS_SERVER_API_KEY}')
+            resp = json.loads(requests.get(GEOCODE_URI).text)
+            lat_lng = resp['results'][0]['geometry']['location']
+            for component in resp['results'][0]['address_components']:
+                if 'locality' in component['types']:
+                    city = component['long_name']
+                    break
+            data = {
+                'secret': settings.HCAPTCHA_SECRET,
+                'response': self.request.POST['h-captcha-response'],
+            }
+            response = requests.post('https://hcaptcha.com/siteverify', data=data).json()
+            if response['success'] == False:
+                return self.form_invalid(form)
+        except:
+            return super().form_invalid(forms)
         user = forms['user_form'].save(commit=False)
         user.is_brand = True
         user.is_registered = True
@@ -162,6 +199,13 @@ class BrandCreationView(MultiModelFormView):
         brand = forms['brand_form'].save(commit=False)
         brand.user = user
         brand.save()
+        location = Location.objects.create(
+            brand=brand,
+            name=store_location,
+            latitude=lat_lng['lat'],
+            longitude=lat_lng['lng'],
+            city=city,
+        )
         send_activation_email.delay(user.pk, get_current_site(self.request))
         return super().forms_valid(forms)
 
@@ -178,6 +222,16 @@ class InfluencerCreationView(MultiModelFormView):
         return reverse_lazy('accounts:registration_complete')
     
     def forms_valid(self, forms):
+        try:
+            data = {
+                'secret': settings.HCAPTCHA_SECRET,
+                'response': self.request.POST['h-captcha-response'],
+            }
+            response = requests.post('https://hcaptcha.com/siteverify', data=data).json()
+            if response['success'] == False:
+                return self.form_invalid(form)
+        except:
+            return self.form_invalid(form)
         user = forms['user_form'].save(commit=False)
         user.is_registered = True
         user.is_google_account = False
@@ -239,6 +293,19 @@ class CompleteBrandRegistrationView(UnregisteredLoginRequiredMixin, FormView):
     success_url = reverse_lazy('accounts:landing')
 
     def form_valid(self, form):
+        store_location = form.cleaned_data['store_location']
+        try:
+            GEOCODE_URI = (settings.GOOGLE_MAPS_URI +
+                f'?address={urllib.parse.quote_plus(store_location)}' +
+                f'&key={settings.GOOGLE_MAPS_SERVER_API_KEY}')
+            resp = json.loads(requests.get(GEOCODE_URI).text)
+            lat_lng = resp['results'][0]['geometry']['location']
+            for component in resp['results'][0]['address_components']:
+                if 'locality' in component['types']:
+                    city = component['long_name']
+                    break
+        except:
+            return super().form_invalid(form)
         brand = form.save(commit=False)
         user = self.request.user
         user.is_brand = True
@@ -246,6 +313,13 @@ class CompleteBrandRegistrationView(UnregisteredLoginRequiredMixin, FormView):
         user.save()
         brand.user = user
         brand.save()
+        location = Location.objects.create(
+            brand=brand,
+            name=store_location,
+            latitude=lat_lng['lat'],
+            longitude=lat_lng['lng'],
+            city=city,
+        )
         return super().form_valid(form)
 
 

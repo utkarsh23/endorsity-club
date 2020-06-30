@@ -11,6 +11,7 @@
 </div>
 <script>
     $('p input').addClass('mdl-textfield__input');
+    $('label[for="id_phone_number"]').html('Phone number (10-digit):');
 </script>
 <style>
     .container {
@@ -34,6 +35,12 @@
         background-color: #161A1D !important;
         margin-top: 2vh;
         width: 100%;
+    }
+
+    .errorlist {
+        background-color: #DD2C00;
+        border-radius: 5px;
+        color: #EEEEEE;
     }
 </style>
 {% endblock %}

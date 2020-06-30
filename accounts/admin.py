@@ -10,6 +10,7 @@ from accounts.forms import (
 )
 from accounts.models import (
     Brand,
+    Location,
     Influencer,
     FacebookPermissions
 )
@@ -51,7 +52,16 @@ class BrandAdmin(admin.ModelAdmin):
     list_filter = ('name', )
     fieldsets = (
         (None, {'fields': ('user',)}),
-        ('Personal Details', {'fields': ('name',)}),
+        ('Details', {'fields': ('name', 'phone_number', 'website', 'instagram_handle')}),
+    )
+
+
+class LocationAdmin(admin.ModelAdmin):
+    list_display = ('brand', 'name', 'active', 'latitude', 'longitude', 'city')
+    list_filter = ('brand', 'active', 'city')
+    readonly_fields = ('id',)
+    fieldsets = (
+        (None, {'fields': ('id','brand', 'name', 'active', 'latitude', 'longitude', 'city')}),
     )
 
 
@@ -60,7 +70,7 @@ class InfluencerAdmin(admin.ModelAdmin):
     list_filter = ('first_name', 'last_name')
     fieldsets = (
         (None, {'fields': ('user', 'is_verified')}),
-        ('Personal Details', {'fields': ('first_name', 'last_name')}),
+        ('Personal Details', {'fields': ('first_name', 'last_name', 'phone_number')}),
     )
 
 
@@ -100,6 +110,7 @@ class FacebookPermissionsAdmin(admin.ModelAdmin):
     )
 
 admin.site.register(Brand, BrandAdmin)
+admin.site.register(Location, LocationAdmin)
 admin.site.register(Influencer, InfluencerAdmin)
 admin.site.register(FacebookPermissions, FacebookPermissionsAdmin)
 admin.site.register(UserModel, UserAdmin)
