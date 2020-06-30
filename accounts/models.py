@@ -126,10 +126,12 @@ class FacebookPermissions(models.Model):
     instagram_basic = models.BooleanField(default=False)
     instagram_manage_insights = models.BooleanField(default=False)
     pages_show_list = models.BooleanField(default=False)
-    user_token = models.TextField(default="")
-    user_id = models.TextField(default="")
-    fb_page_id = models.TextField(default="")
-    ig_page_id = models.TextField(default="")
+    user_token = models.TextField()
+    user_id = models.TextField()
+    fb_page_id = models.TextField()
+    ig_page_id = models.TextField()
+    ig_username = models.CharField(max_length=200, blank=True)
+    ig_follower_count = models.CharField(max_length=200, blank=True)
 
     class Meta:
         verbose_name_plural = 'Facebook Permissions'
@@ -159,8 +161,14 @@ def auto_delete_file_on_delete(sender, instance, **kwargs):
 @receiver(models.signals.post_delete, sender=Influencer)
 def auto_delete_celery_task_on_delete(sender, instance, **kwargs):
     user_pk = instance.user.pk
-    celery_periodic_task = PeriodicTask.objects.filter(
+    celery_user_token_periodic_task = PeriodicTask.objects.filter(
         name=f'Influencer {user_pk} Update User Token'
     )
-    if celery_periodic_task.exists():
-        celery_periodic_task.delete()
+    if celery_user_token_periodic_task.exists():
+        celery_user_token_periodic_task.delete()
+
+    celery_follower_count_periodic_task = PeriodicTask.objects.filter(
+        name=f'Influencer {user_pk} Update Follower Count'
+    )
+    if celery_follower_count_periodic_task.exists():
+        celery_follower_count_periodic_task.delete()

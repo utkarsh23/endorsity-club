@@ -128,6 +128,16 @@ class FacebookConfirmationView(NotFbConnectedInfluencerLoginRequiredMixin, View)
             ig_page_id_response = json.loads(requests.get(IG_PAGE_ID_URI).text)
             ig_page_id = ig_page_id_response['instagram_business_account']['id']
             fb_permissions.ig_page_id = ig_page_id
+
+            # ig username
+            IG_USER_INFO_URI = (settings.FACEBOOK_GRAPH_URI +
+                f"{ig_page_id}?fields=username%2Cfollowers_count&" +
+                f"access_token={long_lived_token}")
+            ig_user_info_response = json.loads(requests.get(IG_USER_INFO_URI).text)
+            ig_username = ig_user_info_response['username']
+            ig_follower_count = ig_user_info_response['followers_count']
+            fb_permissions.ig_username = ig_username
+            fb_permissions.ig_follower_count = ig_follower_count
         except:
             return redirect(reverse_lazy('influencer:fb_failed'))
 
@@ -146,6 +156,22 @@ class FacebookConfirmationView(NotFbConnectedInfluencerLoginRequiredMixin, View)
             interval=schedule,
             name=f'Influencer {fb_permissions.influencer.user.pk} Update User Token',
             task='accounts.tasks.update_fb_user_token',
+            args=json.dumps([fb_permissions.influencer.user.pk,]),
+        )
+
+        schedule, created = IntervalSchedule.objects.get_or_create(
+            every=3,
+            period=IntervalSchedule.HOURS,
+        )
+        current_task = PeriodicTask.objects.filter(
+            name=f'Influencer {fb_permissions.influencer.user.pk} Update Follower Count'
+        )
+        if current_task.exists():
+            current_task.delete()
+        PeriodicTask.objects.create(
+            interval=schedule,
+            name=f'Influencer {fb_permissions.influencer.user.pk} Update Follower Count',
+            task='accounts.tasks.update_ig_follower_count',
             args=json.dumps([fb_permissions.influencer.user.pk,]),
         )
         return redirect(reverse_lazy('accounts:landing'))

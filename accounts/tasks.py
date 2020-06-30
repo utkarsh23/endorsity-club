@@ -36,6 +36,22 @@ def update_fb_user_token(user_pk):
     fb_permissions.save()
 
 @app.task
+def update_ig_follower_count(user_pk):
+    try:
+        user = User.objects.get(pk=user_pk)
+        influencer = Influencer.objects.get(user=user)
+        fb_permissions = FacebookPermissions.objects.get(influencer=influencer)
+        IG_USER_INFO_URI = (settings.FACEBOOK_GRAPH_URI +
+            f"{fb_permissions.ig_page_id}?fields=followers_count&" +
+            f"access_token={fb_permissions.user_token}")
+        ig_user_info_response = json.loads(requests.get(IG_USER_INFO_URI).text)
+        ig_follower_count = ig_user_info_response['followers_count']
+        fb_permissions.ig_follower_count = ig_follower_count
+    except:
+        return
+    fb_permissions.save()
+
+@app.task
 def send_activation_email(user_pk, site):
     user = User.objects.get(pk=user_pk)
     subject = f'Activate your {site.domain} account'
