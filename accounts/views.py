@@ -373,7 +373,7 @@ class SettingsView(RegisteredLoginRequiredMixin, FormView):
             else:
                 context['base_template'] = 'influencer/base.html'
         else:
-            context['base_template'] = 'accounts/inactive_base.html'
+            context['base_template'] = 'accounts/noauth/auth_base.html'
         return context
     
     def form_valid(self, form):
@@ -415,7 +415,7 @@ class NoAuthView(TemplateView):
                 .order_by('-created_at'))[:8]
             context['notifs_unread'] = (Notification.objects
                 .filter(Q(user=self.request.user) & Q(is_seen=False)).count())
-            base_template = 'noauth/inactive_base.html'
+            base_template = 'noauth/auth_base.html'
         else:
             base_template = 'noauth/base.html'
         context['base_template'] = base_template

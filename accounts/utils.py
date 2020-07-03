@@ -17,5 +17,5 @@ def center_crop_and_square_image(image_path):
 
 def resize_image(image_path):
     im = Image.open(image_path).convert('RGB')
-    im.thumbnail((500, 2000), Image.ANTIALIAS)
+    im.thumbnail((500, 500), Image.ANTIALIAS)
     im.save(image_path)

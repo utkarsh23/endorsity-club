@@ -7,6 +7,7 @@ from influencer.views import (
     FacebookVerificationFailedView,
     FacebookConfirmationView,
     AwaitVerificationView,
+    ProfileView,
 )
 
 
@@ -17,6 +18,7 @@ urlpatterns = [
     path('connect/facebook/failed/', FacebookVerificationFailedView.as_view(), name='fb_failed'),
     path('connect/facebook/confirm/', FacebookConfirmationView.as_view(), name="fb_confirmation"),
     path('await-verification/', AwaitVerificationView.as_view(), name='await_verification'),
+    path('profile/', ProfileView.as_view(), name="profile"),
 ]
 
 app_name = 'influencer'

@@ -1,0 +1,384 @@
+{% extends 'influencer/base.html' %}
+{% block main %}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<div class="container">
+    <div class="mdl-grid main-grid">
+        <div class="mdl-cell mdl-cell--3-col first-section">
+            {% if request.user.get_profile_picture %}
+            <img class="profile-picture-display" src="{{ request.user.get_profile_picture.url }}" />
+            {% else %}
+            <i class="material-icons placeholder-profile-picture">account_circle</i>
+            {% endif %}
+            <div class="details">
+                <div class="name">
+                    {{ fb_permissions.influencer.first_name }}
+                    {{ fb_permissions.influencer.last_name }}
+                </div>
+                <svg class="instagram-svg" viewBox="0 0 24 24">
+                    <path fill="#EEEEEE"
+                        d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z">
+                    </path>
+                </svg>
+                &nbsp;&nbsp;&nbsp;{{ fb_permissions.ig_username }}&nbsp;|&nbsp;{{ fb_permissions.ig_follower_count }}
+                followers&nbsp;&nbsp;<i id="follower-count-info" class="material-icons info-icon">info</i><br />
+                <div class="details-link">
+                    <i class="material-icons">link</i>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a class="details-insta-anchor" href="https://instagram.com/{{ fb_permissions.ig_username }}"
+                        target="_blank">
+                        instagram.com/{{ fb_permissions.ig_username }}
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="mdl-cell mdl-cell--1-col"></div>
+        <div class="mdl-cell mdl-cell--8-col main-grid-cell">
+            <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+                <div class="mdl-tabs__tab-bar">
+                    <a href="#statistics-panel" class="mdl-tabs__tab is-active">
+                        <i class="material-icons">analytics</i>
+                        &nbsp;&nbsp;Analytics
+                    </a>
+                    <a href="#endorsements-panel" class="mdl-tabs__tab">
+                        <i class="material-icons">campaign</i>
+                        &nbsp;&nbsp;Endorsements
+                    </a>
+                </div>
+                <div class="mdl-tabs__panel is-active" id="statistics-panel">
+                    <div class="stat-section">
+                        <div class="panel-heading">
+                            Audience City
+                        </div>
+                        <div class="panel-description">
+                            Top 3 cities that audience belongs to.
+                        </div>
+                        <div class="mdl-grid cities-grid">
+                            <div class="mdl-cell mdl-cell--2-col">
+                                <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
+                                    1
+                                </button>
+                            </div>
+                            <div class="mdl-cell mdl-cell--10-col">{{ audience_city_stats.0.0 }}</div>
+                            <div class="mdl-cell mdl-cell--2-col">
+                                <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
+                                    2
+                                </button>
+                            </div>
+                            <div class="mdl-cell mdl-cell--10-col">{{ audience_city_stats.1.0 }}</div>
+                            <div class="mdl-cell mdl-cell--2-col">
+                                <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
+                                    3
+                                </button>
+                            </div>
+                            <div class="mdl-cell mdl-cell--10-col">{{ audience_city_stats.2.0 }}</div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="stat-section">
+                        <div class="panel-heading">
+                            Audience Demographic
+                        </div>
+                        <div id="demographic-chart" style="width: 100%; height: 50vh"></div>
+                    </div>
+                    <hr />
+                    <div class="stat-section">
+                        <div class="panel-heading">
+                            Impressions
+                        </div>
+                        <div class="panel-description">
+                            In a given day, the total number of times the IG User's IG Media objects (i.e. posts, stories
+                            and promotions) have been viewed.
+                        </div>
+                        <div class="select-container">
+                            <select name="impressions">
+                                <option value="10">Last 10 Days</option>
+                                <option value="30">Last 30 Days</option>
+                                <option value="180">Last 6 Months</option>
+                                <option value="360">Last 1 Year</option>
+                            </select>
+                        </div>
+                        <div id="impressions-chart" style="width: 100%; height: 40vh"></div>
+                    </div>
+                    <hr />
+                    <div class="stat-section">
+                        <div class="panel-heading">
+                            Follower Count
+                        </div>
+                        <div class="panel-description">
+                            The total number of new followers in a given day.
+                        </div>
+                        <div class="select-container">
+                            <select name="follower-count">
+                                <option value="10">Last 10 Days</option>
+                                <option value="30">Last 30 Days</option>
+                                <option value="180">Last 6 Months</option>
+                                <option value="360">Last 1 Year</option>
+                            </select>
+                        </div>
+                        <div id="follower-count-chart" style="width: 100%; height: 40vh"></div>
+                    </div>
+                </div>
+                <div class="mdl-tabs__panel" id="endorsements-panel">
+                    <ul>
+                        <li>Tywin</li>
+                        <li>Cersei</li>
+                        <li>Jamie</li>
+                        <li>Tyrion</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mdl-tooltip" for="follower-count-info">
+    Updated every 3 hours
+</div>
+<script>
+    $('#profile-top-nav-id').addClass('is-active');
+    $('select[name="impressions"]').addClass('mdl-button mdl-js-button mdl-button--raised mdl-button--colored');
+    $('select[name="follower-count"]').addClass('mdl-button mdl-js-button mdl-button--raised mdl-button--colored');
+
+    // demographic chart
+    google.charts.load('current', { 'packages': ['corechart', 'line'] });
+    google.charts.setOnLoadCallback(drawPieChart);
+    function drawPieChart() {
+        {% autoescape off %}
+        var demographic_data = {{ audience_demographic }};
+        {% endautoescape %}
+        demographic_data = [['Dempgraphic', 'Audience']].concat(demographic_data);
+        var data = google.visualization.arrayToDataTable(demographic_data);
+        var options = {
+            title: 'Gender & Age Demographic',
+            backgroundColor: 'transparent',
+            chartArea: {
+                backgroundColor: '#eeeeee',
+                bottom: '10%'
+            },
+        };
+        var chart = new google.visualization.PieChart(document.getElementById('demographic-chart'));
+        chart.draw(data, options);
+    }
+
+    // impressions chart
+    {% autoescape off %}
+    var impressions_data = {{ impressions }};
+    {% endautoescape %}
+    google.charts.setOnLoadCallback(initializeImpressionsChart);
+    function initializeImpressionsChart() {
+        var data = new google.visualization.DataTable();
+        drawImpressionsChart(data, 10);
+    }
+    function drawImpressionsChart(data, rows) {
+        data.addColumn('string');
+        data.addColumn('number');
+        data.addRows(impressions_data.slice((impressions_data.length - rows)));
+        var options = {
+            curveType: 'function',
+            backgroundColor: '#eeeeee',
+            chartArea: {
+                backgroundColor: '#eeeeee',
+            },
+            colors: ['#424242'],
+        };
+        var chart = new google.charts.Line(document.getElementById('impressions-chart'));
+        chart.draw(data, google.charts.Line.convertOptions(options));
+    }
+    $('select[name="impressions"]').change(function () {
+        var rows = parseInt($('select[name="impressions"]').val(), 10);
+        if (rows === 360) rows = impressions_data.length;
+        drawImpressionsChart(new google.visualization.DataTable(), rows);
+    });
+
+    // follower count chart
+    {% autoescape off %}
+    var follower_count_data = {{ follower_counts }};
+    {% endautoescape %}
+    google.charts.setOnLoadCallback(initializeFollowerCountChart);
+    function initializeFollowerCountChart() {
+        var data = new google.visualization.DataTable();
+        drawFollowerCountChart(data, 10);
+    }
+    function drawFollowerCountChart(data, rows) {
+        data.addColumn('string');
+        data.addColumn('number');
+        data.addRows(follower_count_data.slice((follower_count_data.length - rows)));
+        var options = {
+            curveType: 'function',
+            backgroundColor: '#eeeeee',
+            chartArea: {
+                backgroundColor: '#eeeeee',
+            },
+            colors: ['#424242'],
+        };
+        var chart = new google.charts.Line(document.getElementById('follower-count-chart'));
+        chart.draw(data, google.charts.Line.convertOptions(options));
+    }
+    $('select[name="follower-count"]').change(function () {
+        var rows = parseInt($('select[name="follower-count"]').val(), 10);
+        if (rows === 360) rows = follower_count_data.length;
+        drawFollowerCountChart(new google.visualization.DataTable(), rows);
+    });
+</script>
+<style>
+    .container {
+        width: 85vw;
+        margin: auto;
+    }
+
+    .profile-picture-display {
+        border-radius: 50%;
+        width: 15vw;
+    }
+
+    .placeholder-profile-picture {
+        font-size: 15vw;
+        color: #EEEEEE;
+    }
+
+    .first-section {
+        text-align: center;
+        margin-top: 5vh;
+    }
+
+    .details {
+        margin-top: 2vh;
+        border-radius: 5px;
+        padding: 1vh 2vw;
+        font-size: 1.2em;
+        color: #EEEEEE;
+        text-align: left;
+    }
+
+    .details i {
+        font-size: 1.5vw;
+    }
+
+    .details-link {
+        display: flex;
+        align-items: center;
+        margin-top: 0.5vh;
+    }
+
+    .details-insta-anchor {
+        color: #EEEEEE;
+    }
+
+    .instagram-svg {
+        width: 1.5vw;
+    }
+
+    i.info-icon {
+        font-size: 1.3em;
+        vertical-align: middle;
+        cursor: help;
+        padding-bottom: 4px;
+    }
+
+    .mdl-tooltip {
+        background-color: #424242;
+        font-size: 1em;
+    }
+
+    .mdl-tabs__tab {
+        color: #EEEEEE;
+    }
+
+    .mdl-tabs.is-upgraded .mdl-tabs__tab.is-active {
+        color: #EEEEEE !important;
+    }
+
+    .mdl-tabs__tab.is-active::after {
+        background: #EEEEEE !important;
+    }
+
+    .mdl-tabs__tab-bar i {
+        vertical-align: middle;
+        font-size: 1.5em;
+    }
+
+    .mdl-tabs__tab-bar {
+        border-bottom: none;
+    }
+
+    .mdl-tabs__panel {
+        background-color: #EEEEEE;
+        min-height: 100%;
+        border-radius: 5px;
+        min-height: 60vh;
+        padding: 2vh 0vw;
+        margin-top: 1vh;
+    }
+
+    .mdl-tabs__panel .mdl-button {
+        background-color: #161A1D;
+        cursor: auto;
+    }
+
+    .main-grid {
+        padding-bottom: 0;
+    }
+
+    .main-grid-cell {
+        margin-bottom: 0;
+    }
+
+    .panel-heading {
+        font-size: 3em;
+        padding-top: 4vh;
+        font-weight: 300;
+    }
+
+    .panel-heading::after {
+        content: "";
+        display: block;
+        border-bottom: 2px solid #161A1D;
+        width: 10%;
+        position: relative;
+        bottom: -20px;
+    }
+
+    .panel-description {
+        margin-top: 4vh;
+    }
+
+    .cities-grid {
+        font-size: 2em;
+        margin-top: 2vh;
+        max-width: 30vw;
+        margin-left: 0;
+    }
+
+    .cities-grid>.mdl-cell {
+        margin: auto;
+        padding-bottom: 2vh;
+    }
+
+    .details .name {
+        font-size: 1.5em;
+        margin-bottom: 2vh;
+        text-align: center;
+    }
+
+    #impressions-chart svg rect[fill="#424242"],
+    #follower-count-chart svg rect[fill="#424242"] {
+        display: none;
+    }
+
+    #impressions-chart, #follower-count-chart {
+        margin-bottom: 5vh;
+    }
+
+    .select-container {
+        margin-top: 2vh;
+        margin-bottom: 4vh;
+    }
+
+    select.mdl-button--raised.mdl-button--colored {
+        background: #161A1D !important;
+        cursor: pointer;
+    }
+
+    .stat-section {
+        padding: 0 4vw;
+    }
+</style>
+{% endblock %}

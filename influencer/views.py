@@ -1,9 +1,12 @@
+import datetime
 import hashlib
 import json
 import os
 import requests
 
 from django.conf import settings
+from django.core.files import File
+from django.core.files.temp import NamedTemporaryFile
 from django.db.models import Q
 from django.views.generic.base import TemplateView, View
 from django.shortcuts import redirect
@@ -14,6 +17,11 @@ from django_celery_beat.models import PeriodicTask, IntervalSchedule
 from accounts.models import (
     FacebookPermissions,
     Influencer,
+    get_profile_picture_path,
+)
+from accounts.utils import (
+    center_crop_and_square_image,
+    resize_image,
 )
 
 from influencer.mixins import (
@@ -23,6 +31,9 @@ from influencer.mixins import (
 )
 
 from notifications.models import Notification
+
+from influencer.tasks import update_influencer_statistics
+from influencer.models import InfluencerStatistics
 
 
 class FacebookConnectView(NotFbConnectedInfluencerLoginRequiredMixin, TemplateView):
@@ -131,13 +142,28 @@ class FacebookConfirmationView(NotFbConnectedInfluencerLoginRequiredMixin, View)
 
             # ig username
             IG_USER_INFO_URI = (settings.FACEBOOK_GRAPH_URI +
-                f"{ig_page_id}?fields=username%2Cfollowers_count&" +
+                f"{ig_page_id}?" +
+                "fields=username%2Cfollowers_count%2Cprofile_picture_url&" +
                 f"access_token={long_lived_token}")
             ig_user_info_response = json.loads(requests.get(IG_USER_INFO_URI).text)
             ig_username = ig_user_info_response['username']
             ig_follower_count = ig_user_info_response['followers_count']
             fb_permissions.ig_username = ig_username
             fb_permissions.ig_follower_count = ig_follower_count
+
+            # save instagram profile picture
+            image = requests.get(ig_user_info_response['profile_picture_url'])
+            img_temp = NamedTemporaryFile(delete=True)
+            img_temp.write(image.content)
+            img_temp.flush()
+            fb_permissions.influencer.user.profile_picture.save(os.path.join(
+                settings.BASE_DIR, get_profile_picture_path(fb_permissions.influencer.user, 'filename')),
+                File(img_temp)
+            )
+            center_crop_and_square_image(os.path.join(
+                settings.BASE_DIR, fb_permissions.influencer.user.profile_picture.url[1:]))
+            resize_image(os.path.join(
+                settings.BASE_DIR, fb_permissions.influencer.user.profile_picture.url[1:]))
         except:
             return redirect(reverse_lazy('influencer:fb_failed'))
 
@@ -174,6 +200,23 @@ class FacebookConfirmationView(NotFbConnectedInfluencerLoginRequiredMixin, View)
             task='accounts.tasks.update_ig_follower_count',
             args=json.dumps([fb_permissions.influencer.user.pk,]),
         )
+
+        update_influencer_statistics.delay(fb_permissions.influencer.user.pk)
+        schedule, created = IntervalSchedule.objects.get_or_create(
+            every=1,
+            period=IntervalSchedule.DAYS,
+        )
+        current_task = PeriodicTask.objects.filter(
+            name=f'Influencer {fb_permissions.influencer.user.pk} Update Influencer Statistics'
+        )
+        if current_task.exists():
+            current_task.delete()
+        PeriodicTask.objects.create(
+            interval=schedule,
+            name=f'Influencer {fb_permissions.influencer.user.pk} Update Influencer Statistics',
+            task='influencer.tasks.update_influencer_statistics',
+            args=json.dumps([fb_permissions.influencer.user.pk,]),
+        )
         return redirect(reverse_lazy('accounts:landing'))
 
 
@@ -191,4 +234,34 @@ class BrandsView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, TemplateVie
             .order_by('-created_at'))[:8]
         context['notifs_unread'] = (Notification.objects
             .filter(Q(user=self.request.user) & Q(is_seen=False)).count())
+        return context
+
+
+class ProfileView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, TemplateView):
+    template_name = 'influencer/profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['notifications'] = (Notification.objects
+            .filter(user=self.request.user)
+            .order_by('-created_at'))[:8]
+        context['notifs_unread'] = (Notification.objects
+            .filter(Q(user=self.request.user) & Q(is_seen=False)).count())
+        context['fb_permissions'] = (FacebookPermissions.objects
+            .get(influencer=Influencer.objects.get(user=self.request.user)))
+        influencer_statistics = (InfluencerStatistics.objects
+            .get(influencer=Influencer.objects.get(user=self.request.user)))
+        context['audience_city_stats'] = sorted(
+            influencer_statistics.audience_city,
+            reverse=True,
+            key=lambda el: int(el[1]))[:3]
+        context['audience_demographic'] = [
+            [el[0].replace('M.', 'Male ').replace('F.', 'Female ').replace('U.', 'Unknown '), int(el[1])]
+            for el in influencer_statistics.audience_gender_age]
+        context['impressions'] = [
+            [datetime.datetime.utcfromtimestamp(int(el[0])).strftime('%d %b %y'), int(el[1])]
+            for el in influencer_statistics.impressions[::-1]]
+        context['follower_counts'] = [
+            [datetime.datetime.utcfromtimestamp(int(el[0])).strftime('%d %b %y'), int(el[1])]
+            for el in influencer_statistics.follower_counts[::-1]]
         return context

@@ -1,10 +1,11 @@
 {% extends 'accounts/account_change/base.html' %}
+{% load accounts_tags %}
 {% block main %}
 <div class="container">
     <div class="heading">Change Profile Picture</div>
     <div>
         {% if request.user.get_profile_picture %}
-        <img class="profile-picture-display" src="{{ request.user.get_profile_picture.url }}" />
+        <img class="profile-picture-display" src="{{ request.user.get_profile_picture.url }}?rand={% random_string %}" />
         {% endif %}
         <br />
         <form method="post" enctype="multipart/form-data" id="profile_picture_form">

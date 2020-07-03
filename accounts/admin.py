@@ -48,11 +48,11 @@ class UserAdmin(BaseUserAdmin):
 
 
 class BrandAdmin(admin.ModelAdmin):
-    list_display = ('user', 'name')
-    list_filter = ('name', )
+    list_display = ('user', 'name', 'is_subscription_active')
+    list_filter = ('name', 'is_subscription_active')
     fieldsets = (
         (None, {'fields': ('user',)}),
-        ('Details', {'fields': ('name', 'phone_number', 'website', 'instagram_handle')}),
+        ('Details', {'fields': ('name', 'phone_number', 'website', 'instagram_handle', 'is_subscription_active')}),
     )
 
 
@@ -66,10 +66,10 @@ class LocationAdmin(admin.ModelAdmin):
 
 
 class InfluencerAdmin(admin.ModelAdmin):
-    list_display = ('user', 'first_name', 'last_name')
-    list_filter = ('first_name', 'last_name')
+    list_display = ('user', 'first_name', 'last_name', 'is_verified', 'is_unlocked')
+    list_filter = ('first_name', 'last_name', 'is_verified', 'is_unlocked')
     fieldsets = (
-        (None, {'fields': ('user', 'is_verified')}),
+        (None, {'fields': ('user', 'is_verified', 'is_unlocked')}),
         ('Personal Details', {'fields': ('first_name', 'last_name', 'phone_number')}),
     )
 
