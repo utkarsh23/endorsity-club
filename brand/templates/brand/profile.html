@@ -1,0 +1,258 @@
+{% extends 'brand/base.html' %}
+{% block main %}
+<div class="container">
+    <div class="mdl-grid main-grid">
+        <div class="mdl-cell mdl-cell--3-col first-section">
+            {% if request.user.get_profile_picture %}
+            <img class="profile-picture-display" src="{{ request.user.get_profile_picture.url }}" />
+            {% else %}
+            <i class="material-icons placeholder-profile-picture">account_circle</i>
+            {% endif %}
+            <div class="details">
+                <div class="name">
+                    {{ brand.name }}
+                </div>
+            </div>
+            <div class="mdl-grid details-grid">
+                {% if brand.instagram_handle %}
+                <div class="mdl-cell mdl-cell--2-col">
+                    <div class="inner-content">
+                        <svg viewBox="0 0 24 24">
+                            <path fill="#EEEEEE"
+                                d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z">
+                            </path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="mdl-cell mdl-cell--10-col">
+                    <div class="inner-content">
+                        {{ brand.instagram_handle }}
+                    </div>
+                </div>
+                {% endif %}
+                {% if brand.website %}
+                <div class="mdl-cell mdl-cell--2-col">
+                    <div class="inner-content">
+                        <i class="material-icons">link</i>
+                    </div>
+                </div>
+                <div class="mdl-cell mdl-cell--10-col">
+                    <div class="inner-content">
+                        <a href="{{ brand.website }}" target="_blank">
+                            {{ brand.website }}
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="mdl-cell mdl-cell--1-col"></div>
+        <div class="mdl-cell mdl-cell--8-col main-grid-cell">
+            <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+                <div class="mdl-tabs__tab-bar">
+                    <a href="#locations-panel" class="mdl-tabs__tab is-active">
+                        <i class="material-icons">location_on</i>
+                        &nbsp;&nbsp;Locations
+                    </a>
+                    <a href="#influencer-posts-panel" class="mdl-tabs__tab">
+                        <i class="material-icons">dynamic_feed</i>
+                        &nbsp;&nbsp;Influencer Posts
+                    </a>
+                </div>
+                <div class="mdl-tabs__panel is-active" id="locations-panel">
+                    <a class="add-location-anchor" href="{% url 'brand:add_location' %}">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored location-btn">
+                            <i class="material-icons">add_location</i>
+                            &nbsp;&nbsp;Add New Location
+                        </button>
+                    </a>
+                    {% for location in locations %}
+                    <div class="location-card">
+                        <div class="location-heading">
+                            {{ location.name }}
+                        </div>
+                        <div class="mdl-grid">
+                            <div class="location-city mdl-cell--6-col">
+                                City&nbsp;-&nbsp;{{ location.city }}
+                            </div>
+                            <div class="location-link mdl-cell--6-col">
+                                <a target="_blank"
+                                    href="https://www.google.com/maps/search/?api=1&query={{ location.latitude }}%2C{{ location.longitude }}">
+                                    <button
+                                        class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored location-btn">
+                                        <i class="material-icons">explore</i>
+                                        &nbsp;&nbsp;Google Maps
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="mdl-tabs__panel" id="influencer-posts-panel">
+                    <ul>
+                        <li>Tywin</li>
+                        <li>Cersei</li>
+                        <li>Jamie</li>
+                        <li>Tyrion</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#profile-top-nav-id').addClass('is-active');
+</script>
+<style>
+    .container {
+        width: 85vw;
+        margin: auto;
+    }
+
+    .profile-picture-display {
+        border-radius: 50%;
+        width: 15vw;
+    }
+
+    .placeholder-profile-picture {
+        font-size: 15vw;
+        color: #EEEEEE;
+    }
+
+    .first-section {
+        text-align: center;
+        margin-top: 5vh;
+    }
+
+    .details {
+        margin-top: 2vh;
+        border-radius: 5px;
+        padding: 1vh 2vw;
+        font-size: 1.2em;
+        color: #EEEEEE;
+        text-align: left;
+    }
+
+    .details .name {
+        font-size: 1.5em;
+        margin-bottom: 2vh;
+        text-align: center;
+        line-height: 1.1;
+    }
+
+    .details-grid {
+        padding: 0vh 2vw;
+        text-align: left;
+    }
+
+    .details-grid i {
+        vertical-align: middle;
+    }
+
+    .details-grid a {
+        color: #EEEEEE;
+        text-decoration: none;
+        border-bottom: 1px solid #EEEEEE;
+    }
+
+    .details-grid .mdl-cell {
+        margin-bottom: 0;
+        margin-top: 0.5vh;
+    }
+
+    .details-grid .mdl-cell--2-col .inner-content {
+        color: #EEEEEE;
+        text-align: center;
+    }
+
+    .details-grid .mdl-cell--10-col .inner-content {
+        font-size: 1.3em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: #EEEEEE;
+        height: 100%;
+        width: 100%;
+        line-height: 1.5;
+    }
+
+    .details-grid svg {
+        max-width: 1.5vw;
+    }
+
+    .mdl-tabs__tab {
+        color: #EEEEEE;
+    }
+
+    .mdl-tabs.is-upgraded .mdl-tabs__tab.is-active {
+        color: #EEEEEE !important;
+    }
+
+    .mdl-tabs__tab.is-active::after {
+        background: #EEEEEE !important;
+    }
+
+    .mdl-tabs__tab-bar i {
+        vertical-align: middle;
+        font-size: 1.5em;
+    }
+
+    .mdl-tabs__tab-bar {
+        border-bottom: none;
+    }
+
+    .mdl-tabs__panel {
+        background-color: #EEEEEE;
+        min-height: 100%;
+        border-radius: 5px;
+        padding: 2vh 2vw;
+        margin-top: 1vh;
+    }
+
+    .mdl-tabs__panel .mdl-button {
+        background-color: #161A1D;
+        cursor: auto;
+    }
+
+    button.location-btn {
+        width: 100%;
+        background-color: #161A1D !important;
+        color: #EEEEEE !important;
+        cursor: pointer !important;
+    }
+
+    .location-card {
+        padding: 2vh 2vw;
+        background-color: #161A1D;
+        margin-top: 2vh;
+        color: #EEEEEE;
+        border-radius: 5px;
+    }
+
+    .location-heading {
+        font-size: 1.5em;
+        line-height: 1.2;
+        margin-bottom: 2vh;
+    }
+
+    .location-city {
+        font-size: 1.3em;
+        display: flex;
+        align-items: center;
+    }
+
+    .location-city i {
+        vertical-align: middle;
+        font-size: 1.3em;
+    }
+
+    .location-link i {
+        vertical-align: middle;
+    }
+
+    .location-link button {
+        background-color: #EEEEEE !important;
+        color: #161A1D !important;
+    }
+</style>
+{% endblock %}

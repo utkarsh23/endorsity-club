@@ -187,9 +187,9 @@ class BrandCreationView(MultiModelFormView):
             }
             response = requests.post('https://hcaptcha.com/siteverify', data=data).json()
             if response['success'] == False:
-                return self.form_invalid(form)
+                return self.forms_invalid(forms)
         except:
-            return super().form_invalid(forms)
+            return super().forms_invalid(forms)
         user = forms['user_form'].save(commit=False)
         user.is_brand = True
         user.is_registered = True
@@ -229,9 +229,9 @@ class InfluencerCreationView(MultiModelFormView):
             }
             response = requests.post('https://hcaptcha.com/siteverify', data=data).json()
             if response['success'] == False:
-                return self.form_invalid(form)
+                return self.forms_invalid(forms)
         except:
-            return self.form_invalid(form)
+            return self.forms_invalid(forms)
         user = forms['user_form'].save(commit=False)
         user.is_registered = True
         user.is_google_account = False

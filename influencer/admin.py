@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from influencer.models import InfluencerStatistics
+from influencer.models import InfluencerStatistics, EndorsingPost
 
 class InfluencerStatisticsAdmin(admin.ModelAdmin):
     list_display = ('influencer',)
@@ -10,4 +10,10 @@ class InfluencerStatisticsAdmin(admin.ModelAdmin):
     )
 
 
+class EndorsingPostAdmin(admin.ModelAdmin):
+    list_display = ('influencer', 'campaign', 'media_embed_url')
+    list_filter = ('influencer', 'campaign')
+
+
 admin.site.register(InfluencerStatistics, InfluencerStatisticsAdmin)
+admin.site.register(EndorsingPost, EndorsingPostAdmin)

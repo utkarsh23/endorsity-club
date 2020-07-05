@@ -1,0 +1,49 @@
+{% extends 'brand/base.html' %}
+{% block main %}
+<div class="container">
+    <div class="heading">Add Store Location</div>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored"
+            type="submit" value="Add Location" />
+    </form>
+</div>
+<script>
+    $('p input').addClass('mdl-textfield__input');
+    var initializeMaps = () => {
+        var maps_input = document.getElementById('id_store_location');
+        new google.maps.places.Autocomplete(maps_input);
+        $('#id_store_location').attr('placeholder', '');
+    };
+    $('form').submit(function() {
+        $('input[type="submit"]').attr("disabled", true);
+        return true;
+    });
+</script>
+<script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpgqiVV0SVKh5pRtddZkxtrMD4Gtty3xk&libraries=places&callback=initializeMaps"
+    async defer></script>
+<style>
+    .container {
+        background-color: #eeeeee;
+        width: 40vw;
+        margin: auto;
+        margin-top: 10vh;
+        border-radius: 5px;
+        padding: 2vh 2vw;
+    }
+
+    .heading {
+        font-size: 2em;
+        margin-bottom: 3vh;
+        text-align: center;
+    }
+
+    input[type="submit"] {
+        width: 100%;
+        background-color: #161A1D !important;
+        color: #EEEEEE !important;
+    }
+</style>
+{% endblock %}

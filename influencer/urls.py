@@ -8,6 +8,8 @@ from influencer.views import (
     FacebookConfirmationView,
     AwaitVerificationView,
     ProfileView,
+    QRScannerView,
+    BrandUnlockView,
 )
 
 
@@ -19,6 +21,8 @@ urlpatterns = [
     path('connect/facebook/confirm/', FacebookConfirmationView.as_view(), name="fb_confirmation"),
     path('await-verification/', AwaitVerificationView.as_view(), name='await_verification'),
     path('profile/', ProfileView.as_view(), name="profile"),
+    path('qr-scanner/', QRScannerView.as_view(), name="qr_scanner"),
+    path('unlock/<uuid:brand_uuid>/', BrandUnlockView.as_view(), name="brand_unlock"),
 ]
 
 app_name = 'influencer'

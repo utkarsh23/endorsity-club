@@ -28,6 +28,12 @@ function new_notifications_received(args) {
 
     document.querySelector("#notif-log").innerHTML =
         html + document.querySelector("#notif-log").innerHTML;
+    $('#notif-log').html($('#notif-log>a:not(.all-notifs-link)').slice(0, 8));
+    $('#notif-log').append(`
+        <a class="all-notifs-link" href="/notifications/">
+            <li class="mdl-menu__item view-all-notifs">View All Notifications</li>
+        </a>
+    `);
     if (!$('#notifications').hasClass('mdl-badge')) $('#notifications').addClass('mdl-badge');
     $('#notifications').attr('data-badge', parseInt($('#notifications').attr('data-badge'), 10) + 1);
 }

@@ -1,4 +1,5 @@
 {% load static %}
+{% load notification_tags %}
 <!DOCTYPE html>
 <html>
 
@@ -38,7 +39,7 @@
         .mdl-layout__header {
             background-color: transparent;
             box-shadow: none;
-            margin-top: 3vh;
+            margin-top: 1.5vh;
         }
 
         .logo-container {
@@ -61,7 +62,7 @@
         }
 
         .mdl-layout__drawer-button {
-            margin-top: 4.5vh;
+            margin-top: 3vh;
         }
 
         .mdl-layout__drawer-button>i {
@@ -82,12 +83,13 @@
         .top-menu {
             width: 60vw;
             text-align: center;
-            margin-top: 3vh;
+            margin-top: 0.2vh;
             border: 2px solid #EEEEEE;
             border-radius: 5px;
             padding: 0;
             background-color: #EEEEEE;
             color: #161A1D;
+            margin-bottom: 1.8vh;
         }
 
         .top-menu i {
@@ -155,6 +157,17 @@
             height: 24px;
             text-decoration: none;
             color: #EEEEEE;
+            margin-left: 2vw;
+        }
+
+        .qr-btn {
+            height: 24px;
+            text-decoration: none;
+            color: #EEEEEE;
+        }
+
+        .mdl-layout__content {
+            border-top: 1px solid #EEEEEE
         }
     </style>
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
@@ -165,14 +178,20 @@
                     <div class="logo-text">ENDORSITY</div>
                 </a>
                 <div class="mdl-layout-spacer"></div>
+                <a class="qr-btn" href="{% url 'brand:qr_code' %}">
+                    <div class="material-icons">
+                        qr_code
+                    </div>
+                </a>
                 <a class="settings-btn" href="{% url 'accounts:settings' %}">
                     <div class="material-icons">
                         settings
                     </div>
                 </a>
+                {% notifs_unread request.user as notifs_unread_count %}
                 <div id="notifications"
-                    class="material-icons {% if notifs_unread > 0 %}mdl-badge{% endif %} mdl-badge--overlap"
-                    data-badge="{{ notifs_unread }}">
+                    class="material-icons {% if notifs_unread_count > 0 %}mdl-badge{% endif %} mdl-badge--overlap"
+                    data-badge="{{ notifs_unread_count }}">
                     notifications
                 </div>
                 <a class="mdl-navigation__link" href="{% url 'accounts:logout' %}">
@@ -208,7 +227,8 @@
             </nav>
         </div>
         <ul id="notif-log" class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="notifications">
-            {% for notification in notifications %}
+            {% notifications request.user as notif_list %}
+            {% for notification in notif_list %}
             <a href="{{ notification.link }}">
                 <li class="mdl-menu__item">{{ notification.message }}</li>
             </a>
@@ -218,26 +238,26 @@
             </a>
         </ul>
         <div class="top-menu mdl-grid">
-            <div class="mdl-cell mdl-cell--3-col is-active">
-                <a href="{% url 'influencer:brands' %}">
+            <div id="top-stats-top-nav-id" class="mdl-cell mdl-cell--3-col">
+                <a href="{% url 'brand:your_endorsements' %}">
                     <i class="material-icons">bar_chart</i>
-                    &nbsp;TOP STATS
+                    &nbsp;OVERVIEW
                 </a>
             </div>
-            <div class="mdl-cell mdl-cell--3-col">
+            <div id="campaigns-top-nav-id" class="mdl-cell mdl-cell--3-col">
                 <a href="#">
                     <i class="material-icons">campaign</i>
                     &nbsp;CAMPAIGNS
                 </a>
             </div>
-            <div class="mdl-cell mdl-cell--3-col">
+            <div id="influencers-top-nav-id" class="mdl-cell mdl-cell--3-col">
                 <a href="#">
                     <i class="material-icons">people</i>
                     &nbsp;INFLUENCERS
                 </a>
             </div>
-            <div class="mdl-cell mdl-cell--3-col">
-                <a href="#">
+            <div id="profile-top-nav-id" class="mdl-cell mdl-cell--3-col">
+                <a href="{% url 'brand:profile' %}">
                     <i class="material-icons">account_circle</i>
                     &nbsp;PROFILE
                 </a>
@@ -246,8 +266,6 @@
         <main class="mdl-layout__content">
             <div class="page-content">
                 {% block main %}{% endblock %}
-                <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-                <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
             </div>
         </main>
     </div>

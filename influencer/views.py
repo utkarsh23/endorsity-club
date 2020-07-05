@@ -9,6 +9,7 @@ from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
 from django.db.models import Q
 from django.views.generic.base import TemplateView, View
+from django.views.generic.edit import FormView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 
@@ -17,6 +18,7 @@ from django_celery_beat.models import PeriodicTask, IntervalSchedule
 from accounts.models import (
     FacebookPermissions,
     Influencer,
+    Location,
     get_profile_picture_path,
 )
 from accounts.utils import (
@@ -24,16 +26,18 @@ from accounts.utils import (
     resize_image,
 )
 
+from brand.models import Campaign
+
+from influencer.forms import LocationSelectForm
 from influencer.mixins import (
     NotFbConnectedInfluencerLoginRequiredMixin,
     NotVerifiedAndFbConnectedInfluencerLoginRequiredMixin,
     VerifiedAndFbConnectedInfluencerLoginRequiredMixin,
 )
+from influencer.models import InfluencerStatistics, EndorsingPost
+from influencer.tasks import update_influencer_statistics
 
 from notifications.models import Notification
-
-from influencer.tasks import update_influencer_statistics
-from influencer.models import InfluencerStatistics
 
 
 class FacebookConnectView(NotFbConnectedInfluencerLoginRequiredMixin, TemplateView):
@@ -227,26 +231,12 @@ class AwaitVerificationView(NotVerifiedAndFbConnectedInfluencerLoginRequiredMixi
 class BrandsView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, TemplateView):
     template_name = 'influencer/brands.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['notifications'] = (Notification.objects
-            .filter(user=self.request.user)
-            .order_by('-created_at'))[:8]
-        context['notifs_unread'] = (Notification.objects
-            .filter(Q(user=self.request.user) & Q(is_seen=False)).count())
-        return context
-
 
 class ProfileView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, TemplateView):
     template_name = 'influencer/profile.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['notifications'] = (Notification.objects
-            .filter(user=self.request.user)
-            .order_by('-created_at'))[:8]
-        context['notifs_unread'] = (Notification.objects
-            .filter(Q(user=self.request.user) & Q(is_seen=False)).count())
         context['fb_permissions'] = (FacebookPermissions.objects
             .get(influencer=Influencer.objects.get(user=self.request.user)))
         influencer_statistics = (InfluencerStatistics.objects
@@ -265,3 +255,32 @@ class ProfileView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, TemplateVi
             [datetime.datetime.utcfromtimestamp(int(el[0])).strftime('%d %b %y'), int(el[1])]
             for el in influencer_statistics.follower_counts[::-1]]
         return context
+
+
+class QRScannerView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, TemplateView):
+    template_name = 'influencer/qr_scanner.html'
+
+
+class BrandUnlockView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, FormView):
+    template_name = 'influencer/brand_unlock.html'
+    form_class = LocationSelectForm
+    success_url = reverse_lazy('influencer:brands')
+
+    def get_form(self, form_class=None):
+        """Return an instance of the form to be used in this view."""
+        if form_class is None:
+            form_class = self.get_form_class()
+        return form_class(**self.get_form_kwargs(), brand_uuid=self.kwargs['brand_uuid'])
+
+    def form_valid(self, form):
+        location_uuid = form.cleaned_data['location']
+        location = Location.objects.get(id=location_uuid)
+        campaign = Campaign.objects.get(brand=location.brand)
+        influencer = Influencer.objects.get(user=self.request.user)
+        EndorsingPost.objects.create(
+            influencer=influencer,
+            campaign=campaign,
+        )
+        influencer.is_unlocked = True
+        influencer.save()
+        return super().form_valid(form)

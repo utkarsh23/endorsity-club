@@ -1,4 +1,5 @@
 {% load static %}
+{% load notification_tags %}
 {% load influencer_tags %}
 <!DOCTYPE html>
 <html>
@@ -176,9 +177,9 @@
                 </a>
                 <div class="mdl-layout-spacer"></div>
                 {% if not request.user|is_influencer_unlocked %}
-                <a href="#" class="mdl-navigation__link unlock-anchor">
+                <a href="{% url 'influencer:qr_scanner' %}" class="mdl-navigation__link unlock-anchor">
                     <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                        <i class="material-icons">lock_open</i>
+                        <i class="material-icons">qr_code_scanner</i>
                         &nbsp;&nbsp;Unlock
                     </button>
                 </a>
@@ -188,9 +189,10 @@
                         settings
                     </div>
                 </a>
+                {% notifs_unread request.user as notifs_unread_count %}
                 <div id="notifications"
-                    class="material-icons {% if notifs_unread > 0 %}mdl-badge{% endif %} mdl-badge--overlap"
-                    data-badge="{{ notifs_unread }}">
+                    class="material-icons {% if notifs_unread_count > 0 %}mdl-badge{% endif %} mdl-badge--overlap"
+                    data-badge="{{ notifs_unread_count }}">
                     notifications
                 </div>
                 <a class="mdl-navigation__link" href="{% url 'accounts:logout' %}">
@@ -226,7 +228,8 @@
             </nav>
         </div>
         <ul id="notif-log" class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="notifications">
-            {% for notification in notifications %}
+            {% notifications request.user as notif_list %}
+            {% for notification in notif_list %}
             <a href="{{ notification.link }}">
                 <li class="mdl-menu__item">{{ notification.message }}</li>
             </a>

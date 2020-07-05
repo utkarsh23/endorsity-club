@@ -86,7 +86,8 @@ class User(AbstractBaseUser):
 
 
 class Brand(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, null=True)
     phone_number = models.CharField(max_length=10)
     website = models.URLField(max_length=200, blank=True, null=True)
@@ -100,7 +101,7 @@ class Brand(models.Model):
 class Location(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
-    name = models.CharField(max_length=500)
+    name = models.CharField(max_length=500, unique=True)
     latitude = models.CharField(max_length=100)
     longitude = models.CharField(max_length=100)
     active = models.BooleanField(default=False)

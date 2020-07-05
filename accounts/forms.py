@@ -111,7 +111,6 @@ class InfluencerCreationForm(forms.ModelForm):
 
 
 class BrandChangeForm(forms.ModelForm):
-    store_location = forms.CharField(max_length=500)
 
     class Meta(object):
         model = Brand

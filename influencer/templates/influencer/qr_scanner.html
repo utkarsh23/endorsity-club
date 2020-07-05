@@ -1,0 +1,56 @@
+{% extends 'influencer/base.html' %}
+{% load static %}
+{% block main %}
+<script src="{% static 'jsQR.js' %}"></script>
+<div class="container">
+    <canvas id="webcam-canvas"></canvas>
+    <div class="show"></div>
+</div>
+<script>
+    var video = document.createElement("video");
+    var canvasElement = document.getElementById("webcam-canvas");
+    var canvas = canvasElement.getContext("2d");
+
+    function drawLine(begin, end, color) {
+        canvas.beginPath();
+        canvas.moveTo(begin.x, begin.y);
+        canvas.lineTo(end.x, end.y);
+        canvas.lineWidth = 4;
+        canvas.strokeStyle = color;
+        canvas.stroke();
+    }
+
+    // Use facingMode: environment to attemt to get the front camera on phones
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function (stream) {
+        video.srcObject = stream;
+        video.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
+        video.play();
+        requestAnimationFrame(tick);
+    });
+
+    function tick() {
+        if (video.readyState === video.HAVE_ENOUGH_DATA) {
+            canvasElement.hidden = false;
+
+            canvasElement.height = video.videoHeight;
+            canvasElement.width = video.videoWidth;
+            canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+            var imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+            var code = jsQR(imageData.data, imageData.width, imageData.height, {
+                inversionAttempts: "dontInvert",
+            });
+            if (code) {
+                if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(code.data) === true)
+                    window.location.href = `/influencer/unlock/${code.data}/`;
+            }
+        }
+        requestAnimationFrame(tick);
+    }
+</script>
+<style>
+    #webcam-canvas {
+        width: 50vw;
+        height: 80vh;
+    }
+</style>
+{% endblock %}

@@ -14,19 +14,43 @@
                     {{ fb_permissions.influencer.first_name }}
                     {{ fb_permissions.influencer.last_name }}
                 </div>
-                <svg class="instagram-svg" viewBox="0 0 24 24">
-                    <path fill="#EEEEEE"
-                        d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z">
-                    </path>
-                </svg>
-                &nbsp;&nbsp;&nbsp;{{ fb_permissions.ig_username }}&nbsp;|&nbsp;{{ fb_permissions.ig_follower_count }}
-                followers&nbsp;&nbsp;<i id="follower-count-info" class="material-icons info-icon">info</i><br />
-                <div class="details-link">
-                    <i class="material-icons">link</i>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a class="details-insta-anchor" href="https://instagram.com/{{ fb_permissions.ig_username }}"
-                        target="_blank">
-                        instagram.com/{{ fb_permissions.ig_username }}
-                    </a>
+            </div>
+            <div class="mdl-grid details-grid">
+                <div class="mdl-cell mdl-cell--2-col">
+                    <div class="inner-content">
+                        <svg viewBox="0 0 24 24">
+                            <path fill="#EEEEEE"
+                                d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z">
+                            </path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="mdl-cell mdl-cell--10-col">
+                    <div class="inner-content">
+                        {{ fb_permissions.ig_username }}
+                    </div>
+                </div>
+                <div class="mdl-cell mdl-cell--2-col">
+                    <div class="inner-content">
+                        <i class="material-icons">trending_up</i>
+                    </div>
+                </div>
+                <div class="mdl-cell mdl-cell--10-col">
+                    <div class="inner-content">
+                        {{ fb_permissions.ig_follower_count }} Followers&nbsp;&nbsp;<i id="follower-count-info" class="material-icons info-icon">info</i>
+                    </div>
+                </div>
+                <div class="mdl-cell mdl-cell--2-col">
+                    <div class="inner-content">
+                        <i class="material-icons">open_in_new</i>
+                    </div>
+                </div>
+                <div class="mdl-cell mdl-cell--10-col">
+                    <div class="inner-content">
+                        <a href="https://instagram.com/{{ fb_permissions.ig_username }}" target="_blank">
+                            instagram.com/{{ fb_permissions.ig_username }}
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -39,7 +63,7 @@
                         &nbsp;&nbsp;Analytics
                     </a>
                     <a href="#endorsements-panel" class="mdl-tabs__tab">
-                        <i class="material-icons">campaign</i>
+                        <i class="material-icons">dynamic_feed</i>
                         &nbsp;&nbsp;Endorsements
                     </a>
                 </div>
@@ -248,26 +272,8 @@
         text-align: left;
     }
 
-    .details i {
-        font-size: 1.5vw;
-    }
-
-    .details-link {
-        display: flex;
-        align-items: center;
-        margin-top: 0.5vh;
-    }
-
-    .details-insta-anchor {
-        color: #EEEEEE;
-    }
-
-    .instagram-svg {
-        width: 1.5vw;
-    }
-
     i.info-icon {
-        font-size: 1.3em;
+        font-size: 1em;
         vertical-align: middle;
         cursor: help;
         padding-bottom: 4px;
@@ -379,6 +385,45 @@
 
     .stat-section {
         padding: 0 4vw;
+    }
+
+    .details-grid {
+        padding: 0vh 2vw;
+        text-align: left;
+    }
+
+    .details-grid i {
+        vertical-align: middle;
+    }
+
+    .details-grid a {
+        color: #EEEEEE;
+        text-decoration: none;
+        border-bottom: 1px solid #EEEEEE;
+    }
+
+    .details-grid .mdl-cell {
+        margin-bottom: 0;
+        margin-top: 0.5vh;
+    }
+
+    .details-grid .mdl-cell--2-col .inner-content {
+        color: #EEEEEE;
+        text-align: center;
+    }
+
+    .details-grid .mdl-cell--10-col .inner-content {
+        font-size: 1.3em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: #EEEEEE;
+        height: 100%;
+        width: 100%;
+        line-height: 1.5;
+    }
+
+    .details-grid svg {
+        max-width: 1.5vw;
     }
 </style>
 {% endblock %}
