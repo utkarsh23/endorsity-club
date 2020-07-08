@@ -1,5 +1,6 @@
 {% load static %}
 {% load notification_tags %}
+{% load brand_tags %}
 <!DOCTYPE html>
 <html>
 
@@ -30,6 +31,17 @@
         button.mdl-button--colored {
             color: #161A1D !important;
             background-color: #EEEEEE !important;
+        }
+
+        button.campaign-status .inactive {
+            color: #dd2c00;
+            font-size: 0.9em;
+        }
+
+
+        button.campaign-status .active {
+            color: #00c853;
+            font-size: 0.9em;
         }
 
         body {
@@ -164,6 +176,7 @@
             height: 24px;
             text-decoration: none;
             color: #EEEEEE;
+            margin-left: 2vw;
         }
 
         .mdl-layout__content {
@@ -178,6 +191,21 @@
                     <div class="logo-text">ENDORSITY</div>
                 </a>
                 <div class="mdl-layout-spacer"></div>
+                {% if request.user|is_subscription_active %}
+                <a class="mdl-navigation__link" href="{% url 'brand:campaigns' %}">
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored campaign-status">
+                        <i class="material-icons active">stop_circle</i>
+                        &nbsp;&nbsp;Campaign Active
+                    </button>
+                </a>
+                {% else %}
+                <a class="mdl-navigation__link" href="{% url 'brand:campaigns' %}">
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored campaign-status">
+                        <i class="material-icons inactive">stop_circle</i>
+                        &nbsp;&nbsp;Campaign Inactive
+                    </button>
+                </a>
+                {% endif %}
                 <a class="qr-btn" href="{% url 'brand:qr_code' %}">
                     <div class="material-icons">
                         qr_code
@@ -245,7 +273,7 @@
                 </a>
             </div>
             <div id="campaigns-top-nav-id" class="mdl-cell mdl-cell--3-col">
-                <a href="#">
+                <a href="{% url 'brand:campaigns' %}">
                     <i class="material-icons">campaign</i>
                     &nbsp;CAMPAIGNS
                 </a>

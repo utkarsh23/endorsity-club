@@ -11,7 +11,7 @@ class InfluencerStatisticsAdmin(admin.ModelAdmin):
 
 
 class EndorsingPostAdmin(admin.ModelAdmin):
-    list_display = ('influencer', 'campaign', 'media_embed_url')
+    list_display = ('created_at', 'influencer', 'campaign', 'media_embed_url')
     list_filter = ('influencer', 'campaign')
 
 

@@ -87,7 +87,7 @@ class User(AbstractBaseUser):
 
 class Brand(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, null=True)
     phone_number = models.CharField(max_length=10)
     website = models.URLField(max_length=200, blank=True, null=True)

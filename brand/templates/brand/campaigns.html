@@ -1,0 +1,245 @@
+{% extends 'brand/base.html' %}
+
+{% load brand_tags %}
+{% load tz %}
+{% block main %}
+<div class="container">
+    {% if current_campaign %}
+    <div class="campaign-card">
+        <div class="timeline mdl-grid">
+            <div class="mdl-cell mdl-cell--5-col">
+                <span
+                    class="day-month-date">{{ current_campaign.start_time|timezone:"Asia/Kolkata"|date:"jS F," }}</span>
+                <span class="year-date">&nbsp;{{ current_campaign.start_time|timezone:"Asia/Kolkata"|date:"Y" }}</span>
+            </div>
+            <div class="mdl-cell mdl-cell--2-col">
+                <i class="material-icons">double_arrow</i>
+            </div>
+            <div class="mdl-cell mdl-cell--5-col">
+                <span class="day-month-date">{{ current_campaign.end_time|timezone:"Asia/Kolkata"|date:"jS F," }}</span>
+                <span class="year-date">&nbsp;{{ current_campaign.end_time|timezone:"Asia/Kolkata"|date:"Y" }}</span>
+            </div>
+        </div>
+        <div class="details-btn mdl-grid">
+            <div class="mdl-cell mdl-cell--4-col">
+                <i class="material-icons campaign-active">stop_circle</i>
+                &nbsp;&nbsp;Active
+            </div>
+            <div class="mdl-cell mdl-cell--4-col">
+                <i class="material-icons">dynamic_feed</i>
+                &nbsp;&nbsp;{% posts current_campaign %} influencer posts
+            </div>
+            <div class="mdl-cell mdl-cell--4-col">
+                <a href="{% url 'brand:campaign_details' current_campaign.id %}">
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                        <i class="material-icons">edit</i>
+                        &nbsp;&nbsp;View &amp; Edit Campaign
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="begin-campaign">
+        <div class="begin-campaign-message">No Active Campaign</div>
+        <div class="begin-campaign-btn">
+            <a href="{% url 'brand:initiate_campaign' %}">
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                    Initiate Campaign
+                </button>
+            </a>
+        </div>
+    </div>
+    {% endif %}
+    <hr />
+    <div class="heading past-heading">Past Campaigns</div>
+    {% for campaign in past_campaigns %}
+    <div class="campaign-card">
+        <div class="timeline mdl-grid">
+            <div class="mdl-cell mdl-cell--5-col">
+                <span class="day-month-date">{{ campaign.start_time|timezone:"Asia/Kolkata"|date:"jS F," }}</span>
+                <span class="year-date">&nbsp;{{ campaign.start_time|timezone:"Asia/Kolkata"|date:"Y" }}</span>
+            </div>
+            <div class="mdl-cell mdl-cell--2-col">
+                <i class="material-icons">double_arrow</i>
+            </div>
+            <div class="mdl-cell mdl-cell--5-col">
+                <span class="day-month-date">{{ campaign.end_time|timezone:"Asia/Kolkata"|date:"jS F," }}</span>
+                <span class="year-date">&nbsp;{{ campaign.end_time|timezone:"Asia/Kolkata"|date:"Y" }}</span>
+            </div>
+        </div>
+        <div class="details-btn mdl-grid">
+            <div class="mdl-cell mdl-cell--4-col">
+                <i class="material-icons campaign-inactive">stop_circle</i>
+                &nbsp;&nbsp;Inactive
+            </div>
+            <div class="mdl-cell mdl-cell--4-col">
+                <i class="material-icons">dynamic_feed</i>
+                &nbsp;&nbsp;{% posts campaign %} influencer posts
+            </div>
+            <div class="mdl-cell mdl-cell--4-col">
+                <a href="{% url 'brand:campaign_details' campaign.id %}">
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                        <i class="material-icons">pageview</i>
+                        &nbsp;&nbsp;View Campaign
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="empty-past">
+        <div class="empty-container">
+            <div>
+                <i class="material-icons">hourglass_empty</i><br />
+                No Data
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<script>
+    $('#campaigns-top-nav-id').addClass('is-active');
+</script>
+<style>
+    .container {
+        width: 60vw;
+        margin: auto;
+        margin-top: 5vh;
+    }
+
+    .heading {
+        font-size: 2.7em;
+        color: #EEEEEE;
+        font-weight: 300;
+        margin-bottom: 5vh;
+    }
+
+    .heading::after {
+        content: "";
+        display: block;
+        border-bottom: 2px solid #EEEEEE;
+        width: 10%;
+        position: relative;
+        bottom: -20px;
+    }
+
+    hr {
+        margin-top: 5vh;
+    }
+
+    .past-heading {
+        margin-top: 5vh;
+        margin-bottom: 5vh;
+    }
+
+    .campaign-card {
+        background-color: #eeeeee;
+        border-radius: 5px;
+        padding: 2vh 2vw;
+        margin-top: 3vh;
+        margin-bottom: 3vh;
+    }
+
+    .day-month-date {
+        font-size: 2.5em;
+    }
+
+    .year-date {
+        font-size: 1.7em;
+    }
+
+    .timeline {
+        text-align: center;
+        border-bottom: 2px solid #161A1D;
+    }
+
+    .timeline i {
+        font-size: 3em;
+    }
+
+    .timeline .mdl-cell--5-col {
+        margin-top: 2vh;
+    }
+
+    .details-btn {
+        font-size: 1.5em;
+        margin-top: 2vh;
+    }
+
+    .details-btn i {
+        vertical-align: middle;
+    }
+
+    .details-btn .mdl-cell {
+        display: flex;
+        align-items: center;
+    }
+
+    .details-btn a,
+    .details-btn button {
+        width: 100%;
+    }
+
+    .details-btn button.mdl-button {
+        background-color: #161A1D !important;
+        color: #EEEEEE !important;
+    }
+
+    .empty-past {
+        margin-top: 7vh;
+        font-size: 1.5em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .empty-past i {
+        font-size: 1.5em;
+        margin-bottom: 1vh;
+    }
+
+    .empty-container {
+        text-align: center;
+        color: #EEEEEE;
+        width: 9vw;
+        height: 9vw;
+        border-radius: 50%;
+        position: relative;
+        border: 5px solid #EEEEEE;
+    }
+
+    .empty-container div {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+
+    .begin-campaign {
+        margin-top: 10vh;
+    }
+
+    .begin-campaign-message {
+        text-align: center;
+        color: #EEEEEE;
+        font-size: 2em;
+    }
+
+    .begin-campaign-btn {
+        margin-top: 2vh;
+        text-align: center;
+    }
+
+    .campaign-active {
+        color: #00c853;
+        font-size: 0.8em;
+    }
+
+    .campaign-inactive {
+        color: #dd2c00;
+        font-size: 0.8em;
+    }
+</style>
+{% endblock %}

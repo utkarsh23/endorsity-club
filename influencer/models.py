@@ -2,7 +2,11 @@ from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.dispatch import receiver
 
-from accounts.models import Influencer, FacebookPermissions
+from accounts.models import (
+    Influencer,
+    FacebookPermissions,
+    Location,
+)
 
 from brand.models import Campaign
 
@@ -49,8 +53,10 @@ class EndorsingPost(models.Model):
         ('VIDEO', 'VIDEO'),
         ('CAROUSEL_ALBUM', 'CAROUSEL_ALBUM'),
     )
+    created_at = models.DateTimeField(auto_now_add=True)
     influencer = models.ForeignKey(Influencer, on_delete=models.CASCADE)
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
     media_id = models.TextField()
     media_embed_url = models.URLField(max_length=1000)
     media_type = models.CharField(max_length=20, choices=MEDIA_CHOICES)
@@ -59,6 +65,7 @@ class EndorsingPost(models.Model):
     reach = models.TextField()
     saved = models.TextField()
     video_views = models.TextField()
+    complete = models.BooleanField(default=False)
 
     def __str__(self):
         return FacebookPermissions.objects.get(influencer=self.influencer).ig_username

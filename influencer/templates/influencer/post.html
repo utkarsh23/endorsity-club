@@ -1,0 +1,181 @@
+{% extends 'influencer/base.html' %}
+
+{% load influencer_tags %}
+{% block main %}
+{% if not request.user|is_influencer_unlocked %}
+<div class="container">
+    <!-- Add instruction like until you make post, you cannot unlock other brands -->
+    <!-- and you cannot delete a post for a minimum of 35 days  -->
+    <div class="message">
+        <i class="material-icons">announcement</i><br />
+        You have not unlocked any brand yet.<br />
+        Once you go to a store and unlock the brand, you may post here.
+    </div>
+</div>
+{% else %}
+<div class="main-heading">Endorsement Post</div>
+<div class="container">
+    <div class="heading mdl-grid">
+        <div class="mdl-cell mdl-cell--1-col">
+            <i class="material-icons">local_offer</i>
+        </div>
+        <div class="mdl-cell mdl-cell--11-col">
+            {{ post.campaign.brand.name }}
+        </div>
+    </div>
+    <div class="sub-heading mdl-grid">
+        <div class="mdl-cell mdl-cell--1-col">
+            <i class="material-icons">location_on</i>
+        </div>
+        <div class="mdl-cell mdl-cell--11-col">
+            {{ post.location }}
+        </div>
+    </div>
+    <hr />
+    <!-- Add Step 1 - Click Pictures around the restaurant, 2 - Post On Instagram, 3 - Select & Submit -->
+    <!-- Add Provisions to cancel unlock if some mistake in selecting location -->
+    <div class="select-heading">Select From Recent Instagram Posts</div>
+    <div class="picture-select mdl-grid">
+    </div>
+</div>
+{% endif %}
+<script>
+    $('#post-top-nav-id').addClass('is-active');
+    {% if request.user|is_influencer_unlocked %}
+    $(document).ready(function () {
+        $.ajax({
+            url: "/influencer/fetch-ig-posts",
+            async: true,
+            success: function (result) {
+                result["media"]["data"].forEach(function (item, index) {
+                    $('.picture-select').append(`
+                        <div id="ig-holder-${index}" class="mdl-cell mdl-cell--4-col">
+                            <div class="spinner-holder">
+                                <div class="mdl-spinner mdl-js-spinner is-active"></div>
+                            </div>
+                        </div>
+                    `);
+                });
+                fetchAllIGURLs(result);
+            }
+        });
+        var fetchAllIGURLs = (res) => {
+            res["media"]["data"].forEach(function (item, index) {
+                $.ajax({
+                    url: `/influencer/fetch-ig-post-thumbnail/${item['id']}/`,
+                    async: true,
+                    success: function (result) {
+                        $(`#ig-holder-${index}`).html(`<img src="${result["link"]}" alt="ig-picture" />`);
+                    }
+                });
+            });
+        };
+    });
+    {% endif %}
+</script>
+<style>
+    .main-heading {
+        width: 60vw;
+        margin: auto;
+    }
+
+    .container {
+        width: 60vw;
+        margin: auto;
+        background-color: #EEEEEE;
+        border-radius: 5px;
+    }
+
+    .spinner-holder {
+        width: 100%;
+        height: 100%;
+        min-height: 10vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .picture-select {
+        width: 40vw;
+        margin: auto;
+    }
+
+    .picture-select img {
+        width: 100%;
+        cursor: pointer;
+    }
+
+    .main-heading {
+        width: 60vw;
+        margin: auto;
+        font-size: 3em;
+        color: #EEEEEE;
+        margin-top: 5vh;
+        margin-bottom: 5vh;
+        font-weight: 300;
+    }
+
+    .main-heading::after {
+        content: "";
+        display: block;
+        border-bottom: 2px solid #EEEEEE;
+        width: 10%;
+        position: relative;
+        bottom: -20px;
+    }
+
+    .message {
+        padding-top: 5vh;
+        padding-bottom: 5vh;
+        font-size: 2em;
+        line-height: 1;
+        text-align: center;
+        margin-top: 5vh;
+    }
+
+    .message i {
+        font-size: 3em;
+        margin-bottom: 2vh;
+    }
+
+    .heading {
+        padding-top: 5vh;
+        margin-left: 5vw;
+        font-size: 2em;
+    }
+
+    .heading .mdl-cell {
+        display: flex;
+        align-items: center;
+    }
+
+    .heading i {
+        font-size: 1em;
+        vertical-align: middle;
+    }
+
+    .sub-heading {
+        margin-bottom: 2vh;
+        margin-left: 5vw;
+        font-size: 2em;
+        line-height: 1;
+    }
+
+    .sub-heading i {
+        font-size: 1em;
+        vertical-align: middle;
+    }
+
+    .select-heading {
+        font-size: 2em;
+        margin-top: 4vh;
+        margin-bottom: 2vh;
+        text-align: center;
+    }
+
+    hr {
+        margin-top: 0;
+        margin-bottom: 2vh;
+    }
+</style>
+{% endblock %}

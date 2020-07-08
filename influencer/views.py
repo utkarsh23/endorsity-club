@@ -8,6 +8,7 @@ from django.conf import settings
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
 from django.db.models import Q
+from django.http import JsonResponse
 from django.views.generic.base import TemplateView, View
 from django.views.generic.edit import FormView
 from django.shortcuts import redirect
@@ -280,7 +281,53 @@ class BrandUnlockView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, FormVi
         EndorsingPost.objects.create(
             influencer=influencer,
             campaign=campaign,
+            location=location,
         )
         influencer.is_unlocked = True
         influencer.save()
         return super().form_valid(form)
+
+
+class PostView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, TemplateView):
+    template_name = 'influencer/post.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['post'] = (EndorsingPost.objects
+                            .get(influencer__user=self.request.user, complete=False))
+        return context
+
+
+class FetchRecentIGPostsView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, View):
+
+    def get(self, request):
+        influencer = Influencer.objects.get(user=self.request.user)
+        fb_permissions = FacebookPermissions.objects.get(influencer=influencer)
+        IG_MEDIA = (settings.FACEBOOK_GRAPH_URI +
+            f"{fb_permissions.ig_page_id}?" +
+            "limit=25&fields=media&"+
+            f"access_token={fb_permissions.user_token}")
+        ig_media_response = json.loads(requests.get(IG_MEDIA).text)
+        return JsonResponse(ig_media_response)
+
+
+class FetchIGPostThumbnailView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, View):
+
+    def get(self, request, media_id):
+        influencer = Influencer.objects.get(user=self.request.user)
+        fb_permissions = FacebookPermissions.objects.get(influencer=influencer)
+        IG_MEDIA_LINK = (settings.FACEBOOK_GRAPH_URI +
+            f"{media_id}?" +
+            "fields=media_url,media_type&"+
+            f"access_token={fb_permissions.user_token}")
+        ig_media_link_response = json.loads(requests.get(IG_MEDIA_LINK).text)
+        if ig_media_link_response['media_type'] == 'VIDEO':
+            IG_MEDIA_LINK = (settings.FACEBOOK_GRAPH_URI +
+                f"{media_id}?" +
+                "fields=thumbnail_url&"+
+                f"access_token={fb_permissions.user_token}")
+            ig_media_link_response = json.loads(requests.get(IG_MEDIA_LINK).text)
+            response = {"link": ig_media_link_response["thumbnail_url"]}
+        else:
+            response = {"link": ig_media_link_response["media_url"]}
+        return JsonResponse(response)

@@ -10,3 +10,6 @@ class Campaign(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField() # typically 30 days from start_time
+
+    def __str__(self):
+        return str(self.id)

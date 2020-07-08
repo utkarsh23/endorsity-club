@@ -72,10 +72,10 @@
                             {{ location.name }}
                         </div>
                         <div class="mdl-grid">
-                            <div class="location-city mdl-cell--6-col">
+                            <div class="location-city mdl-cell--8-col">
                                 City&nbsp;-&nbsp;{{ location.city }}
                             </div>
-                            <div class="location-link mdl-cell--6-col">
+                            <div class="location-link mdl-cell--4-col">
                                 <a target="_blank"
                                     href="https://www.google.com/maps/search/?api=1&query={{ location.latitude }}%2C{{ location.longitude }}">
                                     <button
@@ -103,6 +103,7 @@
 </div>
 <script>
     $('#profile-top-nav-id').addClass('is-active');
+    $('.location-card:last-child').css('border-bottom', 'none');
 </script>
 <style>
     .container {
@@ -222,11 +223,11 @@
     }
 
     .location-card {
-        padding: 2vh 2vw;
-        background-color: #161A1D;
+        padding: 2vh 1vw;
+        color: #161A1D;
         margin-top: 2vh;
-        color: #EEEEEE;
-        border-radius: 5px;
+        background-color: #EEEEEE;
+        border-bottom: 1px solid #161A1D;
     }
 
     .location-heading {
@@ -251,8 +252,8 @@
     }
 
     .location-link button {
-        background-color: #EEEEEE !important;
-        color: #161A1D !important;
+        color: #EEEEEE !important;
+        background-color: #161A1D !important;
     }
 </style>
 {% endblock %}

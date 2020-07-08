@@ -10,6 +10,9 @@ from influencer.views import (
     ProfileView,
     QRScannerView,
     BrandUnlockView,
+    PostView,
+    FetchRecentIGPostsView,
+    FetchIGPostThumbnailView,
 )
 
 
@@ -23,6 +26,13 @@ urlpatterns = [
     path('profile/', ProfileView.as_view(), name="profile"),
     path('qr-scanner/', QRScannerView.as_view(), name="qr_scanner"),
     path('unlock/<uuid:brand_uuid>/', BrandUnlockView.as_view(), name="brand_unlock"),
+    path('post/', PostView.as_view(), name="post"),
+    path('fetch-ig-posts/', FetchRecentIGPostsView.as_view(), name="fetch_ig_posts"),
+    path(
+        'fetch-ig-post-thumbnail/<str:media_id>/',
+        FetchIGPostThumbnailView.as_view(),
+        name="fetch_ig_thumbnail"
+    ),
 ]
 
 app_name = 'influencer'

@@ -1,0 +1,131 @@
+{% extends 'brand/base.html' %}
+
+{% load tz %}
+{% load brand_tags %}
+{% block main %}
+<div class="main-heading">Campaign Details</div>
+<div class="container">
+    <div class="timeline mdl-grid">
+        <div class="mdl-cell mdl-cell--5-col">
+            <span class="day-month-date">{{ campaign.start_time|timezone:"Asia/Kolkata"|date:"jS F," }}</span>
+            <span class="year-date">&nbsp;{{ campaign.start_time|timezone:"Asia/Kolkata"|date:"Y" }}</span>
+        </div>
+        <div class="mdl-cell mdl-cell--2-col">
+            <i class="material-icons">double_arrow</i>
+        </div>
+        <div class="mdl-cell mdl-cell--5-col">
+            <span class="day-month-date">{{ campaign.end_time|timezone:"Asia/Kolkata"|date:"jS F," }}</span>
+            <span class="year-date">&nbsp;{{ campaign.end_time|timezone:"Asia/Kolkata"|date:"Y" }}</span>
+        </div>
+    </div>
+    {% check_active_campaign campaign as is_active_campaign %}
+    {% if is_active_campaign %}
+    <div class="mdl-grid location-grid">
+        <div class="mdl-cell mdl-cell--12-col">
+            <a href="#">
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                    <i class="material-icons">edit_location</i>
+                    &nbsp;&nbsp;Edit Active Locations
+                </button>
+            </a>
+        </div>
+        {% for location in active_locations %}
+            <div class="mdl-cell mdl-cell--1-col">
+                <i class="material-icons active-location">toggle_on</i>
+            </div>
+            <div class="mdl-cell mdl-cell--11-col">
+                {{ location.name }}
+            </div>
+            <hr />
+        {% endfor %}
+        {% for location in inactive_locations %}
+            <div class="mdl-cell mdl-cell--1-col">
+                <i class="material-icons inactive-location">toggle_off</i>
+            </div>
+            <div class="mdl-cell mdl-cell--11-col">
+                {{ location.name }}
+            </div>
+            <hr />
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+<script>
+    $('.location-grid hr:last-child').css('display', 'none');
+</script>
+<style>
+    .container {
+        background-color: #EEEEEE;
+        width: 60vw;
+        margin: auto;
+        margin-top: 5vh;
+        border-radius: 5px;
+    }
+
+    .day-month-date {
+        font-size: 2.5em;
+    }
+
+    .year-date {
+        font-size: 1.7em;
+    }
+
+    .timeline {
+        text-align: center;
+        margin-bottom: 1vh;
+        border-bottom: 1px solid #bdbdbd;
+    }
+
+    .timeline i {
+        font-size: 3em;
+    }
+
+    .timeline .mdl-cell--5-col {
+        margin-top: 2vh;
+    }
+
+    .main-heading {
+        font-size: 3em;
+        width: 60vw;
+        margin: auto;
+        color: #EEEEEE;
+        margin-top: 5vh;
+    }
+
+    .active-location {
+        color: #0091ea;
+    }
+
+    .inactive-location {
+        color: #9e9e9e;
+    }
+
+    .location-grid {
+        font-size: 1.5em;
+        line-height: 1.2;
+    }
+
+    .location-grid .mdl-cell--1-col {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .location-grid i {
+        font-size: 2em;
+    }
+
+    .location-grid button {
+        width: 100%;
+        background-color: #161A1D !important;
+        color: #EEEEEE !important;
+        margin-bottom: 1vh;
+    }
+
+    hr {
+        width: 100%;
+        margin-top: 0.5vh;
+        margin-bottom: 0.5vh;
+    }
+</style>
+{% endblock %}

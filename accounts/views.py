@@ -1,5 +1,7 @@
+import datetime
 import json
 import os
+import pytz
 import requests
 import urllib.parse
 
@@ -53,6 +55,9 @@ from accounts.utils import (
     center_crop_and_square_image,
     resize_image,
 )
+
+from brand.models import Campaign
+from brand.tasks import end_subscription
 
 from notifications.models import Notification
 
@@ -198,6 +203,7 @@ class BrandCreationView(MultiModelFormView):
         user.save()
         brand = forms['brand_form'].save(commit=False)
         brand.user = user
+        brand.is_subscription_active = True
         brand.save()
         location = Location.objects.create(
             brand=brand,
@@ -207,6 +213,16 @@ class BrandCreationView(MultiModelFormView):
             city=city,
         )
         send_activation_email.delay(user.pk, get_current_site(self.request))
+        start_time = datetime.datetime.now()
+        end_time = start_time + settings.FREE_SUBSCRIPTION_TIME
+        end_time = (end_time.astimezone(pytz.timezone('Asia/Kolkata'))
+                    .replace(hour=23, minute=59, second=59, microsecond=59))
+        Campaign.objects.create(
+            brand=brand,
+            start_time=start_time,
+            end_time=end_time,
+        )
+        end_subscription.apply_async(args=[user.pk], eta=end_time)
         return super().forms_valid(forms)
 
 
@@ -312,6 +328,7 @@ class CompleteBrandRegistrationView(UnregisteredLoginRequiredMixin, FormView):
         user.is_registered = True
         user.save()
         brand.user = user
+        brand.is_subscription_active = True
         brand.save()
         location = Location.objects.create(
             brand=brand,
@@ -320,6 +337,16 @@ class CompleteBrandRegistrationView(UnregisteredLoginRequiredMixin, FormView):
             longitude=lat_lng['lng'],
             city=city,
         )
+        start_time = datetime.datetime.now()
+        end_time = start_time + settings.FREE_SUBSCRIPTION_TIME
+        end_time = (end_time.astimezone(pytz.timezone('Asia/Kolkata'))
+                    .replace(hour=23, minute=59, second=59, microsecond=59))
+        Campaign.objects.create(
+            brand=brand,
+            start_time=start_time,
+            end_time=end_time,
+        )
+        end_subscription.apply_async(args=[user.pk], eta=end_time)
         return super().form_valid(form)
 
 
