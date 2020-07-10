@@ -50,10 +50,7 @@ class UserAdmin(BaseUserAdmin):
 class BrandAdmin(admin.ModelAdmin):
     list_display = ('user', 'name', 'is_subscription_active')
     list_filter = ('name', 'is_subscription_active')
-    fieldsets = (
-        (None, {'fields': ('user',)}),
-        ('Details', {'fields': ('name', 'phone_number', 'website', 'instagram_handle', 'is_subscription_active')}),
-    )
+    readonly_fields = ('id',)
 
 
 class LocationAdmin(admin.ModelAdmin):

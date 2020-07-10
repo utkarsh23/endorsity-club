@@ -58,16 +58,16 @@
         <div class="mdl-cell mdl-cell--8-col main-grid-cell">
             <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
                 <div class="mdl-tabs__tab-bar">
-                    <a href="#statistics-panel" class="mdl-tabs__tab is-active">
+                    <a href="{% url 'influencer:profile_analytics' %}" class="mdl-tabs__tab is-active">
                         <i class="material-icons">analytics</i>
                         &nbsp;&nbsp;Analytics
                     </a>
-                    <a href="#endorsements-panel" class="mdl-tabs__tab">
+                    <a href="{% url 'influencer:profile_endorsements' %}" class="mdl-tabs__tab">
                         <i class="material-icons">dynamic_feed</i>
                         &nbsp;&nbsp;Endorsements
                     </a>
                 </div>
-                <div class="mdl-tabs__panel is-active" id="statistics-panel">
+                <div class="mdl-tabs__panel is-active" id="analytics-panel">
                     <div class="stat-section">
                         <div class="panel-heading">
                             Audience City
@@ -141,14 +141,6 @@
                         <div id="follower-count-chart" style="width: 100%; height: 40vh"></div>
                     </div>
                 </div>
-                <div class="mdl-tabs__panel" id="endorsements-panel">
-                    <ul>
-                        <li>Tywin</li>
-                        <li>Cersei</li>
-                        <li>Jamie</li>
-                        <li>Tyrion</li>
-                    </ul>
-                </div>
             </div>
         </div>
     </div>
@@ -158,8 +150,6 @@
 </div>
 <script>
     $('#profile-top-nav-id').addClass('is-active');
-    $('select[name="impressions"]').addClass('mdl-button mdl-js-button mdl-button--raised mdl-button--colored');
-    $('select[name="follower-count"]').addClass('mdl-button mdl-js-button mdl-button--raised mdl-button--colored');
 
     // demographic chart
     google.charts.load('current', { 'packages': ['corechart', 'line'] });
@@ -312,6 +302,7 @@
         min-height: 60vh;
         padding: 2vh 0vw;
         margin-top: 1vh;
+        margin-bottom: 5vh;
     }
 
     .mdl-tabs__panel .mdl-button {
@@ -378,9 +369,11 @@
         margin-bottom: 4vh;
     }
 
-    select.mdl-button--raised.mdl-button--colored {
+    select {
         background: #161A1D !important;
+        color: #EEEEEE !important;
         cursor: pointer;
+        padding: 1vh;
     }
 
     .stat-section {

@@ -29,7 +29,7 @@ from accounts.utils import (
 
 from brand.models import Campaign
 
-from influencer.forms import LocationSelectForm
+from influencer.forms import LocationSelectForm, PostSelectForm
 from influencer.mixins import (
     NotFbConnectedInfluencerLoginRequiredMixin,
     NotVerifiedAndFbConnectedInfluencerLoginRequiredMixin,
@@ -233,8 +233,8 @@ class BrandsView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, TemplateVie
     template_name = 'influencer/brands.html'
 
 
-class ProfileView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, TemplateView):
-    template_name = 'influencer/profile.html'
+class ProfileAnalyticsView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, TemplateView):
+    template_name = 'influencer/profile_analytics.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -258,6 +258,18 @@ class ProfileView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, TemplateVi
         return context
 
 
+class ProfileEndorsementsView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, TemplateView):
+    template_name = 'influencer/profile_endorsements.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fb_permissions'] = (FacebookPermissions.objects
+            .get(influencer=Influencer.objects.get(user=self.request.user)))
+        context['endorsements'] = (EndorsingPost.objects
+            .filter(influencer=Influencer.objects.get(user=self.request.user), complete=True).order_by('-created_at'))
+        return context
+
+
 class QRScannerView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, TemplateView):
     template_name = 'influencer/qr_scanner.html'
 
@@ -265,7 +277,7 @@ class QRScannerView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, Template
 class BrandUnlockView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, FormView):
     template_name = 'influencer/brand_unlock.html'
     form_class = LocationSelectForm
-    success_url = reverse_lazy('influencer:brands')
+    success_url = reverse_lazy('influencer:post')
 
     def get_form(self, form_class=None):
         """Return an instance of the form to be used in this view."""
@@ -288,14 +300,38 @@ class BrandUnlockView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, FormVi
         return super().form_valid(form)
 
 
-class PostView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, TemplateView):
+class PostView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, FormView):
     template_name = 'influencer/post.html'
+    form_class = PostSelectForm
+    success_url = reverse_lazy('influencer:profile_endorsements')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['post'] = (EndorsingPost.objects
-                            .get(influencer__user=self.request.user, complete=False))
+        influencer = Influencer.objects.get(user=self.request.user)
+        if influencer.is_unlocked:
+            context['post'] = (EndorsingPost.objects
+                                .get(influencer__user=self.request.user, complete=False))
         return context
+
+    def form_valid(self, form):
+        media_id = form.cleaned_data['media_id']
+        influencer = Influencer.objects.get(user=self.request.user)
+        fb_permissions = FacebookPermissions.objects.get(influencer=influencer)
+        IG_MEDIA_LINK = (settings.FACEBOOK_GRAPH_URI +
+            f"{media_id}?" +
+            "fields=permalink%2Cmedia_type&"+
+            f"access_token={fb_permissions.user_token}")
+        ig_media_link_response = json.loads(requests.get(IG_MEDIA_LINK).text)
+        post = (EndorsingPost.objects
+                .get(influencer=influencer, complete=False))
+        post.complete = True
+        post.media_id = media_id
+        post.media_type = ig_media_link_response['media_type']
+        post.media_embed_url = ig_media_link_response['permalink']
+        post.save()
+        influencer.is_unlocked = False
+        influencer.save()
+        return super().form_valid(form)
 
 
 class FetchRecentIGPostsView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, View):
@@ -318,16 +354,22 @@ class FetchIGPostThumbnailView(VerifiedAndFbConnectedInfluencerLoginRequiredMixi
         fb_permissions = FacebookPermissions.objects.get(influencer=influencer)
         IG_MEDIA_LINK = (settings.FACEBOOK_GRAPH_URI +
             f"{media_id}?" +
-            "fields=media_url,media_type&"+
+            "fields=media_url%2Cmedia_type%2Cid&"+
             f"access_token={fb_permissions.user_token}")
         ig_media_link_response = json.loads(requests.get(IG_MEDIA_LINK).text)
         if ig_media_link_response['media_type'] == 'VIDEO':
             IG_MEDIA_LINK = (settings.FACEBOOK_GRAPH_URI +
                 f"{media_id}?" +
-                "fields=thumbnail_url&"+
+                "fields=thumbnail_url%2Cid&"+
                 f"access_token={fb_permissions.user_token}")
             ig_media_link_response = json.loads(requests.get(IG_MEDIA_LINK).text)
-            response = {"link": ig_media_link_response["thumbnail_url"]}
+            response = {
+                "link": ig_media_link_response["thumbnail_url"],
+                "id": ig_media_link_response["id"],
+            }
         else:
-            response = {"link": ig_media_link_response["media_url"]}
+            response = {
+                "link": ig_media_link_response["media_url"],
+                "id": ig_media_link_response["id"],
+            }
         return JsonResponse(response)

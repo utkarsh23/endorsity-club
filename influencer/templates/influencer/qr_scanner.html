@@ -2,6 +2,7 @@
 {% load static %}
 {% block main %}
 <script src="{% static 'jsQR.js' %}"></script>
+<div class="main-heading">Scan QR Code</div>
 <div class="container">
     <canvas id="webcam-canvas"></canvas>
     <div class="show"></div>
@@ -49,8 +50,24 @@
 </script>
 <style>
     #webcam-canvas {
-        width: 50vw;
-        height: 80vh;
+        width: 40vw;
+        height: 65vh;
+    }
+
+    .container {
+        margin: auto;
+        width: fit-content;
+        padding: 2vh 2vh;
+        background-color: #EEEEEE;
+        border-radius: 5px;
+        margin-top: 3vh;
+    }
+
+    .main-heading {
+        text-align: center;
+        font-size: 3em;
+        margin-top: 5vh;
+        color: #EEEEEE;
     }
 </style>
 {% endblock %}

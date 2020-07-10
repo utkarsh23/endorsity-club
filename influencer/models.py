@@ -60,12 +60,12 @@ class EndorsingPost(models.Model):
     media_id = models.TextField()
     media_embed_url = models.URLField(max_length=1000)
     media_type = models.CharField(max_length=20, choices=MEDIA_CHOICES)
+    complete = models.BooleanField(default=False)
     engagement = models.TextField()
     impressions = models.TextField()
     reach = models.TextField()
     saved = models.TextField()
     video_views = models.TextField()
-    complete = models.BooleanField(default=False)
 
     def __str__(self):
         return FacebookPermissions.objects.get(influencer=self.influencer).ig_username

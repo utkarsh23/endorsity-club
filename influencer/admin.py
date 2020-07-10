@@ -13,6 +13,7 @@ class InfluencerStatisticsAdmin(admin.ModelAdmin):
 class EndorsingPostAdmin(admin.ModelAdmin):
     list_display = ('created_at', 'influencer', 'campaign', 'media_embed_url')
     list_filter = ('influencer', 'campaign')
+    readonly_fields = ('created_at',)
 
 
 admin.site.register(InfluencerStatistics, InfluencerStatisticsAdmin)

@@ -1,8 +1,52 @@
 {% extends 'influencer/base.html' %}
 {% block main %}
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit" />
-</form>
+<div class="container">
+    <div class="main-heading">Select Unlock Location</div>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" />
+    </form>
+</div>
+<script>
+    $('label[for="id_location"').remove();
+</script>
+<style>
+    .container {
+        background-color: #EEEEEE;
+        margin: auto;
+        width: fit-content;
+        padding: 2vh 2vw;
+        margin-top: 5vh;
+    }
+
+    #id_location {
+        background-color: #161A1D !important;
+        color: #EEEEEE !important;
+        font-size: 1.3em;
+        max-width: 50vw;
+        overflow-x: hidden;
+        padding: 1vh;
+    }
+
+    input[type="submit"] {
+        width: 80%;
+        background-color: #161A1D !important;
+        color: #EEEEEE !important;
+        margin: auto;
+        margin-left: 10%;
+        margin-top: 2vh;
+    }
+
+    select {
+        overflow-x: visible;
+    }
+
+    .main-heading {
+        text-align: center;
+        font-size: 3em;
+        margin-bottom: 5vh;
+        margin-top: 3vh;
+    }
+</style>
 {% endblock %}

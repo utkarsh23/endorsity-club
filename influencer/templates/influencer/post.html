@@ -4,8 +4,6 @@
 {% block main %}
 {% if not request.user|is_influencer_unlocked %}
 <div class="container">
-    <!-- Add instruction like until you make post, you cannot unlock other brands -->
-    <!-- and you cannot delete a post for a minimum of 35 days  -->
     <div class="message">
         <i class="material-icons">announcement</i><br />
         You have not unlocked any brand yet.<br />
@@ -32,10 +30,58 @@
         </div>
     </div>
     <hr />
-    <!-- Add Step 1 - Click Pictures around the restaurant, 2 - Post On Instagram, 3 - Select & Submit -->
-    <!-- Add Provisions to cancel unlock if some mistake in selecting location -->
-    <div class="select-heading">Select From Recent Instagram Posts</div>
-    <div class="picture-select mdl-grid">
+    <div class="mdl-grid steps-grid">
+        <div class="mdl-cell mdl-cell--2-col">
+            <button class="mdl-button mdl-js-button mdl-button--fab">
+                1
+            </button>
+        </div>
+        <div class="mdl-cell mdl-cell--10-col">
+            Go around and click photos of you endorsing the brand.
+        </div>
+        <div class="mdl-cell mdl-cell--2-col">
+            <button class="mdl-button mdl-js-button mdl-button--fab">
+                2
+            </button>
+        </div>
+        <div class="mdl-cell mdl-cell--10-col">
+            Choose your favourite pictures and create an Instagram post with these.
+        </div>
+        <div class="mdl-cell mdl-cell--2-col select-ig-step">
+            <button class="mdl-button mdl-js-button mdl-button--fab">
+                3
+            </button>
+        </div>
+        <div class="mdl-cell mdl-cell--10-col select-ig-step">
+            Select this Instagram post.
+        </div>
+        <div class="mdl-cell mdl-cell--12-col">
+            <div class="picture-select-wrapper">
+                <div class="picture-select mdl-grid">
+                    <div class="spinner-holder">
+                        <div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color is-active"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mdl-cell mdl-cell--2-col">
+            <button class="mdl-button mdl-js-button mdl-button--fab">
+                4
+            </button>
+        </div>
+        <div class="mdl-cell mdl-cell--10-col">
+            Before complete submission, make sure that you have selected the right Instagram post. This action cannot be
+            undone.
+        </div>
+        <div class="mdl-cell mdl-cell--12-col">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit"
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored complete-btn"
+                    value="Complete Submission" />
+            </form>
+        </div>
     </div>
 </div>
 {% endif %}
@@ -47,6 +93,7 @@
             url: "/influencer/fetch-ig-posts",
             async: true,
             success: function (result) {
+                $(".picture-select .spinner-holder").remove();
                 result["media"]["data"].forEach(function (item, index) {
                     $('.picture-select').append(`
                         <div id="ig-holder-${index}" class="mdl-cell mdl-cell--4-col">
@@ -65,7 +112,19 @@
                     url: `/influencer/fetch-ig-post-thumbnail/${item['id']}/`,
                     async: true,
                     success: function (result) {
-                        $(`#ig-holder-${index}`).html(`<img src="${result["link"]}" alt="ig-picture" />`);
+                        $(`#ig-holder-${index}`).html(`
+                            <img class="media-img" media-id="${result['id']}" src="${result["link"]}" alt="ig-picture" />
+                        `);
+                        $('.media-img').click(function () {
+                            $('.img-selected').removeClass('img-selected');
+                            $('.selected-check').remove();
+                            $(this).addClass('img-selected');
+                            $(this).parent().append(`
+                                <i class="material-icons selected-check">check_circle</i>
+                            `);
+                            var media_id = $(this).attr('media-id');
+                            $('#id_media_id').attr('value', media_id);
+                        });
                     }
                 });
             });
@@ -89,20 +148,34 @@
     .spinner-holder {
         width: 100%;
         height: 100%;
-        min-height: 10vh;
         display: flex;
         align-items: center;
         justify-content: center;
+        margin: auto;
     }
 
     .picture-select {
         width: 40vw;
-        margin: auto;
+        border-radius: 5px;
+        background-color: white;
+        min-height: 15vh;
+    }
+
+    .picture-select .mdl-cell {
+        min-height: 10vh;
     }
 
     .picture-select img {
         width: 100%;
         cursor: pointer;
+    }
+
+    .picture-select-wrapper {
+        width: fit-content;
+        margin: auto;
+        padding: 5px 5px;
+        border-radius: 5px;
+        background: linear-gradient(to bottom right, #F58529, #FEDA77, #DD2A7B, #8134AF, #515BD4);
     }
 
     .main-heading {
@@ -166,16 +239,79 @@
         vertical-align: middle;
     }
 
-    .select-heading {
-        font-size: 2em;
-        margin-top: 4vh;
-        margin-bottom: 2vh;
-        text-align: center;
-    }
-
     hr {
         margin-top: 0;
         margin-bottom: 2vh;
+    }
+
+    .steps-grid {
+        padding: 2vh 2vw;
+        margin-bottom: ;
+    }
+
+    .steps-grid .mdl-cell--2-col {
+        text-align: center;
+    }
+
+    .steps-grid .mdl-cell {
+        margin-bottom: 4vh;
+    }
+
+    .steps-grid button {
+        background-color: #161A1D !important;
+        color: #EEEEEE !important;
+        cursor: default;
+    }
+
+    .steps-grid .mdl-cell--10-col {
+        display: flex;
+        align-items: center;
+        font-size: 2em;
+        line-height: 1;
+    }
+
+    .mdl-spinner__layer {
+        border-color: #161A1D !important;
+    }
+
+    .select-ig-step {
+        margin-bottom: 1vh !important;
+    }
+
+    form {
+        text-align: center;
+    }
+
+    .complete-btn {
+        width: 80%;
+        margin: auto;
+        background-color: #161A1D !important;
+        color: #EEEEEE !important;
+    }
+
+    #id_media_id, label[for="id_media_id"] {
+        display: none;
+    }
+
+    form p {
+        margin: 0;
+    }
+
+    .img-selected {
+        filter: opacity(0.25);
+    }
+
+    .picture-select div.mdl-cell {
+        position: relative;
+    }
+
+    .picture-select i.selected-check {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        font-size: 5em;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
     }
 </style>
 {% endblock %}

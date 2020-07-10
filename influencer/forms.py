@@ -12,3 +12,7 @@ class LocationSelectForm(forms.Form):
             location_choices.append((location.id, location.name))
         super().__init__(*args, **kwargs)
         self.fields['location'] = forms.ChoiceField(choices=location_choices)
+
+
+class PostSelectForm(forms.Form):
+    media_id = forms.CharField(max_length=50)
