@@ -1,12 +1,21 @@
-{% extends 'brand/base.html' %}
+{% extends base_template %}
+{% load tz %}
 {% block main %}
 <div class="container">
     <div class="mdl-grid main-grid">
         <div class="mdl-cell mdl-cell--3-col first-section">
-            {% if request.user.get_profile_picture %}
-            <img class="profile-picture-display" src="{{ request.user.get_profile_picture.url }}" />
+            {% if request.user.is_brand %}
+                {% if request.user.get_profile_picture %}
+                <img class="profile-picture-display" src="{{ request.user.get_profile_picture.url }}" />
+                {% else %}
+                <i class="material-icons placeholder-profile-picture">account_circle</i>
+                {% endif %}
             {% else %}
-            <i class="material-icons placeholder-profile-picture">account_circle</i>
+                {% if brand.user.get_profile_picture %}
+                <img class="profile-picture-display" src="{{ brand.user.get_profile_picture.url }}" />
+                {% else %}
+                <i class="material-icons placeholder-profile-picture">account_circle</i>
+                {% endif %}
             {% endif %}
             <div class="details">
                 <div class="name">
@@ -33,7 +42,7 @@
                 {% if brand.website %}
                 <div class="mdl-cell mdl-cell--2-col">
                     <div class="inner-content">
-                        <i class="material-icons">link</i>
+                        <i class="material-icons">language</i>
                     </div>
                 </div>
                 <div class="mdl-cell mdl-cell--10-col">
@@ -60,12 +69,14 @@
                     </a>
                 </div>
                 <div class="mdl-tabs__panel is-active" id="locations-panel">
+                    {% if request.user.is_brand %}
                     <a class="add-location-anchor" href="{% url 'brand:add_location' %}">
                         <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored location-btn">
                             <i class="material-icons">add_location</i>
                             &nbsp;&nbsp;Add New Location
                         </button>
                     </a>
+                    {% endif %}
                     {% for location in locations %}
                     <div class="location-card">
                         <div class="location-heading">
@@ -87,23 +98,84 @@
                             </div>
                         </div>
                     </div>
+                    {% empty %}
+                    <div class="empty-locations-wrapper">
+                        <div class="no-posts">
+                            <div>
+                                <i class="material-icons">hourglass_empty</i><br />
+                                No Data
+                            </div>
+                        </div>
+                    </div>
                     {% endfor %}
                 </div>
-                <div class="mdl-tabs__panel" id="influencer-posts-panel">
-                    <ul>
-                        <li>Tywin</li>
-                        <li>Cersei</li>
-                        <li>Jamie</li>
-                        <li>Tyrion</li>
-                    </ul>
-                </div>
+                <div class="mdl-tabs__panel" id="influencer-posts-panel"></div>
             </div>
         </div>
     </div>
 </div>
 <script>
-    $('#profile-top-nav-id').addClass('is-active');
+    {% if request.user.is_brand %}
+        $('#profile-top-nav-id').addClass('is-active');
+    {% endif %}
     $('.location-card:last-child').css('border-bottom', 'none');
+    {% for endorsement in endorsements %}
+        var link = "{{ endorsement.media_embed_url }}";
+        $("#influencer-posts-panel").append(`
+            <div class="post-container" id="post-container-{{ forloop.counter }}">
+                <div class="loader-container">
+                    <div class="spinner-holder">
+                        <div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color is-active"></div>
+                    </div>
+                </div>
+                <hr class="post-separator" />
+            </div>
+        `);
+        $.ajax({
+            url: `https://api.instagram.com/oembed?url=${link}`,
+            async: true,
+            success: function (result) {
+                $("#post-container-{{ forloop.counter }} .loader-container").remove();
+                $("#post-container-{{ forloop.counter }}").prepend(`
+                    <div class="mdl-grid">
+                        <div class="mdl-cell mdl-cell--1-col brand-name">
+                            {% if endorsement.influencer.user.get_profile_picture %}
+                            <img class="brand-picture-display"
+                                src="{{ endorsement.influencer.user.get_profile_picture.url }}" />
+                            {% else %}
+                            <i class="material-icons">local_offer</i>
+                            {% endif %}
+                        </div>
+                        <div class="mdl-cell mdl-cell--11-col brand-name">
+                            {{ endorsement.influencer.first_name }} {{ endorsement.influencer.last_name }}
+                        </div>
+                        <hr />
+                        <div class="mdl-cell mdl-cell--1-col">
+                            <i class="material-icons">access_time</i>
+                        </div>
+                        <div class="mdl-cell mdl-cell--11-col">{{ endorsement.created_at|timezone:"Asia/Kolkata" }}</div>
+                        <div class="mdl-cell mdl-cell--1-col">
+                            <i class="material-icons">location_on</i>
+                        </div>
+                        <div class="mdl-cell mdl-cell--11-col">{{ endorsement.location.name }}</div>
+                    </div>
+                    ${result['html']}
+                `);
+            }
+        });
+        {% if forloop.last %}
+            $("div.post-container:last-child hr").remove();
+        {% endif %}
+    {% empty %}
+        $("#influencer-posts-panel").append(`
+            <div class="no-posts">
+                <div>
+                    <i class="material-icons">hourglass_empty</i><br />
+                    No Data
+                </div>
+            </div>
+        `);
+    {% endfor %}
 </script>
 <style>
     .container {
@@ -215,6 +287,11 @@
         cursor: auto;
     }
 
+    #influencer-posts-panel {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
     button.location-btn {
         width: 100%;
         background-color: #161A1D !important;
@@ -225,7 +302,7 @@
     .location-card {
         padding: 2vh 1vw;
         color: #161A1D;
-        margin-top: 2vh;
+        margin-top: 1vh;
         background-color: #EEEEEE;
         border-bottom: 1px solid #161A1D;
     }
@@ -254,6 +331,96 @@
     .location-link button {
         color: #EEEEEE !important;
         background-color: #161A1D !important;
+    }
+
+    iframe {
+        margin: auto !important;
+        border: 2px solid #161A1D !important;
+        margin-top: 2vh !important;
+    }
+
+    .post-container {
+        font-size: 1.5em;
+        font-weight: 300;
+    }
+
+    .post-container .loader-container {
+        min-height: 40vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .post-container .mdl-cell {
+        display: flex;
+        align-items: center;
+        line-height: 1;
+    }
+
+    .post-container i {
+        font-size: 1.5em;
+    }
+
+    .post-container .brand-picture-display {
+        width: 1em;
+        border-radius: 50%;
+    }
+
+    .post-container .mdl-grid {
+        width: 80%;
+        margin-top: 2vh;
+    }
+
+    .brand-name {
+        font-size: 1.5em;
+        font-weight: 300;
+    }
+
+    .brand-name i {
+        font-size: 1.5em;
+    }
+
+    hr {
+        width: 100%;
+        margin-top: 1vh;
+        margin-bottom: 1vh;
+    }
+
+    .post-separator {
+        border-color: #161A1D;
+        margin-top: 5vh;
+        border-width: 8px;
+    }
+
+    .no-posts {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+        height: 100%;
+        font-size: 1.5em;
+        position: absolute;
+    }
+
+    .no-posts i {
+        font-size: 1.5em;
+        margin-bottom: 2vh;
+    }
+
+    .mdl-spinner__layer {
+        border-color: #161A1D !important;
+    }
+
+    #influencer-posts-panel,
+    .empty-locations-wrapper {
+        background-color: #EEEEEE;
+        border-radius: 5px;
+        min-height: 40vh;
+        padding: 2vh 0vw;
+        margin-top: 1vh;
+        margin-bottom: 5vh;
+        position: relative;
     }
 </style>
 {% endblock %}

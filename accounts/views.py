@@ -15,7 +15,9 @@ from django.contrib.auth.views import (
     PasswordContextMixin,
 )
 from django.contrib.sites.shortcuts import get_current_site
+from django.core import serializers
 from django.db.models import Q
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, resolve_url
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -456,3 +458,23 @@ class AccountExistsView(View):
             return redirect(reverse_lazy('accounts:landing'))
         else:
             return render(request, 'accounts/account_exists.html')
+
+
+class InfiniteAPIView(View):
+
+    def get(self, request, *args, **kwargs):
+        initial_count = kwargs['initial_count']
+        paginator_count = kwargs['paginator_count']
+        db_model = kwargs['db_model']
+        page_no = kwargs['page_no']
+        filters = kwargs['filters']
+        order_by = kwargs['order_by']
+        custom_serializer = kwargs['custom_serializer']
+        if page_no == 1:
+            results = (db_model.objects.filter(**filters)
+                .order_by(*order_by)[:initial_count])
+        else:
+            starting_record = initial_count + (page_no - 2) * paginator_count
+            results = (db_model.objects.filter(**filters)
+                .order_by(*order_by)[starting_record: starting_record + paginator_count])
+        return HttpResponse(custom_serializer.serialize(results), content_type='application/json')

@@ -17,6 +17,7 @@ from django.urls import reverse_lazy
 from django_celery_beat.models import PeriodicTask, IntervalSchedule
 
 from accounts.models import (
+    Brand,
     FacebookPermissions,
     Influencer,
     Location,
@@ -26,6 +27,7 @@ from accounts.utils import (
     center_crop_and_square_image,
     resize_image,
 )
+from accounts.views import InfiniteAPIView
 
 from brand.models import Campaign
 
@@ -36,7 +38,7 @@ from influencer.mixins import (
     VerifiedAndFbConnectedInfluencerLoginRequiredMixin,
 )
 from influencer.models import InfluencerStatistics, EndorsingPost
-from influencer.tasks import update_influencer_statistics
+from influencer.tasks import update_influencer_statistics, update_post_stats
 
 from notifications.models import Notification
 
@@ -255,6 +257,7 @@ class ProfileAnalyticsView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, T
         context['follower_counts'] = [
             [datetime.datetime.utcfromtimestamp(int(el[0])).strftime('%d %b %y'), int(el[1])]
             for el in influencer_statistics.follower_counts[::-1]]
+        context['base_template'] = 'influencer/base.html'
         return context
 
 
@@ -267,6 +270,18 @@ class ProfileEndorsementsView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin
             .get(influencer=Influencer.objects.get(user=self.request.user)))
         context['endorsements'] = (EndorsingPost.objects
             .filter(influencer=Influencer.objects.get(user=self.request.user), complete=True).order_by('-created_at'))
+        context['base_template'] = 'influencer/base.html'
+        return context
+
+
+class ProfileBadgeView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, TemplateView):
+    template_name = 'influencer/profile_badge.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fb_permissions'] = (FacebookPermissions.objects
+            .get(influencer=Influencer.objects.get(user=self.request.user)))
+        context['base_template'] = 'influencer/base.html'
         return context
 
 
@@ -288,9 +303,12 @@ class BrandUnlockView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, FormVi
     def form_valid(self, form):
         location_uuid = form.cleaned_data['location']
         location = Location.objects.get(id=location_uuid)
-        campaign = Campaign.objects.get(brand=location.brand)
+        if not location.brand.is_subscription_active:
+            return super().form_invalid(form)
+        campaign = (Campaign.objects.filter(brand=location.brand)
+                    .order_by('-start_time').first())
         influencer = Influencer.objects.get(user=self.request.user)
-        EndorsingPost.objects.create(
+        endorsing_post = EndorsingPost.objects.create(
             influencer=influencer,
             campaign=campaign,
             location=location,
@@ -331,6 +349,7 @@ class PostView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, FormView):
         post.save()
         influencer.is_unlocked = False
         influencer.save()
+        update_post_stats.delay(post.id)
         return super().form_valid(form)
 
 
@@ -373,3 +392,21 @@ class FetchIGPostThumbnailView(VerifiedAndFbConnectedInfluencerLoginRequiredMixi
                 "id": ig_media_link_response["id"],
             }
         return JsonResponse(response)
+
+
+class FetchBrandsInfiniteAPIView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, InfiniteAPIView):
+    pass
+
+
+class BrandProfileView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, TemplateView):
+    template_name = 'brand/profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        brand = Brand.objects.get(id=kwargs['brand_uuid'])
+        context['base_template'] = 'influencer/base.html'
+        context['brand'] = brand
+        context['locations'] = Location.objects.filter(brand=brand)
+        context['endorsements'] = (EndorsingPost.objects
+            .filter(campaign__brand__user=brand.user).order_by('-created_at'))
+        return context

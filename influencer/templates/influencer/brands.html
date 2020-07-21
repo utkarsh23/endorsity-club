@@ -1,10 +1,202 @@
 {% extends 'influencer/base.html' %}
 {% block main %}
-<h1>Brands</h1>
-<a href="{% url 'accounts:settings' %}">Settings</a>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<div class="container-wrapper">
+    <div class="container"></div>
+    <div class="spinner-wrapper">
+        <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner"></div>
+    </div>
+</div>
 <script>
-    $('#brands-top-nav-id').addClass('is-active');
+    $(document).ready(function() {
+        $('#brands-top-nav-id').addClass('is-active');
+        var add_brand_data = () => {
+            $('.container-wrapper .mdl-spinner').addClass(`is-active`);
+            $.ajax({
+                cache: false,
+                url: `/influencer/fetch-brands/${ $(window).data('page_no') }/`,
+                success: function (result) {
+                    console.log($(window).data('page_no'));
+                    for (var brand = 0; brand < result.length; brand++) {
+                        console.log(result[brand]);
+                        $(`.container`).append(`
+                            <div class="brand-card">
+                                <div class="brand-card-top">
+                                    ${
+                                        (result[brand]['fields']['profile_picture'])
+                                        ? `
+                                            <img
+                                                class="profile-picture-display"
+                                                src="${result[brand]['fields']['profile_picture']}"
+                                            />`
+                                        : '<i class="material-icons placeholder-profile-picture">account_circle</i>'
+                                    }
+                                    &nbsp;&nbsp;${result[brand]['fields']['name']}
+                                </div>
+                                <hr />
+                                <div class="mdl-grid">
+                                    <div class="mdl-cell mdl-cell--3-col">
+                                        <i class="material-icons">phone</i>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;${result[brand]['fields']['phone_number']}
+                                    </div>
+                                    ${
+                                        (result[brand]['fields']['website'])
+                                        ? `
+                                            <div class="mdl-cell mdl-cell--5-col">
+                                                <div class="website-wrapper">
+                                                    <i class="material-icons">language</i>
+                                                    &nbsp;&nbsp;
+                                                    <a target="_blank" href="${result[brand]['fields']['website']}">
+                                                        ${result[brand]['fields']['website']}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        `
+                                        : '<div class="mdl-cell mdl-cell--5-col"></div>'
+                                    }
+                                    ${
+                                        (result[brand]['fields']['website'])
+                                        ? `
+                                            <div class="mdl-cell mdl-cell--4-col">
+                                                <div class="insta-wrapper">
+                                                    <svg viewBox="0 0 24 24">
+                                                        <path fill="#161A1D"
+                                                            d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z">
+                                                        </path>
+                                                    </svg>
+                                                    &nbsp;&nbsp;${result[brand]['fields']['instagram_handle']}
+                                                </div>
+                                            </div>
+                                        `
+                                        : '<div class="mdl-cell mdl-cell--4-col"></div>'
+                                    }
+                                </div>
+                                <div class="view-brand-wrapper">
+                                    <a class="view-brand-anchor" href="/influencer/brand/${result[brand]['pk']}/">
+                                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                                            View Brand, Get Directions &amp; More
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
+                        `);
+                    }
+                    $('.container-wrapper .mdl-spinner').removeClass(`is-active`);
+                    $(window).data('ajaxready', true);
+                    $(window).data('page_no', $(window).data('page_no') + 1);
+                }
+            });
+        };
+        $(window).data('page_no', 1);
+        add_brand_data();
+        $('main.mdl-layout__content').data('ajaxready', true).scroll(function (e) {
+            if ($(window).data('ajaxready') === false) return;
+
+            if ($(this).scrollTop() + $(this).innerHeight() >= ($(this)[0].scrollHeight) - 100) {
+                $(window).data('ajaxready', false);
+                add_brand_data();
+            }
+        });
+    });
 </script>
+<style>
+    .container {
+        width: 60vw;
+        margin: auto;
+        margin-top: 5vh;
+    }
+
+    .brand-card {
+        background-color: #EEEEEE;
+        margin-bottom: 5vh;
+        padding: 2vh 2vw;
+        border-radius: 5px;
+    }
+
+    .brand-card .mdl-cell {
+        display: flex;
+        align-items: center;
+        font-size: 1.3em;
+    }
+
+    .brand-card button {
+        background-color: #161A1D !important;
+        color: #EEEEEE !important;
+        width: 100%;
+    }
+
+    .website-wrapper a {
+        text-decoration: none;
+        color: inherit;
+        border-bottom: 1px solid #161A1D;
+        width: 100%;
+    }
+
+    .profile-picture-display {
+        border-radius: 50%;
+        width: 2.5vw;
+    }
+
+    .placeholder-profile-picture {
+        font-size: 2.5vw;
+        color: #161A1D;
+        border-radius: 50%;
+    }
+
+    .brand-card-top {
+        display: flex;
+        align-items: center;
+        font-size: 2em;
+        font-weight: 300;
+    }
+
+    .website-wrapper i {
+        vertical-align: middle;
+    }
+
+    .website-wrapper {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        margin: auto;
+        margin-right: 10px;
+    }
+
+    .brand-card svg {
+        width: 24px;
+    }
+
+    .insta-wrapper {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        margin: auto;
+    }
+
+    .insta-wrapper a,
+    .insta-wrapper button {
+        width: 100%;
+    }
+
+    .view-brand-wrapper {
+        margin-top: 2vh;
+    }
+
+    .view-brand-anchor {
+        width: 100%;
+    }
+
+    .spinner-wrapper {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 5vh;
+    }
+
+    .mdl-spinner {
+        color: #EEEEEE;
+    }
+
+    .mdl-spinner__layer {
+        border-color: #EEEEEE !important;
+    }
+</style>
 {% endblock %}

@@ -93,7 +93,7 @@
         }
 
         .top-menu {
-            width: 60vw;
+            width: 50vw;
             text-align: center;
             margin-top: 0.2vh;
             border: 2px solid #EEEEEE;
@@ -266,25 +266,19 @@
             </a>
         </ul>
         <div class="top-menu mdl-grid">
-            <div id="top-stats-top-nav-id" class="mdl-cell mdl-cell--3-col">
-                <a href="{% url 'brand:your_endorsements' %}">
-                    <i class="material-icons">bar_chart</i>
-                    &nbsp;OVERVIEW
-                </a>
-            </div>
-            <div id="campaigns-top-nav-id" class="mdl-cell mdl-cell--3-col">
+            <div id="campaigns-top-nav-id" class="mdl-cell mdl-cell--4-col">
                 <a href="{% url 'brand:campaigns' %}">
                     <i class="material-icons">campaign</i>
-                    &nbsp;CAMPAIGNS
+                    &nbsp;CAMPAIGN
                 </a>
             </div>
-            <div id="influencers-top-nav-id" class="mdl-cell mdl-cell--3-col">
-                <a href="#">
+            <div id="influencers-top-nav-id" class="mdl-cell mdl-cell--4-col">
+                <a href="{% url 'brand:influencers' %}">
                     <i class="material-icons">people</i>
                     &nbsp;INFLUENCERS
                 </a>
             </div>
-            <div id="profile-top-nav-id" class="mdl-cell mdl-cell--3-col">
+            <div id="profile-top-nav-id" class="mdl-cell mdl-cell--4-col">
                 <a href="{% url 'brand:profile' %}">
                     <i class="material-icons">account_circle</i>
                     &nbsp;PROFILE

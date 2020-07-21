@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.dispatch import receiver
@@ -54,6 +56,7 @@ class EndorsingPost(models.Model):
         ('CAROUSEL_ALBUM', 'CAROUSEL_ALBUM'),
     )
     created_at = models.DateTimeField(auto_now_add=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     influencer = models.ForeignKey(Influencer, on_delete=models.CASCADE)
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)

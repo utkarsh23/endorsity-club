@@ -1,5 +1,8 @@
 from django.urls import path
 
+from accounts.models import Brand
+
+from influencer.serializers import brands_view_serializer
 from influencer.views import (
     BrandsView,
     FacebookConnectView,
@@ -9,11 +12,14 @@ from influencer.views import (
     AwaitVerificationView,
     ProfileAnalyticsView,
     ProfileEndorsementsView,
+    ProfileBadgeView,
     QRScannerView,
     BrandUnlockView,
     PostView,
     FetchRecentIGPostsView,
     FetchIGPostThumbnailView,
+    FetchBrandsInfiniteAPIView,
+    BrandProfileView,
 )
 
 
@@ -26,6 +32,7 @@ urlpatterns = [
     path('await-verification/', AwaitVerificationView.as_view(), name='await_verification'),
     path('profile/analytics/', ProfileAnalyticsView.as_view(), name="profile_analytics"),
     path('profile/endorsements/', ProfileEndorsementsView.as_view(), name="profile_endorsements"),
+    path('profile/badge/', ProfileBadgeView.as_view(), name="profile_badge"),
     path('qr-scanner/', QRScannerView.as_view(), name="qr_scanner"),
     path('unlock/<uuid:brand_uuid>/', BrandUnlockView.as_view(), name="brand_unlock"),
     path('post/', PostView.as_view(), name="post"),
@@ -35,6 +42,22 @@ urlpatterns = [
         FetchIGPostThumbnailView.as_view(),
         name="fetch_ig_thumbnail"
     ),
+    path(
+        'fetch-brands/<int:page_no>/',
+        FetchBrandsInfiniteAPIView.as_view(),
+        kwargs={
+            'initial_count': 10,
+            'paginator_count': 5,
+            'db_model': Brand,
+            'filters': {
+                'is_subscription_active': True,
+            },
+            'order_by': [],
+            'custom_serializer': brands_view_serializer,
+        },
+        name="fetch_brands",
+    ),
+    path('brand/<uuid:brand_uuid>/', BrandProfileView.as_view(), name="brand_profile"),
 ]
 
 app_name = 'influencer'

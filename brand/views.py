@@ -6,17 +6,30 @@ import urllib.parse
 
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
+from django.utils.encoding import force_text
+from django.utils.http import urlsafe_base64_decode
 from django.views.generic.base import TemplateView, View
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 
-from accounts.models import Brand, Location
+from accounts.models import (
+    Brand,
+    Location,
+    Influencer,
+    FacebookPermissions,
+)
+from accounts.views import InfiniteAPIView
 
 from brand.forms import AddLocationForm
 from brand.mixins import RegisteredBrandLoginRequiredMixin
 from brand.models import Campaign
 from brand.tasks import end_subscription
+
+from influencer.models import (
+    EndorsingPost,
+    InfluencerStatistics,
+)
 
 from notifications.models import Notification
 
@@ -31,8 +44,11 @@ class ProfileView(RegisteredBrandLoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         brand = Brand.objects.get(user=self.request.user)
+        context['base_template'] = 'brand/base.html'
         context['brand'] = brand
         context['locations'] = Location.objects.filter(brand=brand)
+        context['endorsements'] = (EndorsingPost.objects
+            .filter(campaign__brand__user=self.request.user, complete=True).order_by('-created_at'))
         return context
 
 
@@ -76,18 +92,17 @@ class AddLocationView(RegisteredBrandLoginRequiredMixin, FormView):
 
 
 class CampaignsView(RegisteredBrandLoginRequiredMixin, TemplateView):
-    template_name = 'brand/campaigns.html'
+    template_name = 'brand/campaign.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         brand = Brand.objects.get(user=self.request.user)
-        campaigns = (Campaign.objects.filter(brand=brand)
-                    .order_by('-start_time'))
         if brand.is_subscription_active:
-            current_campaign = campaigns.first()
+            current_campaign = (Campaign.objects.filter(brand=brand)
+                    .order_by('-start_time').first())
             context['current_campaign'] = current_campaign
-            campaigns = campaigns[1:]
-        context['past_campaigns'] = campaigns
+            context['locations'] = Location.objects.filter(brand=current_campaign.brand)
+            context['posts'] = EndorsingPost.objects.filter(campaign=current_campaign, complete=True)
         return context
 
 
@@ -111,15 +126,75 @@ class InitiateCampaignView(RegisteredBrandLoginRequiredMixin, View):
         return redirect(reverse_lazy('brand:campaigns'))
 
 
-class CampaignDetailsView(RegisteredBrandLoginRequiredMixin, TemplateView):
-    template_name = 'brand/campaign_details.html'
+class InfluencersView(RegisteredBrandLoginRequiredMixin, TemplateView):
+    template_name = 'brand/influencers.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        campaign = Campaign.objects.get(id=kwargs['campaign_uuid'])
-        if campaign.brand.user != self.request.user:
-            raise PermissionDenied
-        context['campaign'] = campaign
-        context['active_locations'] = Location.objects.filter(brand=campaign.brand, active=True)
-        context['inactive_locations'] = Location.objects.filter(brand=campaign.brand, active=False)
+        context['your_influencers'] = (EndorsingPost.objects
+            .filter(campaign__brand__user=self.request.user, complete=True)
+            .distinct('influencer'))
         return context
+
+
+class InfluencerAnalyticsView(RegisteredBrandLoginRequiredMixin, TemplateView):
+    template_name = 'influencer/profile_analytics.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['base_template'] = 'brand/base.html'
+        influencer = (Influencer.objects
+            .get(user__pk=urlsafe_base64_decode(force_text(kwargs['influencer_pk']))))
+        context['influencer'] = influencer
+        context['fb_permissions'] = (FacebookPermissions.objects
+            .get(influencer=influencer))
+        influencer_statistics = (InfluencerStatistics.objects
+            .get(influencer=influencer))
+        context['audience_city_stats'] = sorted(
+            influencer_statistics.audience_city,
+            reverse=True,
+            key=lambda el: int(el[1]))[:3]
+        context['audience_demographic'] = [
+            [el[0].replace('M.', 'Male ').replace('F.', 'Female ').replace('U.', 'Unknown '), int(el[1])]
+            for el in influencer_statistics.audience_gender_age]
+        context['impressions'] = [
+            [datetime.datetime.utcfromtimestamp(int(el[0])).strftime('%d %b %y'), int(el[1])]
+            for el in influencer_statistics.impressions[::-1]]
+        context['follower_counts'] = [
+            [datetime.datetime.utcfromtimestamp(int(el[0])).strftime('%d %b %y'), int(el[1])]
+            for el in influencer_statistics.follower_counts[::-1]]
+        return context
+
+
+class InfluencerEndorsementsView(RegisteredBrandLoginRequiredMixin, TemplateView):
+    template_name = 'influencer/profile_endorsements.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['base_template'] = 'brand/base.html'
+        influencer = (Influencer.objects
+            .get(user__pk=urlsafe_base64_decode(force_text(kwargs['influencer_pk']))))
+        context['influencer'] = influencer
+        context['fb_permissions'] = (FacebookPermissions.objects
+            .get(influencer=influencer))
+        context['endorsements'] = (EndorsingPost.objects
+            .filter(influencer=influencer, complete=True).order_by('-created_at'))
+        return context
+
+
+class InfluencerBadgeView(RegisteredBrandLoginRequiredMixin, TemplateView):
+    template_name = 'influencer/profile_badge.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['base_template'] = 'brand/base.html'
+        influencer = (Influencer.objects
+            .get(user__pk=urlsafe_base64_decode(force_text(kwargs['influencer_pk']))))
+        context['influencer'] = influencer
+        context['fb_permissions'] = (FacebookPermissions.objects
+            .get(influencer=influencer))
+        return context
+
+
+class FetchInfluencersInfiniteAPIView(RegisteredBrandLoginRequiredMixin, InfiniteAPIView):
+    pass

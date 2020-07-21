@@ -1,0 +1,264 @@
+{% extends 'brand/base.html' %}
+{% load brand_tags %}
+{% block main %}
+<div class="container">
+    <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+        <div class="mdl-tabs__tab-bar">
+            <a href="#all-influencers-panel" class="mdl-tabs__tab is-active">All Influencers</a>
+            <a href="#your-influencers-panel" class="mdl-tabs__tab">Your Influencers</a>
+        </div>
+        <div class="mdl-tabs__panel is-active" id="all-influencers-panel">
+            <div class="all-influencer-container"></div>
+            <div class="spinner-wrapper">
+                <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner"></div>
+            </div>
+        </div>
+        <div class="mdl-tabs__panel" id="your-influencers-panel">
+            {% for inf in your_influencers %}
+            <div class="influencer-card">
+                <div class="mdl-grid">
+                    <div class="mdl-cell mdl-cell--2-col">
+                        {% if inf.influencer.user.get_profile_picture %}
+                        <img class="profile-picture-display" src="{{ inf.influencer.user.get_profile_picture.url }}" />
+                        {% else %}
+                        <i class="material-icons placeholder-profile-picture">account_circle</i>
+                        {% endif %}
+                    </div>
+                    <div class="mdl-cell mdl-cell--10-col">
+                        <div class="mdl-grid">
+                            <div class="mdl-cell mdl-cell--12-col name-cell">
+                                {{ inf.influencer.first_name }} {{ inf.influencer.last_name }}
+                            </div>
+                            <hr />
+                            <div class="mdl-cell mdl-cell--12-col insta-cell">
+                                <svg viewBox="0 0 24 24">
+                                    <path fill="#161A1D"
+                                        d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z">
+                                    </path>
+                                </svg>
+                                &nbsp;&nbsp;{{ inf }}
+                            </div>
+                            <div class="mdl-cell mdl-cell--12-col followers-cell">
+                                <i class="material-icons">trending_up</i>
+                                &nbsp;&nbsp;{% get_follower_count inf %} Followers
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-cell mdl-cell--12-col view-btn-cell">
+                        {% get_encoded_pk inf.influencer.user as encoded_pk %}
+                        <a href="{% url 'brand:influencer_analytics' encoded_pk %}">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                                View Influencer Profile
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <hr class="separator-hr" />
+            {% empty %}
+            <!-- add for empty -->
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<script>
+    $('#influencers-top-nav-id').addClass('is-active');
+    $('.mdl-tabs__panel hr:last-child').remove();
+    var add_influencer_data = () => {
+            $('#all-influencers-panel .mdl-spinner').addClass(`is-active`);
+            $.ajax({
+                cache: false,
+                url: `/brand/fetch-influencers/${ $(window).data('page_no') }/`,
+                success: function (result) {
+                    console.log($(window).data('page_no'));
+                    for (var influencer = 0; influencer < result.length; influencer++) {
+                        console.log(result[influencer]);
+                        $(`.all-influencer-container`).append(`
+                            <div class="influencer-card">
+                                <div class="mdl-grid">
+                                    <div class="mdl-cell mdl-cell--2-col">
+                                        ${
+                                            (result[influencer]['fields']['profile_picture'])
+                                            ? `
+                                                <img
+                                                    class="profile-picture-display"
+                                                    src="${result[influencer]['fields']['profile_picture']}"
+                                                />`
+                                            : '<div class="placeholder-wrapper"><i class="material-icons placeholder-profile-picture">account_circle</i></div>'
+                                        }
+                                    </div>
+                                    <div class="mdl-cell mdl-cell--10-col">
+                                        <div class="mdl-grid">
+                                            <div class="mdl-cell mdl-cell--12-col name-cell">
+                                                ${result[influencer]['fields']['first_name']} ${result[influencer]['fields']['last_name']}
+                                            </div>
+                                            <hr />
+                                            <div class="mdl-cell mdl-cell--12-col insta-cell">
+                                                <svg viewBox="0 0 24 24">
+                                                    <path fill="#161A1D"
+                                                        d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z">
+                                                    </path>
+                                                </svg>
+                                                &nbsp;&nbsp;${result[influencer]['fields']['username']}
+                                            </div>
+                                            <div class="mdl-cell mdl-cell--12-col followers-cell">
+                                                <i class="material-icons">trending_up</i>
+                                                &nbsp;&nbsp;${result[influencer]['fields']['follower_count']} Followers
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mdl-cell mdl-cell--12-col view-btn-cell">
+                                        <a href="/brand/influencer/${result[influencer]['fields']['user_encoded_pk']}/analytics/">
+                                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                                                View Influencer Profile
+                                            </button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="separator-hr" />
+                        `);
+                    }
+                    $('#all-influencers-panel .mdl-spinner').removeClass(`is-active`);
+                    $(window).data('ajaxready', true);
+                    $(window).data('page_no', $(window).data('page_no') + 1);
+                }
+            });
+        };
+        $(window).data('page_no', 1);
+        add_influencer_data();
+        $('main.mdl-layout__content').data('ajaxready', true).scroll(function (e) {
+            if ($(window).data('ajaxready') === false) return;
+
+            if ($(this).scrollTop() + $(this).innerHeight() >= ($(this)[0].scrollHeight) - 100) {
+                $(window).data('ajaxready', false);
+                add_influencer_data();
+            }
+        });
+</script>
+<style>
+    .container {
+        width: 60vw;
+        margin: auto;
+        border-radius: 5px;
+        margin-top: 2vh;
+        margin-bottom: 2vh;
+    }
+
+    .mdl-tabs__tab {
+        color: #EEEEEE;
+    }
+
+    .mdl-tabs.is-upgraded .mdl-tabs__tab.is-active {
+        color: #EEEEEE !important;
+    }
+
+    .mdl-tabs__tab.is-active::after {
+        background: #EEEEEE !important;
+    }
+
+    .mdl-tabs__tab-bar i {
+        vertical-align: middle;
+        font-size: 1.5em;
+    }
+
+    .mdl-tabs__tab-bar {
+        border-bottom: none;
+    }
+
+    .mdl-tabs__panel {
+        margin-top: 2vh;
+        background-color: #EEEEEE;
+        border-radius: 5px;
+    }
+
+    .profile-picture-display {
+        border-radius: 50%;
+        width: 100%;
+    }
+
+    .placeholder-profile-picture {
+        font-size: 8vw;
+        color: #161A1D;
+    }
+
+    .placeholder-wrapper {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .name-cell {
+        font-size: 2.5em;
+        font-weight: 300;
+    }
+
+    .insta-cell {
+        font-size: 1.5em;
+        margin-top: 3vh;
+    }
+
+    .insta-cell svg {
+        width: 1.5em;
+    }
+
+    .followers-cell {
+        font-size: 1.5em;
+        margin-top: 0;
+    }
+
+    .followers-cell i {
+        font-size: 1.5em;
+        vertical-align: middle;
+    }
+
+    .influencer-card {
+        padding: 2vh 2vw;
+        padding-bottom: 0vh;
+    }
+
+    .influencer-card hr {
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .separator-hr {
+        border-color: #161A1D;
+        border-width: 4px;
+        margin-top: 1vh;
+        margin-bottom: 0;
+        height: 0;
+    }
+
+    .view-btn-cell a,
+    .view-btn-cell button {
+        width: 100%;
+    }
+
+    .view-btn-cell {
+        margin-top: 2vh;
+    }
+
+    .view-btn-cell button {
+        background: #161A1D !important;
+        color: #EEEEEE !important;
+    }
+
+    .spinner-wrapper {
+        background-color: #161A1D;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 5vh;
+        padding-top: 5vh;
+    }
+
+    .mdl-spinner {
+        color: #EEEEEE;
+    }
+
+    .mdl-spinner__layer {
+        border-color: #EEEEEE !important;
+    }
+</style>
+{% endblock %}

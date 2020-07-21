@@ -13,7 +13,7 @@ from accounts.models import (
 
 from endorsity.celery import app
 
-from influencer.models import InfluencerStatistics
+from influencer.models import InfluencerStatistics, EndorsingPost
 
 
 @app.task
@@ -72,3 +72,29 @@ def update_influencer_statistics(user_pk):
     influencer_statistics.impressions = impressions
     influencer_statistics.follower_counts = follower_counts
     influencer_statistics.save()
+
+
+@app.task
+def update_post_stats(post_uuid):
+    endorsing_post = EndorsingPost.objects.get(id=post_uuid)
+    fb_permissions = FacebookPermissions.objects.get(influencer=endorsing_post.influencer)
+    if endorsing_post.media_type == 'CAROUSEL_ALBUM':
+        metrics = ['carousel_album_engagement', 'carousel_album_impressions', 'carousel_album_reach', 'carousel_album_saved']
+    else:
+        metrics = ['engagement', 'impressions', 'reach', 'saved']
+        if endorsing_post.media_type == 'VIDEO':
+            metrics.append('video_views')
+    POST_STATS_URI = (settings.FACEBOOK_GRAPH_URI +
+        f"{endorsing_post.media_id}/insights?" +
+        f"metric={'%2C'.join(metrics)}&" +
+        f"access_token={fb_permissions.user_token}")
+    print(POST_STATS_URI)
+    post_stats_response = json.loads(requests.get(POST_STATS_URI).text)
+    print(post_stats_response)
+    endorsing_post.engagement = post_stats_response["data"][0]["values"][0]["value"]
+    endorsing_post.impressions = post_stats_response["data"][1]["values"][0]["value"]
+    endorsing_post.reach = post_stats_response["data"][2]["values"][0]["value"]
+    endorsing_post.saved = post_stats_response["data"][3]["values"][0]["value"]
+    if endorsing_post.media_type == 'VIDEO':
+        endorsing_post.video_views = post_stats_response["data"][4]["values"][0]["value"]
+    endorsing_post.save()

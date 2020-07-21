@@ -1,6 +1,8 @@
 from django import template
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 
-from accounts.models import Brand
+from accounts.models import Brand, FacebookPermissions
 
 from brand.models import Campaign
 
@@ -23,3 +25,13 @@ def check_active_campaign(campaign):
     current_campaign = (Campaign.objects.filter(brand=campaign.brand)
                         .order_by('-start_time').first())
     return campaign == current_campaign
+
+@register.simple_tag
+def get_follower_count(post):
+    return (FacebookPermissions.objects
+        .get(influencer=post.influencer).ig_follower_count)
+
+
+@register.simple_tag
+def get_encoded_pk(user):
+    return urlsafe_base64_encode(force_bytes(user.pk))

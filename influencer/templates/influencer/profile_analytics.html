@@ -1,13 +1,26 @@
-{% extends 'influencer/base.html' %}
+{% extends base_template %}
+{% load brand_tags %}
 {% block main %}
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <div class="container">
     <div class="mdl-grid main-grid">
         <div class="mdl-cell mdl-cell--3-col first-section">
-            {% if request.user.get_profile_picture %}
-            <img class="profile-picture-display" src="{{ request.user.get_profile_picture.url }}" />
+            {% if not request.user.is_brand %}
+                {% if request.user.get_profile_picture %}
+                <div class="profile-picture-wrapper">
+                    <img class="profile-picture-display" src="{{ request.user.get_profile_picture.url }}" />
+                </div>
+                {% else %}
+                <i class="material-icons placeholder-profile-picture">account_circle</i>
+                {% endif %}
             {% else %}
-            <i class="material-icons placeholder-profile-picture">account_circle</i>
+                {% if influencer.user.get_profile_picture %}
+                <div class="profile-picture-wrapper">
+                    <img class="profile-picture-display" src="{{ influencer.user.get_profile_picture.url }}" />
+                </div>
+                {% else %}
+                <i class="material-icons placeholder-profile-picture">account_circle</i>
+                {% endif %}
             {% endif %}
             <div class="details">
                 <div class="name">
@@ -58,14 +71,34 @@
         <div class="mdl-cell mdl-cell--8-col main-grid-cell">
             <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
                 <div class="mdl-tabs__tab-bar">
-                    <a href="{% url 'influencer:profile_analytics' %}" class="mdl-tabs__tab is-active">
-                        <i class="material-icons">analytics</i>
-                        &nbsp;&nbsp;Analytics
-                    </a>
-                    <a href="{% url 'influencer:profile_endorsements' %}" class="mdl-tabs__tab">
-                        <i class="material-icons">dynamic_feed</i>
-                        &nbsp;&nbsp;Endorsements
-                    </a>
+                    {% if not request.user.is_brand %}
+                        <a href="{% url 'influencer:profile_analytics' %}" class="mdl-tabs__tab is-active">
+                            <i class="material-icons">analytics</i>
+                            &nbsp;&nbsp;Analytics
+                        </a>
+                        <a href="{% url 'influencer:profile_endorsements' %}" class="mdl-tabs__tab">
+                            <i class="material-icons">dynamic_feed</i>
+                            &nbsp;&nbsp;Endorsements
+                        </a>
+                        <a href="{% url 'influencer:profile_badge' %}" class="mdl-tabs__tab">
+                            <i class="material-icons">military_tech</i>
+                            &nbsp;&nbsp;Badge
+                        </a>
+                    {% else %}
+                        {% get_encoded_pk influencer.user as encoded_pk %}
+                        <a href="{% url 'brand:influencer_analytics' encoded_pk %}" class="mdl-tabs__tab is-active">
+                            <i class="material-icons">analytics</i>
+                            &nbsp;&nbsp;Analytics
+                        </a>
+                        <a href="{% url 'brand:influencer_endorsements' encoded_pk %}" class="mdl-tabs__tab">
+                            <i class="material-icons">dynamic_feed</i>
+                            &nbsp;&nbsp;Endorsements
+                        </a>
+                        <a href="{% url 'brand:influencer_badge' encoded_pk %}" class="mdl-tabs__tab">
+                            <i class="material-icons">military_tech</i>
+                            &nbsp;&nbsp;Badge
+                        </a>
+                    {% endif %}
                 </div>
                 <div class="mdl-tabs__panel is-active" id="analytics-panel">
                     <div class="stat-section">
@@ -149,7 +182,9 @@
     Updated every 3 hours
 </div>
 <script>
-    $('#profile-top-nav-id').addClass('is-active');
+    {% if not request.user.is_brand %}
+        $('#profile-top-nav-id').addClass('is-active');
+    {% endif %}
 
     // demographic chart
     google.charts.load('current', { 'packages': ['corechart', 'line'] });
@@ -243,9 +278,20 @@
         width: 15vw;
     }
 
+    .profile-picture-wrapper {
+        /* gold: #ffc107 silver: #757575 bronze: #795548 */
+        border: 0.5vh solid #795548;
+        border-radius: 50%;
+        width: fit-content;
+        margin: auto;
+        padding: 1vh;
+    }
+
     .placeholder-profile-picture {
         font-size: 15vw;
         color: #EEEEEE;
+        border: 0.5vh solid #795548;
+        border-radius: 50%;
     }
 
     .first-section {

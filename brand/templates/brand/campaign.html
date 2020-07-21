@@ -1,0 +1,348 @@
+{% extends 'brand/base.html' %}
+
+{% load brand_tags %}
+{% load tz %}
+{% block main %}
+{% comment %}
+<div class="container">
+    {% if current_campaign %}
+    <div class="campaign-card">
+        <div class="timeline mdl-grid">
+            <div class="mdl-cell mdl-cell--5-col">
+                <span
+                    class="day-month-date">{{ current_campaign.start_time|timezone:"Asia/Kolkata"|date:"jS F," }}</span>
+                <span class="year-date">&nbsp;{{ current_campaign.start_time|timezone:"Asia/Kolkata"|date:"Y" }}</span>
+            </div>
+            <div class="mdl-cell mdl-cell--2-col">
+                <i class="material-icons">double_arrow</i>
+            </div>
+            <div class="mdl-cell mdl-cell--5-col">
+                <span class="day-month-date">{{ current_campaign.end_time|timezone:"Asia/Kolkata"|date:"jS F," }}</span>
+                <span class="year-date">&nbsp;{{ current_campaign.end_time|timezone:"Asia/Kolkata"|date:"Y" }}</span>
+            </div>
+        </div>
+        <div class="details-btn mdl-grid">
+            <div class="mdl-cell mdl-cell--4-col">
+                <i class="material-icons campaign-active">stop_circle</i>
+                &nbsp;&nbsp;Active
+            </div>
+            <div class="mdl-cell mdl-cell--4-col">
+                <i class="material-icons">dynamic_feed</i>
+                &nbsp;&nbsp;{% posts current_campaign %} influencer posts
+            </div>
+            <div class="mdl-cell mdl-cell--4-col">
+                <a href="{% url 'brand:campaign_details' current_campaign.id %}">
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                        <i class="material-icons">edit</i>
+                        &nbsp;&nbsp;View &amp; Edit Campaign
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="begin-campaign">
+        <div class="begin-campaign-message">No Active Campaign</div>
+        <div class="begin-campaign-btn">
+            <a href="{% url 'brand:initiate_campaign' %}">
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                    Initiate Campaign
+                </button>
+            </a>
+        </div>
+    </div>
+    {% endif %}
+    <hr />
+    <div class="heading past-heading">Past Campaigns</div>
+    {% for campaign in past_campaigns %}
+    <div class="campaign-card">
+        <div class="timeline mdl-grid">
+            <div class="mdl-cell mdl-cell--5-col">
+                <span class="day-month-date">{{ campaign.start_time|timezone:"Asia/Kolkata"|date:"jS F," }}</span>
+                <span class="year-date">&nbsp;{{ campaign.start_time|timezone:"Asia/Kolkata"|date:"Y" }}</span>
+            </div>
+            <div class="mdl-cell mdl-cell--2-col">
+                <i class="material-icons">double_arrow</i>
+            </div>
+            <div class="mdl-cell mdl-cell--5-col">
+                <span class="day-month-date">{{ campaign.end_time|timezone:"Asia/Kolkata"|date:"jS F," }}</span>
+                <span class="year-date">&nbsp;{{ campaign.end_time|timezone:"Asia/Kolkata"|date:"Y" }}</span>
+            </div>
+        </div>
+        <div class="details-btn mdl-grid">
+            <div class="mdl-cell mdl-cell--4-col">
+                <i class="material-icons campaign-inactive">stop_circle</i>
+                &nbsp;&nbsp;Inactive
+            </div>
+            <div class="mdl-cell mdl-cell--4-col">
+                <i class="material-icons">dynamic_feed</i>
+                &nbsp;&nbsp;{% posts campaign %} influencer posts
+            </div>
+            <div class="mdl-cell mdl-cell--4-col">
+                <a href="{% url 'brand:campaign_details' campaign.id %}">
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                        <i class="material-icons">pageview</i>
+                        &nbsp;&nbsp;View Campaign
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="empty-past">
+        <div class="empty-container">
+            <div>
+                <i class="material-icons">hourglass_empty</i><br />
+                No Data
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endcomment %}
+<div class="container">
+    {% if current_campaign %}
+        <div class="current-campaign">
+            <div class="mdl-grid top-grid">
+                <div class="mdl-cell mdl-cell--3-col">
+                    <i class="material-icons active-icon">fiber_manual_record</i>
+                    &nbsp;&nbsp;Campaign Active
+                </div>
+                <div class="mdl-cell mdl-cell--5-col center-align">
+                    <i class="material-icons">dynamic_feed</i>
+                    &nbsp;&nbsp;{% posts current_campaign %} influencer posts
+                </div>
+                <div class="mdl-cell mdl-cell--4-col right-align">
+                    <i class="material-icons">event_busy</i>
+                    &nbsp;&nbsp;Ends on
+                    {{ current_campaign.end_time|timezone:"Asia/Kolkata"|date:"jS F, Y" }}
+                </div>
+            </div>
+        </div>
+        <div class="header">Active Locations</div>
+        <div class="mdl-grid location-grid">
+            {% for location in locations %}
+                <div class="mdl-cell mdl-cell--1-col">
+                    {% if location.active %}
+                    <i class="material-icons toggle-on">toggle_on</i>
+                    {% else %}
+                    <i class="material-icons toggle-off">toggle_off</i>
+                    {% endif %}
+                    </i>
+                </div>
+                <div class="mdl-cell mdl-cell--11-col">
+                    {{ location.name }}
+                </div>
+                {% if not forloop.last %}
+                <hr />
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="header">Influencer Posts</div>
+        {% for post in posts %}
+        <div class="post-section">
+            <div class="mdl-grid post-section-top-grid">
+                <div class="mdl-cell mdl-cell--1-col">
+                    {% if post.influencer.user.get_profile_picture %}
+                    <img class="profile-picture-display" src="{{ post.influencer.user.get_profile_picture.url }}" />
+                    {% else %}
+                    <i class="material-icons placeholder-profile-picture">account_circle</i>
+                    {% endif %}
+                </div>
+                <div class="mdl-cell mdl-cell--11-col">
+                    &nbsp;&nbsp;{{ post.influencer.first_name }} {{ post.influencer.last_name }}
+                </div>
+            </div>
+            <div class="mdl-grid">
+                <div
+                    id="insta-embed-{{ forloop.counter0 }}"
+                    class="mdl-cell mdl-cell--6-col"
+                    data-instalink="{{ post.media_embed_url }}"
+                >
+                    <div class="spinner-wrapper">
+                        <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
+                    </div>
+                </div>
+                <div class="mdl-cell mdl-cell--6-col post-right-side">
+                    <div class="mdl-grid">
+                        <div class="mdl-cell mdl-cell--1-col">
+                            <i class="material-icons">access_time</i>
+                        </div>
+                        <div class="mdl-cell mdl-cell--11-col">{{ post.created_at|timezone:"Asia/Kolkata" }}</div>
+                        <div class="mdl-cell mdl-cell--1-col">
+                            <i class="material-icons">location_on</i>
+                        </div>
+                        <div class="mdl-cell mdl-cell--11-col">{{ post.location.name }}</div>
+                        <div class="mdl-cell mdl-cell--12-col separator-cell"></div>
+                        <div class="mdl-cell mdl-cell--12-col stat-heading">Engagement</div>
+                        <div class="mdl-cell mdl-cell--12-col stat-number">{{ post.engagement }}</div>
+                        <div class="mdl-cell mdl-cell--12-col stat-heading">Impressions</div>
+                        <div class="mdl-cell mdl-cell--12-col stat-number">{{ post.impressions }}</div>
+                        <div class="mdl-cell mdl-cell--12-col stat-heading">Reach</div>
+                        <div class="mdl-cell mdl-cell--12-col stat-number">{{ post.reach }}</div>
+                        {% if post.media_type == 'VIDEO' %}
+                        <div class="mdl-cell mdl-cell--12-col stat-heading">Views</div>
+                        <div class="mdl-cell mdl-cell--12-col stat-number">{{ post.video_views }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if not forloop.last %}
+        <hr />
+        {% endif %}
+        {% empty %}
+        {% endfor %}
+    {% else %}
+    {% endif %}
+</div>
+<script>
+    $('#campaigns-top-nav-id').addClass('is-active');
+    $('.post-section').each(function(index) {
+        $.ajax({
+            url: `https://api.instagram.com/oembed?url=${$(`#insta-embed-${index}`).attr('data-instalink')}`,
+            async: true,
+            success: function (result) {
+                $(`#insta-embed-${index} .spinner-wrapper`).remove();
+                $(`#insta-embed-${index}`).append(result['html']);
+            }
+        });
+    });
+</script>
+<style>
+    .container {
+        width: 56vw;
+        margin: auto;
+        background-color: #EEEEEE;
+        margin-top: 5vh;
+        border-radius: 5px;
+        padding: 2vh 2vw;
+    }
+
+    .current-campaign .top-grid i {
+        vertical-align: middle;
+        font-size: 1.5em;
+    }
+
+    .active-icon {
+        color: #00e676;
+    }
+
+    .current-campaign .top-grid {
+        font-size: 1.5em;
+    }
+
+    .current-campaign .top-grid .right-align {
+        text-align: right;
+    }
+
+    .current-campaign .top-grid .center-align {
+        text-align: center;
+    }
+
+    .header {
+        font-size: 2.5em;
+        font-weight: 300;
+        margin-top: 5vh;
+        padding-bottom: 2vh;
+        border-bottom: 1px solid #9e9e9e;
+    }
+
+    .location-grid {
+        margin-top: 2vh;
+    }
+
+    .location-grid i {
+        font-size: 3em;
+        vertical-align: middle;
+    }
+
+    .location-grid .mdl-cell--11-col {
+        font-size: 1.5em;
+        line-height: 1;
+    }
+
+    .location-grid hr {
+        width: 100%;
+        margin-top: 1vh;
+        margin-bottom: 1vh;
+    }
+
+    i.toggle-on {
+        color: #00b0ff;
+    }
+
+    i.toggle-off {
+        color: #9e9e9e;
+    }
+
+    .profile-picture-display {
+        border-radius: 50%;
+        width: 100%;
+    }
+
+    .placeholder-profile-picture {
+        font-size: 8vw;
+        color: #161A1D;
+    }
+
+    .placeholder-wrapper {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .post-section {
+        margin-top: 2vh;
+        margin-bottom: 2vh;
+    }
+
+    .post-section-top-grid {
+        display: flex;
+        align-items: center;
+    }
+
+    .post-section-top-grid .mdl-cell--11-col {
+        font-size: 2.5em;
+        font-weight: 300;
+    }
+
+    .post-section-top-grid hr {
+        width: 100%;
+        margin-top: 0;
+    }
+
+    .spinner-wrapper {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mdl-spinner__layer {
+        border-color: #161A1D !important;
+    }
+
+    .post-right-side {
+        font-size: 1.5em;
+    }
+
+    .stat-number {
+        font-size: 3em;
+        font-weight: 300;
+        margin-bottom: 7vh;
+        margin-top: 3vh;
+        text-align: center;
+    }
+
+    .stat-heading {
+        text-align: center;
+    }
+
+    .separator-cell {
+        margin-bottom: 3vh;
+    }
+</style>
+{% endblock %}
