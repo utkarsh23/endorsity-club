@@ -56,7 +56,9 @@
             </div>
             <hr class="separator-hr" />
             {% empty %}
-            <!-- add for empty -->
+            <div class="empty-influencers">
+                No influencers who have endorsed you yet.
+            </div>
             {% endfor %}
         </div>
     </div>
@@ -259,6 +261,12 @@
 
     .mdl-spinner__layer {
         border-color: #EEEEEE !important;
+    }
+
+    .empty-influencers {
+        text-align: center;
+        font-size: 2em;
+        padding: 5vh;
     }
 </style>
 {% endblock %}

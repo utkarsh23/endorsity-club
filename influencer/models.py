@@ -21,25 +21,29 @@ class InfluencerStatistics(models.Model):
         ArrayField(
             models.TextField(),
             size=2
-        )
+        ),
+        null=True,
     )
     audience_gender_age = ArrayField(
         ArrayField(
             models.TextField(),
             size=2
-        )
+        ),
+        null=True,
     )
     impressions = ArrayField(
         ArrayField(
             models.TextField(),
             size=2
-        )
+        ),
+        null=True,
     )
     follower_counts = ArrayField(
         ArrayField(
             models.TextField(),
             size=2
-        )
+        ),
+        null=True,
     )
 
     class Meta:

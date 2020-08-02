@@ -38,7 +38,11 @@ from influencer.mixins import (
     VerifiedAndFbConnectedInfluencerLoginRequiredMixin,
 )
 from influencer.models import InfluencerStatistics, EndorsingPost
-from influencer.tasks import update_influencer_statistics, update_post_stats
+from influencer.tasks import (
+    delete_update_post_stats,
+    update_influencer_statistics,
+    update_post_stats,
+)
 
 from notifications.models import Notification
 
@@ -244,19 +248,23 @@ class ProfileAnalyticsView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, T
             .get(influencer=Influencer.objects.get(user=self.request.user)))
         influencer_statistics = (InfluencerStatistics.objects
             .get(influencer=Influencer.objects.get(user=self.request.user)))
-        context['audience_city_stats'] = sorted(
-            influencer_statistics.audience_city,
-            reverse=True,
-            key=lambda el: int(el[1]))[:3]
-        context['audience_demographic'] = [
-            [el[0].replace('M.', 'Male ').replace('F.', 'Female ').replace('U.', 'Unknown '), int(el[1])]
-            for el in influencer_statistics.audience_gender_age]
-        context['impressions'] = [
-            [datetime.datetime.utcfromtimestamp(int(el[0])).strftime('%d %b %y'), int(el[1])]
-            for el in influencer_statistics.impressions[::-1]]
-        context['follower_counts'] = [
-            [datetime.datetime.utcfromtimestamp(int(el[0])).strftime('%d %b %y'), int(el[1])]
-            for el in influencer_statistics.follower_counts[::-1]]
+        if influencer_statistics.audience_city:
+            context['audience_city_stats'] = sorted(
+                influencer_statistics.audience_city,
+                reverse=True,
+                key=lambda el: int(el[1]))[:3]
+        if influencer_statistics.audience_gender_age:
+            context['audience_demographic'] = [
+                [el[0].replace('M.', 'Male ').replace('F.', 'Female ').replace('U.', 'Unknown '), int(el[1])]
+                for el in influencer_statistics.audience_gender_age]
+        if influencer_statistics.impressions:
+            context['impressions'] = [
+                [datetime.datetime.utcfromtimestamp(int(el[0])).strftime('%d %b %y'), int(el[1])]
+                for el in influencer_statistics.impressions[::-1]]
+        if influencer_statistics.follower_counts:
+            context['follower_counts'] = [
+                [datetime.datetime.utcfromtimestamp(int(el[0])).strftime('%d %b %y'), int(el[1])]
+                for el in influencer_statistics.follower_counts[::-1]]
         context['base_template'] = 'influencer/base.html'
         return context
 
@@ -349,7 +357,25 @@ class PostView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, FormView):
         post.save()
         influencer.is_unlocked = False
         influencer.save()
+
         update_post_stats.delay(post.id)
+        schedule, created = IntervalSchedule.objects.get_or_create(
+            every=2,
+            period=IntervalSchedule.HOURS,
+        )
+        current_task = PeriodicTask.objects.filter(
+            name=f'Influencer {fb_permissions.influencer.user.pk} Update Post {post.id} Statistics'
+        )
+        if current_task.exists():
+            current_task.delete()
+        PeriodicTask.objects.create(
+            interval=schedule,
+            name=f'Influencer {fb_permissions.influencer.user.pk} Update Post {post.id} Statistics',
+            task='influencer.tasks.update_post_stats',
+            args=json.dumps([str(post.id)]),
+        )
+        stop_update_time = datetime.datetime.now() + datetime.timedelta(days=30, minutes=30)
+        delete_update_post_stats.apply_async((fb_permissions.influencer.user.pk, post.id), eta=stop_update_time)
         return super().form_valid(form)
 
 

@@ -21,7 +21,7 @@ from accounts.models import (
 )
 from accounts.views import InfiniteAPIView
 
-from brand.forms import AddLocationForm
+from brand.forms import AddLocationForm, ActiveLocationsForm
 from brand.mixins import RegisteredBrandLoginRequiredMixin
 from brand.models import Campaign
 from brand.tasks import end_subscription
@@ -32,10 +32,6 @@ from influencer.models import (
 )
 
 from notifications.models import Notification
-
-
-class YourEndorsementsView(RegisteredBrandLoginRequiredMixin, TemplateView):
-    template_name = 'brand/your-endorsements.html'
 
 
 class ProfileView(RegisteredBrandLoginRequiredMixin, TemplateView):
@@ -123,7 +119,7 @@ class InitiateCampaignView(RegisteredBrandLoginRequiredMixin, View):
             brand.is_subscription_active = True
             brand.save()
             end_subscription.apply_async(args=[brand.user.pk], eta=end_time)
-        return redirect(reverse_lazy('brand:campaigns'))
+        return redirect(reverse_lazy('brand:campaign'))
 
 
 class InfluencersView(RegisteredBrandLoginRequiredMixin, TemplateView):
@@ -150,19 +146,23 @@ class InfluencerAnalyticsView(RegisteredBrandLoginRequiredMixin, TemplateView):
             .get(influencer=influencer))
         influencer_statistics = (InfluencerStatistics.objects
             .get(influencer=influencer))
-        context['audience_city_stats'] = sorted(
-            influencer_statistics.audience_city,
-            reverse=True,
-            key=lambda el: int(el[1]))[:3]
-        context['audience_demographic'] = [
-            [el[0].replace('M.', 'Male ').replace('F.', 'Female ').replace('U.', 'Unknown '), int(el[1])]
-            for el in influencer_statistics.audience_gender_age]
-        context['impressions'] = [
-            [datetime.datetime.utcfromtimestamp(int(el[0])).strftime('%d %b %y'), int(el[1])]
-            for el in influencer_statistics.impressions[::-1]]
-        context['follower_counts'] = [
-            [datetime.datetime.utcfromtimestamp(int(el[0])).strftime('%d %b %y'), int(el[1])]
-            for el in influencer_statistics.follower_counts[::-1]]
+        if influencer_statistics.audience_city:
+            context['audience_city_stats'] = sorted(
+                influencer_statistics.audience_city,
+                reverse=True,
+                key=lambda el: int(el[1]))[:3]
+        if influencer_statistics.audience_gender_age:
+            context['audience_demographic'] = [
+                [el[0].replace('M.', 'Male ').replace('F.', 'Female ').replace('U.', 'Unknown '), int(el[1])]
+                for el in influencer_statistics.audience_gender_age]
+        if influencer_statistics.impressions:
+            context['impressions'] = [
+                [datetime.datetime.utcfromtimestamp(int(el[0])).strftime('%d %b %y'), int(el[1])]
+                for el in influencer_statistics.impressions[::-1]]
+        if influencer_statistics.follower_counts:
+            context['follower_counts'] = [
+                [datetime.datetime.utcfromtimestamp(int(el[0])).strftime('%d %b %y'), int(el[1])]
+                for el in influencer_statistics.follower_counts[::-1]]
         return context
 
 
@@ -198,3 +198,27 @@ class InfluencerBadgeView(RegisteredBrandLoginRequiredMixin, TemplateView):
 
 class FetchInfluencersInfiniteAPIView(RegisteredBrandLoginRequiredMixin, InfiniteAPIView):
     pass
+
+
+class EditActiveLocationsView(RegisteredBrandLoginRequiredMixin, FormView):
+    template_name = 'brand/edit_active_locations.html'
+    form_class = ActiveLocationsForm
+    success_url = reverse_lazy('brand:campaign')
+
+    def get_form(self, form_class=None):
+        """Return an instance of the form to be used in this view."""
+        if form_class is None:
+            form_class = self.get_form_class()
+        brand = Brand.objects.get(user=self.request.user)
+        if not brand.is_subscription_active:
+            raise PermissionDenied
+        return form_class(**self.get_form_kwargs(), brand_uuid=brand.id)
+
+    def form_valid(self, form):
+        active_locations = form.cleaned_data['location']
+        Location.objects.filter(brand__user=self.request.user).update(active=False)
+        for active_location_id in active_locations:
+            active_location = Location.objects.get(id=active_location_id)
+            active_location.active = True
+            active_location.save()
+        return super().form_valid(form)

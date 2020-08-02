@@ -192,14 +192,14 @@
                 </a>
                 <div class="mdl-layout-spacer"></div>
                 {% if request.user|is_subscription_active %}
-                <a class="mdl-navigation__link" href="{% url 'brand:campaigns' %}">
+                <a class="mdl-navigation__link" href="{% url 'brand:campaign' %}">
                     <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored campaign-status">
                         <i class="material-icons active">stop_circle</i>
                         &nbsp;&nbsp;Campaign Active
                     </button>
                 </a>
                 {% else %}
-                <a class="mdl-navigation__link" href="{% url 'brand:campaigns' %}">
+                <a class="mdl-navigation__link" href="{% url 'brand:campaign' %}">
                     <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored campaign-status">
                         <i class="material-icons inactive">stop_circle</i>
                         &nbsp;&nbsp;Campaign Inactive
@@ -267,7 +267,7 @@
         </ul>
         <div class="top-menu mdl-grid">
             <div id="campaigns-top-nav-id" class="mdl-cell mdl-cell--4-col">
-                <a href="{% url 'brand:campaigns' %}">
+                <a href="{% url 'brand:campaign' %}">
                     <i class="material-icons">campaign</i>
                     &nbsp;CAMPAIGN
                 </a>

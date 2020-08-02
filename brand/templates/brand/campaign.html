@@ -120,6 +120,14 @@
             </div>
         </div>
         <div class="header">Active Locations</div>
+        <div class="edit-btn-wrapper">
+            <a class="edit-location-anchor" href="{% url 'brand:edit_active_locations' %}">
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                    <i class="material-icons edit-location-btn">edit</i>
+                    &nbsp;&nbsp;Edit Active Locations
+                </button>
+            </a>
+        </div>
         <div class="mdl-grid location-grid">
             {% for location in locations %}
                 <div class="mdl-cell mdl-cell--1-col">
@@ -128,7 +136,6 @@
                     {% else %}
                     <i class="material-icons toggle-off">toggle_off</i>
                     {% endif %}
-                    </i>
                 </div>
                 <div class="mdl-cell mdl-cell--11-col">
                     {{ location.name }}
@@ -140,60 +147,71 @@
         </div>
         <div class="header">Influencer Posts</div>
         {% for post in posts %}
-        <div class="post-section">
-            <div class="mdl-grid post-section-top-grid">
-                <div class="mdl-cell mdl-cell--1-col">
-                    {% if post.influencer.user.get_profile_picture %}
-                    <img class="profile-picture-display" src="{{ post.influencer.user.get_profile_picture.url }}" />
-                    {% else %}
-                    <i class="material-icons placeholder-profile-picture">account_circle</i>
-                    {% endif %}
-                </div>
-                <div class="mdl-cell mdl-cell--11-col">
-                    &nbsp;&nbsp;{{ post.influencer.first_name }} {{ post.influencer.last_name }}
-                </div>
-            </div>
-            <div class="mdl-grid">
-                <div
-                    id="insta-embed-{{ forloop.counter0 }}"
-                    class="mdl-cell mdl-cell--6-col"
-                    data-instalink="{{ post.media_embed_url }}"
-                >
-                    <div class="spinner-wrapper">
-                        <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
-                    </div>
-                </div>
-                <div class="mdl-cell mdl-cell--6-col post-right-side">
-                    <div class="mdl-grid">
-                        <div class="mdl-cell mdl-cell--1-col">
-                            <i class="material-icons">access_time</i>
-                        </div>
-                        <div class="mdl-cell mdl-cell--11-col">{{ post.created_at|timezone:"Asia/Kolkata" }}</div>
-                        <div class="mdl-cell mdl-cell--1-col">
-                            <i class="material-icons">location_on</i>
-                        </div>
-                        <div class="mdl-cell mdl-cell--11-col">{{ post.location.name }}</div>
-                        <div class="mdl-cell mdl-cell--12-col separator-cell"></div>
-                        <div class="mdl-cell mdl-cell--12-col stat-heading">Engagement</div>
-                        <div class="mdl-cell mdl-cell--12-col stat-number">{{ post.engagement }}</div>
-                        <div class="mdl-cell mdl-cell--12-col stat-heading">Impressions</div>
-                        <div class="mdl-cell mdl-cell--12-col stat-number">{{ post.impressions }}</div>
-                        <div class="mdl-cell mdl-cell--12-col stat-heading">Reach</div>
-                        <div class="mdl-cell mdl-cell--12-col stat-number">{{ post.reach }}</div>
-                        {% if post.media_type == 'VIDEO' %}
-                        <div class="mdl-cell mdl-cell--12-col stat-heading">Views</div>
-                        <div class="mdl-cell mdl-cell--12-col stat-number">{{ post.video_views }}</div>
+            <div class="post-section">
+                <div class="mdl-grid post-section-top-grid">
+                    <div class="mdl-cell mdl-cell--1-col">
+                        {% if post.influencer.user.get_profile_picture %}
+                        <img class="profile-picture-display" src="{{ post.influencer.user.get_profile_picture.url }}" />
+                        {% else %}
+                        <i class="material-icons placeholder-profile-picture">account_circle</i>
                         {% endif %}
                     </div>
+                    <div class="mdl-cell mdl-cell--11-col">
+                        &nbsp;&nbsp;{{ post.influencer.first_name }} {{ post.influencer.last_name }}
+                    </div>
+                </div>
+                <div class="mdl-grid">
+                    <div
+                        id="insta-embed-{{ forloop.counter0 }}"
+                        class="mdl-cell mdl-cell--6-col"
+                        data-instalink="{{ post.media_embed_url }}"
+                    >
+                        <div class="spinner-wrapper">
+                            <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
+                        </div>
+                    </div>
+                    <div class="mdl-cell mdl-cell--6-col post-right-side">
+                        <div class="mdl-grid">
+                            <div class="mdl-cell mdl-cell--1-col">
+                                <i class="material-icons">access_time</i>
+                            </div>
+                            <div class="mdl-cell mdl-cell--11-col">{{ post.created_at|timezone:"Asia/Kolkata" }}</div>
+                            <div class="mdl-cell mdl-cell--1-col">
+                                <i class="material-icons">location_on</i>
+                            </div>
+                            <div class="mdl-cell mdl-cell--11-col">{{ post.location.name }}</div>
+                            <div class="mdl-cell mdl-cell--12-col separator-cell"></div>
+                            <div class="mdl-cell mdl-cell--12-col stat-heading">Engagement</div>
+                            <div class="mdl-cell mdl-cell--12-col stat-number">{{ post.engagement }}</div>
+                            <div class="mdl-cell mdl-cell--12-col stat-heading">Impressions</div>
+                            <div class="mdl-cell mdl-cell--12-col stat-number">{{ post.impressions }}</div>
+                            <div class="mdl-cell mdl-cell--12-col stat-heading">Reach</div>
+                            <div class="mdl-cell mdl-cell--12-col stat-number">{{ post.reach }}</div>
+                            {% if post.media_type == 'VIDEO' %}
+                            <div class="mdl-cell mdl-cell--12-col stat-heading">Views</div>
+                            <div class="mdl-cell mdl-cell--12-col stat-number">{{ post.video_views }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        {% if not forloop.last %}
-        <hr />
-        {% endif %}
+            {% if not forloop.last %}
+            <hr />
+            {% endif %}
         {% empty %}
+            <div class="empty-posts">
+                No posts yet.
+            </div>
         {% endfor %}
     {% else %}
+        <div class="inactive-campaign">
+            Campaign Inactive.<br />
+            <a href="{% url 'brand:initiate_campaign' %}">
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                    Start Campaign
+                </button>
+            </a>
+        </div>
     {% endif %}
 </div>
 <script>
@@ -343,6 +361,38 @@
 
     .separator-cell {
         margin-bottom: 3vh;
+    }
+
+    .edit-btn-wrapper {
+        margin-top: 2vh;
+    }
+
+    .edit-location-anchor {
+        width: 100%;
+    }
+
+    .edit-location-anchor > button {
+        width: 100%;
+        background-color: #161A1D !important;
+        color: #EEEEEE !important;
+    }
+
+    .empty-posts {
+        text-align: center;
+        padding: 4vh;
+        font-size: 2em;
+    }
+
+    .inactive-campaign {
+        font-size: 2em;
+        padding: 5vh;
+        text-align: center;
+    }
+
+    .inactive-campaign button {
+        margin-top: 5vh;
+        background-color: #161A1D !important;
+        color: #EEEEEE !important;
     }
 </style>
 {% endblock %}

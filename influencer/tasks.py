@@ -5,6 +5,8 @@ import requests
 
 from django.conf import settings
 
+from django_celery_beat.models import PeriodicTask
+
 from accounts.models import (
     FacebookPermissions,
     Influencer,
@@ -23,7 +25,7 @@ def update_influencer_statistics(user_pk):
     fb_permissions = FacebookPermissions.objects.get(influencer=influencer)
     influencer_statistics = InfluencerStatistics.objects.filter(influencer=influencer).first()
     if not influencer_statistics:
-        influencer_statistics = InfluencerStatistics(influencer=influencer)
+        influencer_statistics = InfluencerStatistics.objects.create(influencer=influencer)
 
     # audience_city & audience_gender_age
     LIFETIME_STATS_URI = (settings.FACEBOOK_GRAPH_URI +
@@ -88,9 +90,7 @@ def update_post_stats(post_uuid):
         f"{endorsing_post.media_id}/insights?" +
         f"metric={'%2C'.join(metrics)}&" +
         f"access_token={fb_permissions.user_token}")
-    print(POST_STATS_URI)
     post_stats_response = json.loads(requests.get(POST_STATS_URI).text)
-    print(post_stats_response)
     endorsing_post.engagement = post_stats_response["data"][0]["values"][0]["value"]
     endorsing_post.impressions = post_stats_response["data"][1]["values"][0]["value"]
     endorsing_post.reach = post_stats_response["data"][2]["values"][0]["value"]
@@ -98,3 +98,10 @@ def update_post_stats(post_uuid):
     if endorsing_post.media_type == 'VIDEO':
         endorsing_post.video_views = post_stats_response["data"][4]["values"][0]["value"]
     endorsing_post.save()
+
+
+@app.task
+def delete_update_post_stats(user_pk, post_uuid):
+    PeriodicTask.objects.filter(
+        name=f'Influencer {user_pk} Update Post {post_uuid} Statistics'
+    ).delete()

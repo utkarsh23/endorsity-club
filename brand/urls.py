@@ -4,7 +4,6 @@ from accounts.models import Influencer
 
 from brand.serializers import influencers_view_serializer
 from brand.views import (
-    YourEndorsementsView,
     ProfileView,
     QRCodeView,
     AddLocationView,
@@ -15,15 +14,15 @@ from brand.views import (
     InfluencerEndorsementsView,
     InfluencerBadgeView,
     FetchInfluencersInfiniteAPIView,
+    EditActiveLocationsView,
 )
 
 
 urlpatterns = [
-    path('your-endorsements/', YourEndorsementsView.as_view(), name='your_endorsements'),
     path('profile/', ProfileView.as_view(), name="profile"),
     path('qr-code/', QRCodeView.as_view(), name="qr_code"),
     path('add-location/', AddLocationView.as_view(), name="add_location"),
-    path('campaign/', CampaignsView.as_view(), name="campaigns"),
+    path('campaign/', CampaignsView.as_view(), name="campaign"),
     path('initiate-campaign/', InitiateCampaignView.as_view(), name="initiate_campaign"),
     path('influencers/', InfluencersView.as_view(), name="influencers"),
     path('influencer/<str:influencer_pk>/analytics/', InfluencerAnalyticsView.as_view(), name="influencer_analytics"),
@@ -44,6 +43,7 @@ urlpatterns = [
         },
         name="fetch_influencers",
     ),
+    path('edit-active-locations/', EditActiveLocationsView.as_view(), name='edit_active_locations'),
 ]
 
 app_name = 'brand'

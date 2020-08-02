@@ -152,8 +152,36 @@
                         </div>
                         <div class="mdl-cell mdl-cell--11-col">{{ endorsement.location.name }}</div>
                     </div>
-                    ${result['html']}
+                    <div class="custom-tab">
+                        <a href="#post-panel-{{ forloop.counter0 }}" data-counter="{{ forloop.counter0 }}" class="custom-tab-child active-child">Post</a>
+                        <a href="#statistics-panel-{{ forloop.counter0 }}" data-counter="{{ forloop.counter0 }}" class="custom-tab-child">Statistics</a>
+                    </div>
+                    <div id="post-panel-{{ forloop.counter0 }}" data-counter="{{ forloop.counter0 }}" class="custom-panel active-custom-panel">
+                        ${result['html']}
+                    </div>
+                    <div id="statistics-panel-{{ forloop.counter0 }}" data-counter="{{ forloop.counter0 }}" class="custom-panel">
+                        <div class="mdl-grid">
+                            <div class="mdl-cell mdl-cell--12-col stat-heading">Engagement</div>
+                            <div class="mdl-cell mdl-cell--12-col stat-number">{{ endorsement.engagement }}</div>
+                            <div class="mdl-cell mdl-cell--12-col stat-heading">Impressions</div>
+                            <div class="mdl-cell mdl-cell--12-col stat-number">{{ endorsement.impressions }}</div>
+                            <div class="mdl-cell mdl-cell--12-col stat-heading">Reach</div>
+                            <div class="mdl-cell mdl-cell--12-col stat-number">{{ endorsement.reach }}</div>
+                            {% if endorsement.media_type == 'VIDEO' %}
+                            <div class="mdl-cell mdl-cell--12-col stat-heading">Views</div>
+                            <div class="mdl-cell mdl-cell--12-col stat-number">{{ endorsement.video_views }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
                 `);
+                $('.custom-tab-child').click(function (e) {
+                    e.preventDefault();
+                    var counter = $(this).data('counter');
+                    $(`.active-child[data-counter=${counter}]`).removeClass('active-child');
+                    $(this).addClass('active-child');
+                    $(`.active-custom-panel[data-counter=${counter}]`).removeClass('active-custom-panel');
+                    $(`${$(this).attr('href')}[data-counter=${counter}]`).addClass('active-custom-panel');
+                });
             }
         });
         {% if forloop.last %}
@@ -408,6 +436,47 @@
 
     .mdl-spinner__layer {
         border-color: #161A1D !important;
+    }
+
+    .custom-tab {
+        width: 100%;
+        text-align: center;
+        margin-top: 2vh;
+    }
+
+    .custom-tab-child {
+        text-decoration: none;
+        text-transform: uppercase;
+        color: #161A1D;
+        padding: 0.5vh 0.5vw;
+        margin-bottom: 2vh;
+        font-size: 1em;
+        font-size: 14px;
+    }
+
+    .active-child {
+        border-bottom: 2px solid #161A1D;
+    }
+
+    .custom-panel {
+        display: none;
+    }
+
+    .active-custom-panel {
+        display: initial;
+    }
+
+    .stat-heading {
+        justify-content: center;
+        font-size: 1.5em;
+        font-weight: 300;
+    }
+
+    .stat-number {
+        justify-content: center;
+        font-size: 3em;
+        margin-bottom: 5vh;
+        font-weight: 300;
     }
 </style>
 {% endblock %}
