@@ -1,13 +1,734 @@
 {% extends 'noauth/base.html' %}
+{% load static %}
 {% block main %}
-<h1>India's Most Rewarding Influencer Marketing Club</h1>
+<div class="landing-circle"></div>
+<div class="landing-section">
+    <div class="landing-wrapper">
+        <div class="landing-heading">India's Most Rewarding Influencer Marketing Club</div>
+        <div class="landing-subheading">Sign up to start your free trial today!</div>
+    </div>
+    <img src="{% static 'landing_graphic.png' %}" alt="landing graphcic" class="landing-graphic">
+</div>
+<div class="how-it-works-section">
+    <div class="how-it-works-heading">How It Works</div>
+    <div class="how-it-works-subheading">Lorem Ipsum Bla bla Bla bla Bla bla blah vlah<br />Bla bla blah vlah</div>
+    <div class="mdl-grid how-it-works-grid">
+        <div class="mdl-cell mdl-cell--4-col">
+            <div class="how-it-works-circle">
+                <img src="{% static 'how-it-works-1.png' %}" alt="how it works step" class="how-it-works-img">
+            </div>
+            <div class="how-it-works-step">
+                Enroll For Verification
+            </div>
+        </div>
+        <div class="mdl-cell mdl-cell--4-col">
+            <div class="how-it-works-circle">
+                <img src="{% static 'how-it-works-2.png' %}" alt="how it works step" class="how-it-works-img">
+            </div>
+            <div class="how-it-works-step">
+                Once verified, browse through multiple deals, filtered based on city &amp; offering
+            </div>
+        </div>
+        <div class="mdl-cell mdl-cell--4-col">
+            <div class="how-it-works-circle">
+                <img src="{% static 'how-it-works-3.png' %}" alt="how it works" class="how-it-works-img">
+            </div>
+            <div class="how-it-works-step">
+                Unlock any deal if you would like to partner with the brand
+            </div>
+        </div>
+        <div class="mdl-cell mdl-cell--4-col">
+            <div class="how-it-works-circle">
+                <img src="{% static 'how-it-works-4.png' %}" alt="how it works" class="how-it-works-img">
+            </div>
+            <div class="how-it-works-step">
+                Visit the store &amp; experience their offerings, while clicking lots of photos
+            </div>
+        </div>
+        <div class="mdl-cell mdl-cell--4-col">
+            <div class="how-it-works-circle">
+                <img src="{% static 'how-it-works-5.png' %}" alt="how it works" class="how-it-works-img">
+            </div>
+            <div class="how-it-works-step">
+                Post your pictures on the linked Instagram account
+            </div>
+        </div>
+        <div class="mdl-cell mdl-cell--4-col">
+            <div class="how-it-works-circle">
+                <img src="{% static 'how-it-works-6.png' %}" alt="how it works" class="how-it-works-img">
+            </div>
+            <div class="how-it-works-step">
+                Unlock your next deal
+            </div>
+        </div>
+    </div>
+</div>
+<div class="how-are-we-different-section">
+    <div class="how-are-we-different-heading">How Are We Different?</div>
+    <div class="how-are-we-different-subheading">
+        Lorem Ipsum Bla bla Bla bla Bla bla blah vlah bla blah vlah<br />Bla bla blah vlah bla blah vlah
+    </div>
+    <div class="mdl-grid how-are-we-different-grid">
+        <div class="mdl-cell mdl-cell--3-col">
+            <div class="how-are-we-different-circle">
+                <img src="{% static 'how-are-we-different-1.png' %}" alt="how are we different"
+                    class="how-are-we-different-img">
+            </div>
+            <div class="how-are-we-different-step">
+                Start endorsing with just a click
+            </div>
+            <div class="how-are-we-different-substep">
+                Maecenas vehicula sollicitudin lacus quis feugiat. Nulla ut consectetur tortor. Nunc hendrerit vel sem
+                sed malesuada.
+            </div>
+        </div>
+        <div class="mdl-cell mdl-cell--3-col">
+            <div class="how-are-we-different-circle">
+                <img src="{% static 'how-are-we-different-2.png' %}" alt="how are we different"
+                    class="how-are-we-different-img">
+            </div>
+            <div class="how-are-we-different-step">
+                Barter-based &amp; No Commissions
+            </div>
+            <div class="how-are-we-different-substep">
+                Maecenas vehicula sollicitudin lacus quis feugiat. Nulla ut consectetur tortor. Nunc hendrerit vel sem
+                sed malesuada.
+            </div>
+        </div>
+        <div class="mdl-cell mdl-cell--3-col">
+            <div class="how-are-we-different-circle">
+                <img src="{% static 'how-are-we-different-3.png' %}" alt="how are we different"
+                    class="how-are-we-different-img">
+            </div>
+            <div class="how-are-we-different-step">
+                Seamless Instagram Integration
+            </div>
+            <div class="how-are-we-different-substep">
+                Maecenas vehicula sollicitudin lacus quis feugiat. Nulla ut consectetur tortor. Nunc hendrerit vel sem
+                sed malesuada.
+            </div>
+        </div>
+        <div class="mdl-cell mdl-cell--3-col">
+            <div class="how-are-we-different-circle">
+                <img src="{% static 'how-are-we-different-4.png' %}" alt="how are we different"
+                    class="how-are-we-different-img">
+            </div>
+            <div class="how-are-we-different-step">
+                100% Genuine Brands
+            </div>
+            <div class="how-are-we-different-substep">
+                Maecenas vehicula sollicitudin lacus quis feugiat. Nulla ut consectetur tortor. Nunc hendrerit vel sem
+                sed malesuada.
+            </div>
+        </div>
+    </div>
+</div>
+<div class="pricing-section">
+    <img src="{% static 'pricing-pattern.png' %}" alt="pattern" class="pricing-pattern" />
+    <div class="pricing-heading">Pricing</div>
+    <div class="pricing-subheading">
+        Maecenas vehicula sollicitudin lacus quis feugiat. Nulla ut consectetur tortor.<br />Nunc hendrerit vel sem
+        sed malesuada.
+    </div>
+    <div class="pricing-grid mdl-grid">
+        <div class="mdl-cell mdl-cell--5-col pricing-grid-left-cell">
+            <div class="pricing-card">
+                <div class="pricing-card-heading">Premium</div>
+                <hr class="pricing-card-hr" />
+                <div class="pricing-card-price"><span class="rupee-symbol">&#x20B9;</span>&nbsp;199</div>
+                <div class="pricing-card-trial">Free 2 months trial</div>
+                <ul class="pricing-feature-list">
+                    <li>50 GB Free Space</li>
+                    <li>24/7 Free Support</li>
+                    <li>Public API Access</li>
+                    <li>Build Your Own Template</li>
+                    <li>Public API Access</li>
+                    <li>Build Your Own Template</li>
+                </ul>
+                <div class="learn-more-btn">
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                        Learn More
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="mdl-cell mdl-cell--7-col pricing-grid-right-cell">
+            <div class="mdl-grid">
+                <div class="mdl-cell mdl-cell--6-col">
+                    <div class="pricing-circle">
+                        <img class="pricing-img" src="{% static 'pricing-1.png' %}" alt="pricing circle" />
+                    </div>
+                    <div class="pricing-text">Completely Free For Influencers</div>
+                </div>
+                <div class="mdl-cell mdl-cell--6-col">
+                    <div class="pricing-circle">
+                        <img class="pricing-img" src="{% static 'pricing-2.png' %}" alt="pricing circle" />
+                    </div>
+                    <div class="pricing-text">No hidden charges</div>
+                </div>
+                <div class="mdl-cell mdl-cell--6-col">
+                    <div class="pricing-circle">
+                        <img class="pricing-img" src="{% static 'pricing-3.png' %}" alt="pricing circle" />
+                    </div>
+                    <div class="pricing-text">Unlimited influencers after subscription</div>
+                </div>
+                <div class="mdl-cell mdl-cell--6-col">
+                    <div class="pricing-circle">
+                        <img class="pricing-img" src="{% static 'pricing-4.png' %}" alt="pricing circle" />
+                    </div>
+                    <div class="pricing-text">No credit card required for trial</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="faq-section">
+    <div class="faq-heading">FAQs</div>
+    <div class="faq-subheading">
+        Maecenas vehicula sollicitudin lacus quis feugiat. Nulla ut consectetur tortor.<br />Nunc hendrerit vel sem
+        sed malesuada.
+    </div>
+    <div class="mdl-grid faq-grid">
+        <div class="mdl-cell mdl-cell--7-col collapsible-wrapper">
+            <div class="collapsible active">
+                Lorem ipsum dolor sit amet, consectetur
+                <div class="collapse-section">
+                    <hr />
+                    Suspendisse aliquam vel mi semper viverra. Integer non euismod nisl, vel feugiat magna. Maecenas sed
+                    ex ligula. Duis purus erat, tristique euismod fringilla eget, ornare et dolor. Quisque eu luctus
+                    nibh, sed luctus libero. Duis in ultricies lacus. Quisque interdum iaculis felis tincidunt mattis.
+                    Donec venenatis, nisl quis lobortis interdum, libero diam tempus libero, ut pretium mi mauris quis
+                    ante. Aliquam bibendum ipsum sagittis purus ultrices vulputate. Aliquam bibendum ipsum sagittis
+                    purus ultrices vulputate.Aliquam bibendum ipsum sagittis purus ultrices vulputate.
+                </div>
+            </div>
+            <div class="collapsible">
+                Lorem ipsum dolor sit amet, consectetur
+                <div class="collapse-section">
+                    <hr />
+                    Suspendisse aliquam vel mi semper viverra. Integer non euismod nisl, vel feugiat magna. Maecenas sed
+                    ex ligula. Duis purus erat, tristique euismod fringilla eget, ornare et dolor. Quisque eu luctus
+                    nibh, sed luctus libero. Duis in ultricies lacus. Quisque interdum iaculis felis tincidunt mattis.
+                    Donec venenatis, nisl quis lobortis interdum, libero diam tempus libero, ut pretium mi mauris quis
+                    ante. Aliquam bibendum ipsum sagittis purus ultrices vulputate. Aliquam bibendum ipsum sagittis
+                    purus ultrices vulputate.Aliquam bibendum ipsum sagittis purus ultrices vulputate.
+                </div>
+            </div>
+            <div class="collapsible">
+                Lorem ipsum dolor sit amet, consectetur
+                <div class="collapse-section">
+                    <hr />
+                    Suspendisse aliquam vel mi semper viverra. Integer non euismod nisl, vel feugiat magna. Maecenas sed
+                    ex ligula. Duis purus erat, tristique euismod fringilla eget, ornare et dolor. Quisque eu luctus
+                    nibh, sed luctus libero. Duis in ultricies lacus. Quisque interdum iaculis felis tincidunt mattis.
+                    Donec venenatis, nisl quis lobortis interdum, libero diam tempus libero, ut pretium mi mauris quis
+                    ante. Aliquam bibendum ipsum sagittis purus ultrices vulputate. Aliquam bibendum ipsum sagittis
+                    purus ultrices vulputate.Aliquam bibendum ipsum sagittis purus ultrices vulputate.
+                </div>
+            </div>
+        </div>
+        <div class="mdl-cell mdl-cell--5-col">
+            <img src="{% static 'faq-banner.png' %}" alt="FAQ banner" class="faq-banner">
+        </div>
+    </div>
+</div>
+<div class="contact-section">
+    <div class="mdl-grid contact-grid">
+        <div class="mdl-cell mdl-cell--6-col">
+            <div class="contact-heading">Contact Us</div>
+            <div class="contact-subheading">
+                Suspendisse aliquam vel mi semper viverra. Integer non euismod nisl, vel feugiat magna.
+            </div>
+            <form action="POST">
+                <div class="mdl-grid">
+                    <div class="mdl-cell mdl-cell--6-col">
+                        <input type="text" placeholder="First Name" />
+                    </div>
+                    <div class="mdl-cell mdl-cell--6-col">
+                        <input type="text" placeholder="Last Name" />
+                    </div>
+                    <div class="mdl-cell mdl-cell--12-col">
+                        <input type="text" placeholder="Email" />
+                    </div>
+                    <div class="mdl-cell mdl-cell--12-col">
+                        <input type="text" placeholder="Phone" />
+                    </div>
+                    <div class="mdl-cell mdl-cell--12-col">
+                        <textarea placeholder="Message"></textarea>
+                    </div>
+                </div>
+            </form>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                Send Message
+            </button>
+        </div>
+        <div class="mdl-cell mdl-cell--6-col contact-right">
+            <img src="{% static 'contact-banner.png' %}" alt="Contact banner" class="contact-banner">
+        </div>
+    </div>
+</div>
+<div class="contact-footer">
+    Copyright 2020 | All Rights Reserved
+</div>
+<script>
+    $('.collapsible').click(function () {
+        $('.collapsible.active').removeClass('active');
+        $(this).addClass('active');
+    });
+</script>
 <style>
-    h1 {
-        text-align: center;
-        margin-top: 10vh;
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700%2C500&display=swap');
+
+    /* landing section */
+    .landing-circle {
+        position: absolute;
+        width: 60vw;
+        height: 60vw;
+        border-radius: 50%;
+        background: #274c6c;
+        right: -15vw;
+        top: -55vh;
+        opacity: 0.43;
+    }
+
+    .landing-section {
+        min-height: 87vh;
+        max-height: 87vh;
+        position: relative;
+    }
+
+    .landing-wrapper {
+        width: 50vw;
+        padding-left: 4vw;
+        padding-top: 12vh;
+    }
+
+    .landing-heading {
         color: #E0E0E0;
-        font-family: 'Rubik', sans-serif;
-        font-weight: 300;
+        font-family: 'Quicksand', sans-serif;
+        font-size: 8vh;
+        line-height: 9vh;
+    }
+
+    .landing-subheading {
+        font-size: 4vh;
+        margin-top: 5vh;
+        color: #fff;
+    }
+
+    .landing-graphic {
+        bottom: 0;
+        right: 0;
+        width: 47vw;
+        position: absolute;
+    }
+
+    /* how it works */
+    .how-it-works-section {
+        min-height: 100vh;
+        max-height: 100vh;
+        background-color: #FCFCFC;
+    }
+
+    .how-it-works-grid {
+        width: 75vw;
+        margin: auto;
+    }
+
+    .how-it-works-img {
+        width: 12vh;
+    }
+
+    .how-it-works-heading {
+        font-size: 5vh;
+        text-transform: uppercase;
+        font-family: 'Montserrat', sans-serif;
+        color: #575757;
+        padding-top: 7vh;
+        text-align: center;
+        width: 100%;
+        font-weight: 700;
+    }
+
+    .how-it-works-subheading {
+        text-align: center;
+        font-size: 2vh;
+        font-family: 'Montserrat', sans-serif;
+        margin-top: 3vh;
+        font-weight: 500;
+        line-height: 3vh;
+        color: #878787;
+    }
+
+    .how-it-works-circle {
+        border-radius: 50%;
+        width: fit-content;
+        margin: auto;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+        margin-top: 2vh;
+        width: 22vh;
+        height: 22vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .how-it-works-step {
+        margin: auto;
+        width: 25vh;
+        text-align: center;
+        margin-top: 2vh;
+        font-size: 2vh;
+        line-height: 2.5vh;
+        color: #232323;
+    }
+
+    /* how are we different */
+    .how-are-we-different-section {
+        min-height: 100vh;
+        max-height: 100vh;
+        background-color: #0471FF;
+    }
+
+    .how-are-we-different-heading {
+        padding-top: 10vh;
+        font-size: 5vh;
+        font-family: 'Montserrat', sans-serif;
+        text-align: center;
+        color: #fff;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .how-are-we-different-subheading {
+        padding-top: 5vh;
+        line-height: 3.5vh;
+        font-size: 3vh;
+        font-family: 'Montserrat', sans-serif;
+        text-align: center;
+        color: #fff;
+        font-weight: 500;
+    }
+
+    .how-are-we-different-grid {
+        width: 85vw;
+        margin: auto;
+        margin-top: 7vh;
+    }
+
+    .how-are-we-different-circle {
+        width: 25vh;
+        height: 25vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #fff;
+        border-radius: 50%;
+        margin: auto;
+    }
+
+    .how-are-we-different-img {
+        height: 15vh;
+    }
+
+    .how-are-we-different-step {
+        margin: auto;
+        width: 30vh;
+        color: #fff;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        text-align: center;
+        margin-top: 2vh;
+        font-size: 3vh;
+        line-height: 4vh;
+    }
+
+    .how-are-we-different-substep {
+        margin: auto;
+        width: 27vh;
+        color: #fff;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 500;
+        text-align: center;
+        margin-top: 1vh;
+        font-size: 2vh;
+        line-height: 2.5vh;
+    }
+
+    /* pricing section */
+    .pricing-section {
+        min-height: 100vh;
+        max-height: 100vh;
+        position: relative;
+    }
+
+    .pricing-heading {
+        padding-top: 5vh;
+        font-size: 5vh;
+        font-family: 'Montserrat', sans-serif;
+        text-align: center;
+        color: #fff;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .pricing-subheading {
+        padding-top: 3vh;
+        line-height: 3.5vh;
+        font-size: 3vh;
+        font-family: 'Montserrat', sans-serif;
+        text-align: center;
+        color: #fff;
+        font-weight: 500;
+    }
+
+    .pricing-grid {
+        width: 80vw;
+        padding-top: 5vh;
+    }
+
+    .pricing-card {
+        width: 25vw;
+        margin: auto;
+        background-color: #0471FF;
+        border-radius: 5px;
+    }
+
+    .pricing-pattern {
+        position: absolute;
+        right: 2vh;
+        top: 1vw;
+        z-index: -1;
+        width: 15vw;
+    }
+
+    .pricing-card-heading {
+        font-size: 5vh;
+        padding-top: 3vh;
+        text-align: center;
+    }
+
+    .pricing-card-hr {
+        width: 10vw;
+        margin-left: 7.5vw;
+        margin-top: 3vh;
+        border-color: #000;
+    }
+
+    .pricing-card-price {
+        color: #fff;
+        text-align: center;
+        font-size: 8vh;
+        font-family: 'Montserrat', sans-serif;
+        padding-top: 3vh;
+        font-weight: 700;
+    }
+
+    .rupee-symbol {
+        font-size: 7vh;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .pricing-card-trial {
+        color: #fff;
+        text-align: center;
+        font-size: 4vh;
+        font-family: 'Montserrat', sans-serif;
+        padding-top: 5vh;
+        font-weight: 700;
+    }
+
+    .pricing-feature-list {
+        margin-top: 5vh;
+        color: #fff;
+        font-size: 2.5vh;
+        line-height: 4.5vh;
+        margin-left: 2.5vw;
+        padding-left: 2vw;
+    }
+
+    .learn-more-btn {
+        text-align: center;
+        padding-bottom: 2vh;
+    }
+
+    .pricing-circle {
+        background-color: #fff;
+        border-radius: 50%;
+        width: 11vw;
+        height: 11vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
+    }
+
+    .pricing-img {
+        height: 6vw;
+    }
+
+    .pricing-text {
+        width: 15vw;
+        font-size: 3vh;
+        color: #fff;
+        text-align: center;
+        margin: auto;
+        margin-top: 2vh;
+        line-height: 3.5vh;
+    }
+
+    .pricing-grid-right-cell {
+        margin-top: 0;
+    }
+
+    .pricing-grid-right-cell .mdl-grid {
+        padding-top: 0;
+    }
+
+    .pricing-section button {
+        background-color: #150E41 !important;
+    }
+
+    /* faq section */
+    .faq-section {
+        background-color: #FCFCFC;
+        min-height: 100vh;
+        max-height: 100vh;
+        padding-left: 10vw;
+        padding-right: 5vw;
+    }
+
+    .faq-heading {
+        padding-top: 10vh;
+        font-size: 5vh;
+        font-family: 'Montserrat', sans-serif;
+        color: #575757;
+        font-weight: 700;
+    }
+
+    .faq-subheading {
+        padding-top: 4vh;
+        font-size: 3vh;
+        line-height: 3.5vh;
+        font-family: 'Montserrat', sans-serif;
+        color: #878787;
+    }
+
+    .faq-banner {
+        width: 100%;
+    }
+
+    .faq-grid {
+        padding-left: 0;
+    }
+
+    .collapsible-wrapper {
+        margin-left: 0;
+    }
+
+    .collapsible {
+        background-color: #fff;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+        margin-bottom: 2vh;
+        padding: 2vh;
+        font-size: 3vh;
+        color: #4a4a4a;
+        line-height: 4vh;
+        cursor: pointer;
+    }
+
+    .collapsible>.collapse-section {
+        max-height: 0;
+        overflow: hidden;
+    }
+
+    .collapsible>.collapse-section>hr {
+        margin-bottom: 1vh;
+        margin-top: 1vh;
+    }
+
+    .collapsible.active>.collapse-section {
+        min-height: 100vh;
+        max-height: 100vh;
+    }
+
+    /* contact section */
+    .contact-section {
+        min-height: 93vh;
+        max-height: 93vh;
+    }
+
+    .contact-grid {
+        width: 80vw;
+        margin: auto;
+        padding-top: 5vh;
+    }
+
+    .contact-grid>.mdl-cell {
+        margin: 0;
+    }
+
+    .contact-heading {
+        padding-top: 5vh;
+        font-size: 5vh;
+        font-family: 'Montserrat', sans-serif;
+        color: #fff;
+    }
+
+    .contact-subheading {
+        padding-top: 5vh;
+        font-size: 2.5vh;
+        font-family: 'Montserrat', sans-serif;
+        color: #fff;
+        line-height: 3vh;
+    }
+
+    .contact-footer {
+        min-height: 7vh;
+        max-height: 7vh;
+        background-color: #231a5d;
+        padding: 0 10vw;
+        color: #fff;
+        padding-top: 4vh;
+        font-size: 2vh;
+    }
+
+    .contact-banner {
+        width: 30vw;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+    }
+
+    .contact-right {
+        position: relative;
+    }
+
+    .contact-section input {
+        width: 100%;
+        height: 5vh;
+        margin-left: 0;
+        border-radius: 5px;
+    }
+
+    .contact-section textarea {
+        width: 100%;
+        height: 30vh;
+        border-radius: 5px;
+    }
+
+    .contact-section form .mdl-grid {
+        padding: 0;
+        padding-top: 2vh;
+    }
+
+    .contact-section form .mdl-cell {
+        margin-left: 0;
+    }
+
+    .contact-section button {
+        background-color: #4a4c89 !important;
+        height: 4vh;
     }
 </style>
 {% endblock %}

@@ -64,6 +64,7 @@ class AddLocationView(RegisteredBrandLoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         store_location = form.cleaned_data['store_location']
+        city = ""
         try:
             GEOCODE_URI = (settings.GOOGLE_MAPS_URI +
                 f'?address={urllib.parse.quote_plus(store_location)}' +
@@ -97,7 +98,7 @@ class CampaignsView(RegisteredBrandLoginRequiredMixin, TemplateView):
             current_campaign = (Campaign.objects.filter(brand=brand)
                     .order_by('-start_time').first())
             context['current_campaign'] = current_campaign
-            context['locations'] = Location.objects.filter(brand=current_campaign.brand)
+            context['locations'] = Location.objects.filter(brand=current_campaign.brand).order_by('id')
             context['posts'] = EndorsingPost.objects.filter(campaign=current_campaign, complete=True)
         return context
 

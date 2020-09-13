@@ -432,7 +432,7 @@ class BrandProfileView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, Templ
         brand = Brand.objects.get(id=kwargs['brand_uuid'])
         context['base_template'] = 'influencer/base.html'
         context['brand'] = brand
-        context['locations'] = Location.objects.filter(brand=brand)
+        context['locations'] = Location.objects.filter(brand=brand, active=True)
         context['endorsements'] = (EndorsingPost.objects
             .filter(campaign__brand__user=brand.user).order_by('-created_at'))
         return context

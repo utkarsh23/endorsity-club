@@ -3,50 +3,61 @@
 {% load socialaccount %}
 {% block main %}
 <div class="tab-wrapper">
-    <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
-        <div class="mdl-tabs__tab-bar">
-            <a href="#login-panel" class="mdl-tabs__tab is-active">Login</a>
-            <a href="#signup-panel" class="mdl-tabs__tab">Sign Up</a>
+    <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--4-col login-left">
+            <div class="circle"></div>
+            <img src="{% static 'login-banner.png' %}" alt="Login Banner" />
         </div>
-        <div class="mdl-tabs__panel is-active" id="login-panel">
-            <div class="gsignin-wrapper">
-                <a href="{% provider_login_url 'google' %}"><img src="{% static 'gsignin.png' %}"
-                        alt="Google Sign In" /></a>
-                <br /><br />OR<br /><br />
-            </div>
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <div class="mdl-grid login-card-grid">
-                    <div class="mdl-cell mdl-cell--6-col">
-                        <input
-                            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
-                            type="submit" value="Login" />
-                    </div>
-                    <div class="mdl-cell mdl-cell--6-col">
-                        <a href="{% url 'accounts:password_reset' %}">
-                            <button type="button" class="mdl-button mdl-js-button mdl-js-ripple-effect">
-                                Forgot Password?
-                            </button>
-                        </a>
+        <div class="mdl-cell mdl-cell--1-col"></div>
+        <div class="mdl-cell mdl-cell--7-col login-right">
+            <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+                <div class="mdl-tabs__tab-bar">
+                    <a href="#login-panel" class="mdl-tabs__tab is-active">Login</a>
+                    <a href="#signup-panel" class="mdl-tabs__tab">Sign Up</a>
+                </div>
+                <div class="mdl-tabs__panel is-active" id="login-panel">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <div class="mdl-grid login-card-grid">
+                            <div class="mdl-cell mdl-cell--12-col">
+                                <a href="{% url 'accounts:password_reset' %}">
+                                    <button type="button" class="mdl-button mdl-js-button mdl-js-ripple-effect">
+                                        Forgot Password?
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="mdl-cell mdl-cell--12-col">
+                                <input
+                                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+                                    type="submit" value="Login" />
+                            </div>
+                        </div>
+                    </form>
+                    <div class="gsignin-wrapper">
+                        <br />Or<br />
+                        <a href="{% provider_login_url 'google' %}"><img src="{% static 'gsignin.png' %}"
+                                alt="Google Sign In" /></a>
                     </div>
                 </div>
-            </form>
-        </div>
-        <div class="mdl-tabs__panel" id="signup-panel">
-            <a href="{% url 'accounts:brand_registration' %}">
-                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                    <i class="material-icons">local_offer</i>
-                    &nbsp;&nbsp;Sign Up As a Brand
-                </button>
-            </a>
-            <br /><br />
-            <a href="{% url 'accounts:influencer_registration' %}">
-                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                    <i class="material-icons">how_to_reg</i>
-                    &nbsp;&nbsp;Sign Up As an Influencer
-                </button>
-            </a>
+                <div class="mdl-tabs__panel" id="signup-panel">
+                    <a href="{% url 'accounts:brand_registration' %}">
+                        <button
+                            class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored signup-brand-btn">
+                            <i class="material-icons">local_offer</i>
+                            &nbsp;&nbsp;Sign Up As a Brand
+                        </button>
+                    </a>
+                    <br /><br />Or<br /><br />
+                    <a href="{% url 'accounts:influencer_registration' %}">
+                        <button
+                            class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored signup-influencer-btn">
+                            <i class="material-icons">how_to_reg</i>
+                            &nbsp;&nbsp;Sign Up As an Influencer
+                        </button>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -54,13 +65,60 @@
     $('input').addClass('mdl-textfield__input');
 </script>
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700%2C500&display=swap');
+
     .tab-wrapper {
-        width: 40vw;
-        margin-left: 30vw;
-        background-color: #EEEEEE;
-        margin-top: 10vh;
+        width: 60vw;
+        margin-left: 20vw;
+        background-color: #fff;
+        margin-top: 5vh;
         padding-top: 0;
-        border-radius: 5px;
+        border-radius: 30px;
+    }
+
+    .tab-wrapper>.mdl-grid {
+        padding: 0;
+        min-height: 60vh;
+    }
+
+    .login-left {
+        background-color: #0471FF;
+        margin: 0;
+        border-top-left-radius: 30px;
+        border-bottom-left-radius: 30px;
+        position: relative;
+    }
+
+    .login-left>.circle {
+        position: absolute;
+        border-radius: 50%;
+        height: 50vh;
+        width: 50vh;
+        right: -10vw;
+        top: 5vh;
+        background-color: #fff;
+        opacity: 0.12;
+    }
+
+    .login-left>img {
+        position: absolute;
+        right: -5vw;
+        top: 10vh;
+        height: 40vh;
+    }
+
+    .login-right {
+        background-color: #fff;
+        margin: 0;
+    }
+
+    form {
+        margin-top: 2vh;
+    }
+
+    form label {
+        color: #828282;
+        font-size: 2vh;
     }
 
     form button {
@@ -69,11 +127,15 @@
     }
 
     input.mdl-button {
-        background-color: #161A1D !important;
-        color: #EEEEEE !important;
-        font-family: 'Rubik', sans-serif !important;
-        padding-top: 1px !important;
+        background-color: #0471ff !important;
+        color: #fff !important;
+        font-family: 'Montserrat', sans-serif !important;
+        padding: 1vh !important;
+        height: auto;
         text-align: center;
+        border-radius: 10px;
+        text-transform: none;
+        font-size: 2.5vh;
     }
 
     #signup-panel {
@@ -81,35 +143,78 @@
         text-align: center;
     }
 
+    .mdl-tabs__tab-bar {
+        border: none;
+        margin-top: 3vh;
+        justify-content: flex-start;
+    }
+
     .mdl-tabs__tab {
-        color: #424242 !important;
+        color: #828282 !important;
+        font-size: 2vh;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: bold;
+        opacity: 0.7;
     }
 
     .mdl-tabs__tab.is-active {
         color: #000000 !important;
+        font-size: 3vh;
+        opacity: 1;
     }
 
     .mdl-tabs.is-upgraded .mdl-tabs__tab.is-active:after {
-        background: #424242;
+        height: 0;
     }
 
-    #signup-panel button {
-        background-color: #161A1D !important;
-        color: #EEEEEE !important;
+    #signup-panel {
+        margin-top: 5vh;
+    }
+
+    #signup-panel button.signup-brand-btn {
+        background-color: #0471ff !important;
+        color: #fff !important;
+        padding: 1vh;
+        height: auto;
+        width: 100%;
+    }
+
+    #signup-panel button.signup-influencer-btn {
+        background-color: #4cbb2c !important;
+        color: #fff !important;
+        padding: 1vh;
+        height: auto;
+        width: 100%;
     }
 
     .login-card-grid {
-        padding-left: 0;
-        padding-right: 0;
+        padding: 0;
+    }
+
+    .login-card-grid a {
+        text-decoration: none;
+    }
+
+    .login-card-grid button {
+        background-color: transparent !important;
+        color: #828282 !important;
+        display: flex;
     }
 
     .login-card-grid>.mdl-cell {
-        margin-left: 0;
+        margin: 0;
+        margin-top: 1vh;
+        width: 100%;
     }
 
     .gsignin-wrapper {
         width: 100%;
         text-align: center;
+        color: #828282;
+    }
+
+    .gsignin-wrapper img {
+        max-width: 100%;
     }
 
     #login-panel {

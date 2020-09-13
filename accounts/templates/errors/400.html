@@ -7,7 +7,7 @@
     <div class="mdl-grid">
         <div class="mdl-cell mdl-cell--6-col">
             <a href="{% url 'accounts:contact_us' %}">
-                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored green-btn">
                     <i class="material-icons">question_answer</i>
                     &nbsp;&nbsp;Contact Us
                 </button>
@@ -26,14 +26,34 @@
 <style>
     .container {
         text-align: center;
-        background-color: #EEEEEE;
-        color: #161A1D;
-        width: 40vw;
-        margin-left: 30vw;
+        background-color: #fff;
+        color: #414141;
+        width: 60vw;
+        margin-left: 20vw;
         padding: 2vh 2vw;
-        border-radius: 5px;
+        border-radius: 30px;
         margin-top: 10vh;
-        font-size: 1.5em;
+        font-size: 4vh;
+        line-height: 4vh;
+    }
+
+    button.mdl-button {
+        background-color: #0471ff !important;
+        color: #fff !important;
+        padding: 1vh !important;
+        height: auto;
+        width: 100%;
+        text-transform: none;
+        font-size: 3vh;
+        border-radius: 5px;
+    }
+
+    button.green-btn {
+        background-color: #4cbb2c !important;
+    }
+
+    button.mdl-button i {
+        font-size: 3vh;
     }
 
     .i-container {

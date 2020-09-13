@@ -61,7 +61,7 @@
                 <div class="mdl-tabs__tab-bar">
                     <a href="#locations-panel" class="mdl-tabs__tab is-active">
                         <i class="material-icons">location_on</i>
-                        &nbsp;&nbsp;Locations
+                        &nbsp;&nbsp;{% if not request.user.is_brand %}Active {% endif %}Locations
                     </a>
                     <a href="#influencer-posts-panel" class="mdl-tabs__tab">
                         <i class="material-icons">dynamic_feed</i>

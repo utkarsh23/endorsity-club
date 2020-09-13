@@ -101,7 +101,7 @@ class Brand(models.Model):
 class Location(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
-    name = models.CharField(max_length=500, unique=True)
+    name = models.CharField(max_length=500)
     latitude = models.CharField(max_length=100)
     longitude = models.CharField(max_length=100)
     active = models.BooleanField(default=False)
