@@ -15,22 +15,29 @@
 
 <body>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500&family=Eczar&family=Rubik:wght@300;400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500&family=Montserrat:wght@500&display=swap');
 
         * {
             font-family: 'Rubik', sans-serif;
             font-weight: 400;
         }
 
-        button {
+        /* button {
             color: #EEEEEE !important;
             font-family: 'Rubik', sans-serif !important;
             padding-top: 1px !important;
-        }
+        } */
 
         button.mdl-button--colored {
             color: #161A1D !important;
-            background-color: #EEEEEE !important;
+            background-color: #fff !important;
+            border-radius: 15px;
+            text-transform: none;
+            font-size: 2vh;
+            font-family: 'Montserrat', sans-serif !important;
+            height: 5vh;
+            margin-top: 1.2vh;
+            line-height: 2vh;
         }
 
         button.campaign-status .inactive {
@@ -45,13 +52,13 @@
         }
 
         body {
-            background-color: #161A1D;
+            background-color: #150E41;
         }
 
         .mdl-layout__header {
             background-color: transparent;
             box-shadow: none;
-            margin-top: 1.5vh;
+            margin-top: 3vh;
         }
 
         .logo-container {
@@ -67,18 +74,29 @@
         }
 
         .logo-text {
-            font-size: 2em;
+            font-size: 4.5vh;
             padding-left: 10px;
-            font-family: 'Roboto Slab', serif;
+            font-family: 'Quicksand', sans-serif;
             color: #E0E0E0;
         }
 
+        .mdl-layout__drawer.is-visible {
+            width: 15vw;
+        }
+
+        .mdl-layout__header-row {
+            padding: 0 2vw 0 6vw;
+            margin-bottom: 3.5vh;
+        }
+
         .mdl-layout__drawer-button {
-            margin-top: 3vh;
+            margin-top: 32px;
+            height: 7vh;
+            width: 7vh;
         }
 
         .mdl-layout__drawer-button>i {
-            font-size: 1.2em;
+            font-size: 7vh;
             color: #EEEEEE;
         }
 
@@ -102,6 +120,7 @@
             background-color: #EEEEEE;
             color: #161A1D;
             margin-bottom: 1.8vh;
+            display: none;
         }
 
         .top-menu i {
@@ -134,10 +153,10 @@
         #notifications {
             margin-left: 2vw;
             margin-right: 1vw;
+            margin-top: 1.9vh;
         }
 
         .logo-menu-container {
-            background-color: #161A1D;
             margin: 4vh 1vw;
             display: flex;
             align-items: center;
@@ -147,18 +166,12 @@
         }
 
         .logo-menu-img {
-            height: 6vh;
+            height: 10vh;
         }
 
-        .logo-menu-text {
-            font-size: 1.5em;
-            padding-left: 10px;
-            font-family: 'Roboto Slab', serif;
-            color: #E0E0E0;
-        }
-
-        .mdl-navigation .mdl-navigation__link {
+        .mdl-layout__header-row .mdl-navigation__link {
             color: #161A1D !important;
+            padding-right: 1vw !important;
         }
 
         .mdl-layout__header-row div.material-icons {
@@ -187,15 +200,82 @@
             text-align: center;
             margin-top: 1vh;
         }
+
+        button.nav-buttons {
+            background-color: #3b4877 !important;
+            color: #fff !important;
+            border-radius: 15px;
+            font-size: 2vh;
+            text-transform: none;
+            line-height: 2vh;
+            font-family: 'Montserrat', sans-serif !important;
+            height: 5vh;
+            margin-top: 1.2vh;
+        }
+
+        button.nav-buttons.is-active {
+            background-color: #0471ff !important;
+            color: #fff !important;
+        }
+
+        div.material-icons {
+            margin-top: 0.9vh;
+        }
+
+        button.sidenav-btn {
+            color: #161A1D !important;
+            text-transform: none !important;
+            font-family: 'Montserrat', sans-serif !important;
+            font-size: 3vh;
+        }
+
+        button.sidenav-btn i.material-icons {
+            font-size: 3vh;
+        }
+
+        button.logout-btn {
+            color: #b71c1c !important;
+            text-transform: none !important;
+            font-family: 'Montserrat', sans-serif !important;
+            font-size: 3vh;
+        }
+
+        button.logout-btn i.material-icons {
+            font-size: 3vh;
+        }
+
+        @media only screen and (max-width: 600px) {
+            .top-menu {
+                display: block;
+            }
+        }
     </style>
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
         <header class="mdl-layout__header">
             <div class="mdl-layout__header-row">
                 <a href="{% url 'accounts:landing' %}" class="logo-container">
                     <img src="{% static 'logo.png' %}" alt="Endorsity" class="logo-img" />
-                    <div class="logo-text">ENDORSITY</div>
+                    <div class="logo-text">Endorsity</div>
                 </a>
                 <div class="mdl-layout-spacer"></div>
+                <a class="mdl-navigation__link" href="{% url 'brand:campaign' %}">
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored nav-buttons campaigns-top-nav">
+                        <i class="material-icons active">campaign</i>
+                        &nbsp;&nbsp;Campaign
+                    </button>
+                </a>
+                <a class="mdl-navigation__link" href="{% url 'brand:influencers' %}">
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored nav-buttons influencers-top-nav">
+                        <i class="material-icons active">people</i>
+                        &nbsp;&nbsp;Influencers
+                    </button>
+                </a>
+                <a class="mdl-navigation__link" href="{% url 'brand:profile' %}">
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored nav-buttons profile-top-nav">
+                        <i class="material-icons active">account_circle</i>
+                        &nbsp;&nbsp;Profile
+                    </button>
+                </a>
                 {% if request.user|is_subscription_active %}
                 <a class="mdl-navigation__link" href="{% url 'brand:campaign' %}">
                     <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored campaign-status">
@@ -216,46 +296,64 @@
                         qr_code
                     </div>
                 </a>
-                <a class="settings-btn" href="{% url 'accounts:settings' %}">
+                <!-- <a class="settings-btn" href="{% url 'accounts:settings' %}">
                     <div class="material-icons">
                         settings
                     </div>
-                </a>
+                </a> -->
                 {% notifs_unread request.user as notifs_unread_count %}
                 <div id="notifications"
                     class="material-icons {% if notifs_unread_count > 0 %}mdl-badge{% endif %} mdl-badge--overlap"
                     data-badge="{{ notifs_unread_count }}">
                     notifications
                 </div>
-                <a class="mdl-navigation__link" href="{% url 'accounts:logout' %}">
+                <!-- <a class="mdl-navigation__link" href="{% url 'accounts:logout' %}">
                     <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
                         <i class="material-icons">exit_to_app</i>
                         &nbsp;&nbsp;Logout
                     </button>
-                </a>
+                </a> -->
             </div>
         </header>
         <div class="mdl-layout__drawer">
             <div class="logo-menu-container">
                 <img src="{% static 'logo.png' %}" alt="Endorsity" class="logo-menu-img" />
-                <div class="logo-menu-text">ENDORSITY</div>
             </div>
             <nav class="mdl-navigation">
-                <a class="mdl-navigation__link" href="{% url 'accounts:how_it_works' %}">
-                    <i class="material-icons">engineering</i>
-                    &nbsp;&nbsp;How It Works
+                <!-- <a href="{% url 'accounts:landing' %}?view=how-it-works" class="mdl-navigation__link">
+                    <button class="mdl-button mdl-js-button">
+                        <i class="material-icons">engineering</i>
+                        &nbsp;How It Works
+                    </button>
                 </a>
-                <a class="mdl-navigation__link" href="#">
-                    <i class="material-icons">monetization_on</i>
-                    &nbsp;&nbsp;Pricing
+                <a href="{% url 'accounts:landing' %}?view=how-are-we-different" class="mdl-navigation__link">
+                    <button class="mdl-button mdl-js-button">
+                        <i class="material-icons">wb_incandescent</i>
+                        &nbsp;How Are We Different
+                    </button>
                 </a>
-                <a class="mdl-navigation__link" href="{% url 'accounts:contact_us' %}">
-                    <i class="material-icons">question_answer</i>
-                    &nbsp;&nbsp;Contact Us
+                <a href="{% url 'accounts:landing' %}?view=pricing" class="mdl-navigation__link">
+                    <button class="mdl-button mdl-js-button">
+                        <i class="material-icons">monetization_on</i>
+                        &nbsp;Pricing
+                    </button>
                 </a>
-                <a class="mdl-navigation__link" href="{% url 'accounts:faq' %}">
-                    <i class="material-icons">help</i>
-                    &nbsp;&nbsp;FAQs
+                <a href="{% url 'accounts:landing' %}?view=faq" class="mdl-navigation__link">
+                    <button class="mdl-button mdl-js-button">
+                        <i class="material-icons">help</i>
+                        &nbsp;FAQ
+                    </button>
+                </a> -->
+                <a href="{% url 'accounts:settings' %}" class="mdl-navigation__link">
+                    <button class="mdl-button mdl-js-button sidenav-btn">
+                        <i class="material-icons">settings</i>
+                        &nbsp;Settings
+                    </button>
+                </a>
+                <a href="{% url 'accounts:logout' %}" class="mdl-navigation__link">
+                    <button class="mdl-button mdl-js-button logout-btn">
+                        Logout
+                    </button>
                 </a>
             </nav>
         </div>
@@ -273,19 +371,19 @@
             </a>
         </ul>
         <div class="top-menu mdl-grid">
-            <div id="campaigns-top-nav-id" class="mdl-cell mdl-cell--4-col">
+            <div class="mdl-cell mdl-cell--4-col campaigns-top-nav">
                 <a href="{% url 'brand:campaign' %}">
                     <i class="material-icons">campaign</i>
                     &nbsp;CAMPAIGN
                 </a>
             </div>
-            <div id="influencers-top-nav-id" class="mdl-cell mdl-cell--4-col">
+            <div class="mdl-cell mdl-cell--4-col influencers-top-nav">
                 <a href="{% url 'brand:influencers' %}">
                     <i class="material-icons">people</i>
                     &nbsp;INFLUENCERS
                 </a>
             </div>
-            <div id="profile-top-nav-id" class="mdl-cell mdl-cell--4-col">
+            <div class="mdl-cell mdl-cell--4-col profile-top-nav">
                 <a href="{% url 'brand:profile' %}">
                     <i class="material-icons">account_circle</i>
                     &nbsp;PROFILE

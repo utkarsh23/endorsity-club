@@ -116,7 +116,7 @@
 </div>
 <script>
     {% if request.user.is_brand %}
-        $('#profile-top-nav-id').addClass('is-active');
+        $('.profile-top-nav').addClass('is-active');
     {% endif %}
     $('.location-card:last-child').css('border-bottom', 'none');
     {% for endorsement in endorsements %}

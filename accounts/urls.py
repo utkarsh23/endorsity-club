@@ -20,7 +20,6 @@ from accounts.views import (
     ActivateAccount,
     AuthActivationView,
     ResendActivationMail,
-    NoAuthView,
     AccountExistsView,
 )
 
@@ -62,9 +61,6 @@ urlpatterns = [
     path('password_change/done/', PasswordChangeDoneView.as_view(), name='password_change_done'),
     path('profile_picture_change/', ProfilePictureChangeView.as_view(), name='profile_picture_change'),
     path('account-exists/', AccountExistsView.as_view(), name='account_exists'),
-    path('howitworks/', NoAuthView.as_view(template_name='noauth/howitworks.html'), name='how_it_works'),
-    path('faq/', NoAuthView.as_view(template_name='noauth/faq.html'), name='faq'),
-    path('contactus/', NoAuthView.as_view(template_name='noauth/contactus.html'), name='contact_us'),
 ]
 
 app_name = 'accounts'

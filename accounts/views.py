@@ -434,23 +434,6 @@ class ProfilePictureChangeView(RegisteredLoginRequiredMixin, FormView):
         return super().form_valid(form)
 
 
-class NoAuthView(TemplateView):
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if self.request.user.is_authenticated:
-            context['notifications'] = (Notification.objects
-                .filter(user=self.request.user)
-                .order_by('-created_at'))[:8]
-            context['notifs_unread'] = (Notification.objects
-                .filter(Q(user=self.request.user) & Q(is_seen=False)).count())
-            base_template = 'noauth/auth_base.html'
-        else:
-            base_template = 'noauth/base.html'
-        context['base_template'] = base_template
-        return context
-
-
 class AccountExistsView(View):
 
     def get(self, request, *args, **kwargs):

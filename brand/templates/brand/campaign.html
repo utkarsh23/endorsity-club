@@ -215,7 +215,7 @@
     {% endif %}
 </div>
 <script>
-    $('#campaigns-top-nav-id').addClass('is-active');
+    $('.campaigns-top-nav').addClass('is-active');
     $('.post-section').each(function(index) {
         $.ajax({
             url: `https://api.instagram.com/oembed?url=${$(`#insta-embed-${index}`).attr('data-instalink')}`,
