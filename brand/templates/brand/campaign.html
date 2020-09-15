@@ -1,6 +1,7 @@
 {% extends 'brand/base.html' %}
 
 {% load brand_tags %}
+{% load static %}
 {% load tz %}
 {% block main %}
 {% comment %}
@@ -10,7 +11,7 @@
         <div class="timeline mdl-grid">
             <div class="mdl-cell mdl-cell--5-col">
                 <span
-                    class="day-month-date">{{ current_campaign.start_time|timezone:"Asia/Kolkata"|date:"jS F," }}</span>
+                    class="day-month-date">{{ current_campaign.start_time|timezone:"Asia/Kolkata"|date:"jN F," }}</span>
                 <span class="year-date">&nbsp;{{ current_campaign.start_time|timezone:"Asia/Kolkata"|date:"Y" }}</span>
             </div>
             <div class="mdl-cell mdl-cell--2-col">
@@ -104,41 +105,49 @@
     {% if current_campaign %}
         <div class="current-campaign">
             <div class="mdl-grid top-grid">
-                <div class="mdl-cell mdl-cell--3-col">
+                <div class="mdl-cell mdl-cell--4-col left-align">
                     <i class="material-icons active-icon">fiber_manual_record</i>
                     &nbsp;&nbsp;Campaign Active
                 </div>
-                <div class="mdl-cell mdl-cell--5-col center-align">
+                <div class="mdl-cell mdl-cell--4-col center-align">
                     <i class="material-icons">dynamic_feed</i>
                     &nbsp;&nbsp;{% posts current_campaign %} influencer posts
                 </div>
                 <div class="mdl-cell mdl-cell--4-col right-align">
                     <i class="material-icons">event_busy</i>
                     &nbsp;&nbsp;Ends on
-                    {{ current_campaign.end_time|timezone:"Asia/Kolkata"|date:"jS F, Y" }}
+                    {{ current_campaign.end_time|timezone:"Asia/Kolkata"|date:"j N Y" }}
                 </div>
             </div>
         </div>
-        <div class="header">Active Locations</div>
-        <div class="edit-btn-wrapper">
-            <a class="edit-location-anchor" href="{% url 'brand:edit_active_locations' %}">
-                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                    <i class="material-icons edit-location-btn">edit</i>
-                    &nbsp;&nbsp;Edit Active Locations
-                </button>
-            </a>
+        <div class="header">
+            <div class="mdl-grid">
+                <div class="mdl-cell mdl-cell--7-col">
+                    Action Locations
+                </div>
+                <div class="mdl-cell mdl-cell--5-col">
+                    <div class="edit-btn-wrapper">
+                        <a class="edit-location-anchor" href="{% url 'brand:edit_active_locations' %}">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                                <i class="material-icons edit-location-btn">edit</i>
+                                &nbsp;&nbsp;Edit Active Locations
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="mdl-grid location-grid">
             {% for location in locations %}
+                <div class="mdl-cell mdl-cell--11-col">
+                    {{ location.name }}
+                </div>
                 <div class="mdl-cell mdl-cell--1-col">
                     {% if location.active %}
                     <i class="material-icons toggle-on">toggle_on</i>
                     {% else %}
                     <i class="material-icons toggle-off">toggle_off</i>
                     {% endif %}
-                </div>
-                <div class="mdl-cell mdl-cell--11-col">
-                    {{ location.name }}
                 </div>
                 {% if not forloop.last %}
                 <hr />
@@ -181,15 +190,52 @@
                             </div>
                             <div class="mdl-cell mdl-cell--11-col">{{ post.location.name }}</div>
                             <div class="mdl-cell mdl-cell--12-col separator-cell"></div>
-                            <div class="mdl-cell mdl-cell--12-col stat-heading">Engagement</div>
-                            <div class="mdl-cell mdl-cell--12-col stat-number">{{ post.engagement }}</div>
-                            <div class="mdl-cell mdl-cell--12-col stat-heading">Impressions</div>
-                            <div class="mdl-cell mdl-cell--12-col stat-number">{{ post.impressions }}</div>
+                            <div class="mdl-cell mdl-cell--12-col">
+                                <div class="mdl-grid">
+                                    <div class="mdl-cell mdl-cell--3-col">
+                                        <div class="img-cover">
+                                            <img src="{% static 'engagement-campaign.png' %}" alt="engagement symbol" />
+                                        </div>
+                                    </div>
+                                    <div class="mdl-cell mdl-cell--9-col">
+                                        <div class="stat-heading">Engagement</div>
+                                        <div class="stat-number">200{{ post.engagement }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mdl-cell mdl-cell--12-col">
+                                <div class="mdl-grid">
+                                    <div class="mdl-cell mdl-cell--3-col">
+                                        <div class="img-cover">
+                                            <img src="{% static 'impressions-campaign.png' %}" alt="engagement symbol" />
+                                        </div>
+                                    </div>
+                                    <div class="mdl-cell mdl-cell--9-col">
+                                        <div class="stat-heading">Impressions</div>
+                                        <div class="stat-number">200{{ post.impressions }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mdl-cell mdl-cell--12-col">
+                                <div class="mdl-grid">
+                                    <div class="mdl-cell mdl-cell--3-col">
+                                        <div class="img-cover">
+                                            <img src="{% static 'reach-campaign.png' %}" alt="engagement symbol" />
+                                        </div>
+                                    </div>
+                                    <div class="mdl-cell mdl-cell--9-col">
+                                        <div class="stat-heading">Reach</div>
+                                        <div class="stat-number">200{{ post.reach }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="mdl-cell mdl-cell--12-col stat-heading">Impressions</div>
+                            <div class="mdl-cell mdl-cell--12-col stat-number">200{{ post.impressions }}</div>
                             <div class="mdl-cell mdl-cell--12-col stat-heading">Reach</div>
-                            <div class="mdl-cell mdl-cell--12-col stat-number">{{ post.reach }}</div>
+                            <div class="mdl-cell mdl-cell--12-col stat-number">200{{ post.reach }}</div> -->
                             {% if post.media_type == 'VIDEO' %}
                             <div class="mdl-cell mdl-cell--12-col stat-heading">Views</div>
-                            <div class="mdl-cell mdl-cell--12-col stat-number">{{ post.video_views }}</div>
+                            <div class="mdl-cell mdl-cell--12-col stat-number">200{{ post.video_views }}</div>
                             {% endif %}
                         </div>
                     </div>
@@ -229,9 +275,9 @@
 </script>
 <style>
     .container {
-        width: 56vw;
+        width: 65vw;
         margin: auto;
-        background-color: #EEEEEE;
+        background-color: #fff;
         margin-top: 5vh;
         border-radius: 5px;
         padding: 2vh 2vw;
@@ -239,7 +285,7 @@
 
     .current-campaign .top-grid i {
         vertical-align: middle;
-        font-size: 1.5em;
+        font-size: 1em;
     }
 
     .active-icon {
@@ -250,8 +296,23 @@
         font-size: 1.5em;
     }
 
+    .current-campaign .top-grid .mdl-cell {
+        padding-top: 1vh;
+        padding-bottom: 1vh;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .current-campaign .top-grid .left-align {
+        border-radius: 15px;
+        display: flex;
+        justify-content: center;
+        background-color: #f5f5f5;
+        color: #424242;
+    }
+
     .current-campaign .top-grid .right-align {
         text-align: right;
+        color: #e53935;
     }
 
     .current-campaign .top-grid .center-align {
@@ -264,10 +325,22 @@
         margin-top: 5vh;
         padding-bottom: 2vh;
         border-bottom: 1px solid #9e9e9e;
+        color: #150e41;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .header .mdl-cell--7-col {
+        color: #150e41;
+        font-family: 'Montserrat', sans-serif;
     }
 
     .location-grid {
         margin-top: 2vh;
+        color: #515151;
+    }
+
+    .location-grid .mdl-cell {
+        font-family: 'Montserrat', sans-serif;
     }
 
     .location-grid i {
@@ -287,7 +360,7 @@
     }
 
     i.toggle-on {
-        color: #00b0ff;
+        color: #0471ff;
     }
 
     i.toggle-off {
@@ -319,16 +392,31 @@
     .post-section-top-grid {
         display: flex;
         align-items: center;
+        color: #515151;
     }
 
     .post-section-top-grid .mdl-cell--11-col {
         font-size: 2.5em;
         font-weight: 300;
+        font-family: 'Montserrat', sans-serif
     }
 
     .post-section-top-grid hr {
         width: 100%;
         margin-top: 0;
+    }
+
+    .img-cover {
+        padding: 2vh;
+        background-color: #f3f3f3;
+        width: fit-content;
+        border-radius: 50%;
+        position: relative;
+        width: 2.5vw;
+        height: 2.5vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .spinner-wrapper {
@@ -345,18 +433,23 @@
 
     .post-right-side {
         font-size: 1.5em;
+        color: #515151;
+    }
+
+    .post-right-side .mdl-grid .mdl-cell {
+        font-family: 'Montserrat', sans-serif;
     }
 
     .stat-number {
         font-size: 3em;
         font-weight: 300;
-        margin-bottom: 7vh;
+        margin-bottom: 5vh;
         margin-top: 3vh;
-        text-align: center;
+        font-family: 'Montserrat', sans-serif;
     }
 
     .stat-heading {
-        text-align: center;
+        font-family: 'Montserrat', sans-serif;
     }
 
     .separator-cell {
@@ -364,7 +457,7 @@
     }
 
     .edit-btn-wrapper {
-        margin-top: 2vh;
+        width: 100%;
     }
 
     .edit-location-anchor {
@@ -373,8 +466,20 @@
 
     .edit-location-anchor > button {
         width: 100%;
-        background-color: #161A1D !important;
-        color: #EEEEEE !important;
+        background-color: #fff !important;
+        color: #424242 !important;
+        margin-top: 0;
+        border: 2px solid #424242;
+    }
+
+    .header .mdl-grid {
+        padding: 0;
+    }
+
+    .header .mdl-grid .mdl-cell {
+        display: flex;
+        align-items: center;
+        margin: 0;
     }
 
     .empty-posts {
