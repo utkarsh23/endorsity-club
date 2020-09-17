@@ -144,10 +144,11 @@
         }
 
         .view-all-notifs {
-            background-color: #161A1D !important;
+            background-color: #150E41 !important;
             color: #EEEEEE !important;
             margin: 10px 10px;
             border-radius: 10px;
+            text-align: center;
         }
 
         #notifications {
@@ -203,6 +204,12 @@
         .no-notifs {
             text-align: center;
             margin-top: 1vh;
+            font-size: 2.5vh;
+            color: #424242;
+            line-height: 3vh;
+            padding-top: 4vh;
+            padding-bottom: 4vh;
+            font-family: 'Montserrat', sans-serif;
         }
 
         button.nav-buttons {
@@ -246,6 +253,11 @@
 
         button.logout-btn i.material-icons {
             font-size: 3vh;
+        }
+
+        #notif-log li {
+            padding-right: 2vw;
+            padding-left: 2vw;
         }
 
         @media only screen and (max-width: 600px) {
@@ -368,7 +380,7 @@
                 <li class="mdl-menu__item">{{ notification.message }}</li>
             </a>
             {% empty %}
-            <li class="no-notifs">No pending notifications.</li>
+            <li class="no-notifs">No pending notifications</li>
             {% endfor %}
             <a class="all-notifs-link" href="/notifications/">
                 <li class="mdl-menu__item view-all-notifs">View All Notifications</li>
