@@ -1,8 +1,7 @@
 {% extends 'accounts/account_change/base.html' %}
 {% block main %}
 <div class="container">
-    <div class="heading">Settings</div>
-    <div class="sub-heading">Account Details</div>
+    <div class="heading">SETTINGS</div>
     <div class="button-container">
         <a href="{% url 'accounts:profile_picture_change' %}">
             <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
@@ -11,9 +10,10 @@
             </button>
         </a>
     </div>
+    <div class="sub-heading">Account Details</div>
     <form method="post">
         {% csrf_token %}
-        <p>Email address<br />
+        <p>Email address:<br />
             <span class="email-val">{{ user.get_username }}</span></p>
         {{ form.as_p }}
         <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="submit"
@@ -36,24 +36,33 @@
 </script>
 <style>
     .container {
-        width: 40vw;
-        background-color: #EEEEEE;
+        width: 65vw;
+        background-color: #fff;
         border-radius: 5px;
         color: #161A1D;
         padding: 2vh 2vw;
-        margin-top: 10vh;
-        margin-left: 30vw;
+        margin: auto;
+        margin-top: 3vh;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
     }
 
     .heading {
-        font-size: 2em;
-        text-align: center;
-        margin-bottom: 3vh;
+        font-size: 4vh;
+        font-weight: 300;
+        padding-top: 2vh;
+        color: #150e41;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: bold;
+        margin-bottom: 4vh;
     }
 
     .sub-heading {
-        font-size: 1.3em;
-        margin-top: 2vh;
+        font-family: 'Montserrat', sans-serif;
+        color: #000;
+        font-size: 3vh;
+        margin-top: 4vh;
+        margin-bottom: 2vh;
     }
 
     .button-container {
@@ -61,21 +70,59 @@
         width: 100%;
     }
 
+    a {
+        text-decoration: none;
+    }
+
     .button-container .mdl-button {
-        color: #EEEEEE !important;
-        background-color: #161A1D !important;
-        margin-top: 2vh;
-        margin-bottom: 2vh;
-        text-align: center;
+        background-color: #0471ff !important;
+        color: #fff !important;
+        border-radius: 15px;
+        font-size: 2vh;
+        text-transform: none;
+        line-height: 2vh;
+        font-family: 'Montserrat', sans-serif !important;
+        height: 5vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         width: 100%;
     }
 
+    form {
+        margin-top: 4vh;
+    }
+
     form .mdl-button {
-        color: #EEEEEE !important;
-        background-color: #161A1D !important;
-        margin-top: 1vh;
-        margin-bottom: 2vh;
+        background-color: #0471ff !important;
+        color: #fff !important;
+        border-radius: 15px;
+        font-size: 2vh;
+        text-transform: none;
+        line-height: 2vh;
+        font-family: 'Montserrat', sans-serif !important;
+        height: 5vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         width: 100%;
+    }
+
+    form p {
+        font-family: 'Montserrat', sans-serif;
+        color: #515151;
+        font-size: 2vh;
+    }
+
+    label {
+        font-family: 'Montserrat', sans-serif;
+        color: #515151;
+        font-size: 2vh;
+    }
+
+    p input {
+        margin-top: 0.5vh !important;
+        margin-bottom: 3vh !important;
     }
 </style>
 {% endblock %}

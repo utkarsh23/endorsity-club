@@ -13,11 +13,10 @@
 
 <body>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500&family=Eczar&family=Rubik:wght@300;400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500&family=Montserrat:wght@500&display=swap');
 
         * {
-            font-family: 'Rubik', sans-serif;
-            font-weight: 400;
+            font-family: 'Quicksand', sans-serif;
         }
 
         button {
@@ -27,12 +26,20 @@
         }
 
         button.mdl-button--colored {
-            color: #161A1D !important;
-            background-color: #EEEEEE !important;
+            background-color: #0471ff !important;
+            color: #fff !important;
+            border-radius: 15px;
+            font-size: 2vh;
+            text-transform: none;
+            line-height: 2vh;
+            font-family: 'Montserrat', sans-serif !important;
+            height: 5vh;
+            display: flex;
+            align-items: center;
         }
 
         body {
-            background-color: #161A1D;
+            background-color: #150E41;
         }
 
         .mdl-layout__header {
@@ -54,9 +61,9 @@
         }
 
         .logo-text {
-            font-size: 2em;
+            font-size: 4.5vh;
             padding-left: 10px;
-            font-family: 'Roboto Slab', serif;
+            font-family: 'Quicksand', sans-serif;
             color: #E0E0E0;
         }
 
@@ -84,39 +91,9 @@
             <div class="mdl-layout__header-row">
                 <a href="{% url 'accounts:landing' %}" class="logo-container">
                     <img src="{% static 'logo.png' %}" alt="Endorsity" class="logo-img" />
-                    <div class="logo-text">ENDORSITY</div>
+                    <div class="logo-text">Endorsity</div>
                 </a>
                 <div class="mdl-layout-spacer"></div>
-                <a href="{% url 'accounts:landing' %}?view=how-it-works" class="mdl-navigation__link">
-                    <button class="mdl-button mdl-js-button">
-                        <i class="material-icons">engineering</i>
-                        &nbsp;How It Works
-                    </button>
-                </a>
-                <a href="{% url 'accounts:landing' %}?view=how-are-we-different" class="mdl-navigation__link">
-                    <button class="mdl-button mdl-js-button">
-                        <i class="material-icons">wb_incandescent</i>
-                        &nbsp;How Are We Different
-                    </button>
-                </a>
-                <a href="{% url 'accounts:landing' %}?view=pricing" class="mdl-navigation__link">
-                    <button class="mdl-button mdl-js-button">
-                        <i class="material-icons">monetization_on</i>
-                        &nbsp;Pricing
-                    </button>
-                </a>
-                <a href="{% url 'accounts:landing' %}?view=faq" class="mdl-navigation__link">
-                    <button class="mdl-button mdl-js-button">
-                        <i class="material-icons">help</i>
-                        &nbsp;FAQ
-                    </button>
-                </a>
-                <a href="{% url 'accounts:landing' %}?view=contact" class="mdl-navigation__link">
-                    <button class="mdl-button mdl-js-button">
-                        <i class="material-icons">question_answer</i>
-                        &nbsp;Contact Us
-                    </button>
-                </a>
                 <a class="mdl-navigation__link" href="{% url 'accounts:landing' %}">
                     <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
                         <i class="material-icons">dashboard</i>

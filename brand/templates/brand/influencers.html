@@ -28,9 +28,15 @@
                         <div class="mdl-grid">
                             <div class="mdl-cell mdl-cell--12-col name-cell">
                                 {{ inf.influencer.first_name }} {{ inf.influencer.last_name }}
+                                {% get_encoded_pk inf.influencer.user as encoded_pk %}
+                                <a href="{% url 'brand:influencer_analytics' encoded_pk %}">
+                                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                                        View Influencer Profile
+                                    </button>
+                                </a>
                             </div>
                             <hr />
-                            <div class="mdl-cell mdl-cell--12-col insta-cell">
+                            <div class="mdl-cell mdl-cell--6-col insta-cell">
                                 <svg viewBox="0 0 24 24">
                                     <path fill="#161A1D"
                                         d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z">
@@ -38,23 +44,14 @@
                                 </svg>
                                 &nbsp;&nbsp;{{ inf }}
                             </div>
-                            <div class="mdl-cell mdl-cell--12-col followers-cell">
+                            <div class="mdl-cell mdl-cell--6-col followers-cell">
                                 <i class="material-icons">trending_up</i>
-                                &nbsp;&nbsp;{% get_follower_count inf %} Followers
+                                &nbsp;&nbsp;{% get_follower_count inf %} followers
                             </div>
                         </div>
                     </div>
-                    <div class="mdl-cell mdl-cell--12-col view-btn-cell">
-                        {% get_encoded_pk inf.influencer.user as encoded_pk %}
-                        <a href="{% url 'brand:influencer_analytics' encoded_pk %}">
-                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                                View Influencer Profile
-                            </button>
-                        </a>
-                    </div>
                 </div>
             </div>
-            <hr class="separator-hr" />
             {% empty %}
             <div class="empty-influencers">
                 No influencers who have endorsed you yet.
@@ -65,7 +62,7 @@
 </div>
 <script>
     $('.influencers-top-nav').addClass('is-active');
-    $('.mdl-tabs__panel hr:last-child').remove();
+    $('main').css('background-color', '#fff');
     var add_influencer_data = () => {
             $('#all-influencers-panel .mdl-spinner').addClass(`is-active`);
             $.ajax({
@@ -93,9 +90,14 @@
                                         <div class="mdl-grid">
                                             <div class="mdl-cell mdl-cell--12-col name-cell">
                                                 ${result[influencer]['fields']['first_name']} ${result[influencer]['fields']['last_name']}
+                                                <a href="/brand/influencer/${result[influencer]['fields']['user_encoded_pk']}/analytics/">
+                                                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                                                        View Influencer Profile
+                                                    </button>
+                                                </a>
                                             </div>
                                             <hr />
-                                            <div class="mdl-cell mdl-cell--12-col insta-cell">
+                                            <div class="mdl-cell mdl-cell--6-col insta-cell">
                                                 <svg viewBox="0 0 24 24">
                                                     <path fill="#161A1D"
                                                         d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z">
@@ -103,22 +105,14 @@
                                                 </svg>
                                                 &nbsp;&nbsp;${result[influencer]['fields']['username']}
                                             </div>
-                                            <div class="mdl-cell mdl-cell--12-col followers-cell">
+                                            <div class="mdl-cell mdl-cell--6-col followers-cell">
                                                 <i class="material-icons">trending_up</i>
-                                                &nbsp;&nbsp;${result[influencer]['fields']['follower_count']} Followers
+                                                &nbsp;&nbsp;${result[influencer]['fields']['follower_count']} followers
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="mdl-cell mdl-cell--12-col view-btn-cell">
-                                        <a href="/brand/influencer/${result[influencer]['fields']['user_encoded_pk']}/analytics/">
-                                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                                                View Influencer Profile
-                                            </button>
-                                        </a>
-                                    </div>
                                 </div>
                             </div>
-                            <hr class="separator-hr" />
                         `);
                     }
                     $('#all-influencers-panel .mdl-spinner').removeClass(`is-active`);
@@ -140,23 +134,41 @@
 </script>
 <style>
     .container {
-        width: 60vw;
+        width: 65vw;
         margin: auto;
-        border-radius: 5px;
-        margin-top: 2vh;
+        padding-top: 2vh;
         margin-bottom: 2vh;
+    }
+
+    .mdl-tabs__tab-bar {
+        justify-content: start;
     }
 
     .mdl-tabs__tab {
         color: #EEEEEE;
     }
 
+    .mdl-tabs.is-upgraded .mdl-tabs__tab {
+        background-color: #f5f5f5 !important;
+        color: #515151 !important;
+        border-radius: 15px;
+        font-size: 2vh;
+        text-transform: none;
+        line-height: 2vh;
+        font-family: 'Montserrat', sans-serif !important;
+        height: 5vh;
+        display: flex;
+        align-items: center;
+        margin-right: 1vw;
+    }
+
     .mdl-tabs.is-upgraded .mdl-tabs__tab.is-active {
-        color: #EEEEEE !important;
+        color: #fff !important;
+        background-color: #0471ff !important;
     }
 
     .mdl-tabs__tab.is-active::after {
-        background: #EEEEEE !important;
+        height: 0 !important;
     }
 
     .mdl-tabs__tab-bar i {
@@ -170,7 +182,6 @@
 
     .mdl-tabs__panel {
         margin-top: 2vh;
-        background-color: #EEEEEE;
         border-radius: 5px;
     }
 
@@ -194,6 +205,15 @@
     .name-cell {
         font-size: 2.5em;
         font-weight: 300;
+        display: flex;
+        align-items: center;
+        margin-bottom: 0;
+        color: #150E41;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .name-cell a {
+        margin-left: auto;
     }
 
     .insta-cell {
@@ -207,7 +227,8 @@
 
     .followers-cell {
         font-size: 1.5em;
-        margin-top: 0;
+        margin-top: 3vh;
+        text-align: right;
     }
 
     .followers-cell i {
@@ -225,42 +246,27 @@
         margin-bottom: 0;
     }
 
-    .separator-hr {
-        border-color: #161A1D;
-        border-width: 4px;
-        margin-top: 1vh;
-        margin-bottom: 0;
-        height: 0;
-    }
-
-    .view-btn-cell a,
-    .view-btn-cell button {
-        width: 100%;
-    }
-
-    .view-btn-cell {
-        margin-top: 2vh;
-    }
-
-    .view-btn-cell button {
-        background: #161A1D !important;
-        color: #EEEEEE !important;
+    .name-cell button {
+        background: #fff !important;
+        color: #3d3d3d !important;
+        margin-top: 0;
+        border: 1px solid #707070;
     }
 
     .spinner-wrapper {
-        background-color: #161A1D;
         width: 100%;
         text-align: center;
         margin-bottom: 5vh;
         padding-top: 5vh;
+        padding-bottom: 5vh;
     }
 
-    .mdl-spinner {
-        color: #EEEEEE;
+    .mdl-spinner:not(.is-active) {
+        display: none;
     }
 
     .mdl-spinner__layer {
-        border-color: #EEEEEE !important;
+        border-color: #150E41 !important;
     }
 
     .empty-influencers {

@@ -238,6 +238,8 @@
             text-transform: none !important;
             font-family: 'Montserrat', sans-serif !important;
             font-size: 3vh;
+            display: flex;
+            align-items: center;
         }
 
         button.sidenav-btn i.material-icons {
@@ -336,30 +338,6 @@
                 <img src="{% static 'logo.png' %}" alt="Endorsity" class="logo-menu-img" />
             </div>
             <nav class="mdl-navigation">
-                <!-- <a href="{% url 'accounts:landing' %}?view=how-it-works" class="mdl-navigation__link">
-                    <button class="mdl-button mdl-js-button">
-                        <i class="material-icons">engineering</i>
-                        &nbsp;How It Works
-                    </button>
-                </a>
-                <a href="{% url 'accounts:landing' %}?view=how-are-we-different" class="mdl-navigation__link">
-                    <button class="mdl-button mdl-js-button">
-                        <i class="material-icons">wb_incandescent</i>
-                        &nbsp;How Are We Different
-                    </button>
-                </a>
-                <a href="{% url 'accounts:landing' %}?view=pricing" class="mdl-navigation__link">
-                    <button class="mdl-button mdl-js-button">
-                        <i class="material-icons">monetization_on</i>
-                        &nbsp;Pricing
-                    </button>
-                </a>
-                <a href="{% url 'accounts:landing' %}?view=faq" class="mdl-navigation__link">
-                    <button class="mdl-button mdl-js-button">
-                        <i class="material-icons">help</i>
-                        &nbsp;FAQ
-                    </button>
-                </a> -->
                 <a href="{% url 'accounts:settings' %}" class="mdl-navigation__link">
                     <button class="mdl-button mdl-js-button sidenav-btn">
                         <i class="material-icons">settings</i>

@@ -2,7 +2,7 @@
 {% load accounts_tags %}
 {% block main %}
 <div class="container">
-    <div class="heading">Change Profile Picture</div>
+    <div class="heading">CHANGE PROFILE PICTURE</div>
     <div>
         {% if request.user.get_profile_picture %}
         <img class="profile-picture-display" src="{{ request.user.get_profile_picture.url }}?rand={% random_string %}" />
@@ -25,20 +25,24 @@
 </script>
 <style>
     .container {
-        background-color: #EEEEEE;
+        background-color: #fff;
         color: #161A1D;
         border-radius: 5px;
-        width: 40vw;
-        margin-left: 30vw;
+        width: 60vw;
         padding: 2vh 2vw;
         text-align: center;
-        margin-top: 10vh;
+        margin: auto;
+        margin-top: 5vh;
     }
 
     .heading {
-        font-size: 2em;
-        margin-bottom: 3vh;
-        text-align: center;
+        font-size: 4vh;
+        font-weight: 300;
+        padding-top: 2vh;
+        color: #150e41;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: bold;
+        margin-bottom: 4vh;
     }
 
     .edit-profile-picture>input {
@@ -50,9 +54,19 @@
     }
 
     .container .mdl-button {
-        color: #EEEEEE !important;
-        background-color: #161A1D !important;
-        margin-top: 1vh;
+        background-color: #0471ff !important;
+        color: #fff !important;
+        border-radius: 15px;
+        font-size: 2vh;
+        line-height: 2vh;
+        font-family: 'Montserrat', sans-serif !important;
+        height: 5vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30vw;
+        margin: auto;
+        margin-top: 1.2vh;
         margin-bottom: 2vh;
     }
 </style>
