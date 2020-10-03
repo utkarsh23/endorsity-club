@@ -1,14 +1,16 @@
 {% extends 'influencer/base.html' %}
 {% block main %}
 <div class="container-wrapper">
-    <div class="container"></div>
+    <div class="container mdl-grid"></div>
     <div class="spinner-wrapper">
         <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner"></div>
     </div>
 </div>
 <script>
     $(document).ready(function() {
+        $('main').css('background-color', '#fff');
         $('#brands-top-nav-id').addClass('is-active');
+        $('.brands-top-nav').addClass('is-active');
         var add_brand_data = () => {
             $('.container-wrapper .mdl-spinner').addClass(`is-active`);
             $.ajax({
@@ -19,7 +21,7 @@
                     for (var brand = 0; brand < result.length; brand++) {
                         console.log(result[brand]);
                         $(`.container`).append(`
-                            <div class="brand-card">
+                            <div class="brand-card mdl-cell mdl-cell--4-col">
                                 <div class="brand-card-top">
                                     ${
                                         (result[brand]['fields']['profile_picture'])
@@ -30,18 +32,17 @@
                                             />`
                                         : '<i class="material-icons placeholder-profile-picture">account_circle</i>'
                                     }
-                                    &nbsp;&nbsp;${result[brand]['fields']['name']}
+                                    <div>${result[brand]['fields']['name']}</div>
                                 </div>
-                                <hr />
                                 <div class="mdl-grid">
-                                    <div class="mdl-cell mdl-cell--3-col">
+                                    <div class="mdl-cell mdl-cell--12-col">
                                         <i class="material-icons">phone</i>
                                         &nbsp;&nbsp;&nbsp;&nbsp;${result[brand]['fields']['phone_number']}
                                     </div>
                                     ${
                                         (result[brand]['fields']['website'])
                                         ? `
-                                            <div class="mdl-cell mdl-cell--5-col">
+                                            <div class="mdl-cell mdl-cell--12-col">
                                                 <div class="website-wrapper">
                                                     <i class="material-icons">language</i>
                                                     &nbsp;&nbsp;
@@ -56,7 +57,7 @@
                                     ${
                                         (result[brand]['fields']['instagram_handle'])
                                         ? `
-                                            <div class="mdl-cell mdl-cell--4-col">
+                                            <div class="mdl-cell mdl-cell--12-col">
                                                 <div class="insta-wrapper">
                                                     <svg viewBox="0 0 24 24">
                                                         <path fill="#161A1D"
@@ -73,7 +74,7 @@
                                 <div class="view-brand-wrapper">
                                     <a class="view-brand-anchor" href="/influencer/brand/${result[brand]['pk']}/">
                                         <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                                            View Brand, Get Directions &amp; More
+                                            View Brand Profile
                                         </button>
                                     </a>
                                 </div>
@@ -100,16 +101,16 @@
 </script>
 <style>
     .container {
-        width: 60vw;
+        width: 80vw;
         margin: auto;
         margin-top: 5vh;
     }
 
     .brand-card {
-        background-color: #EEEEEE;
         margin-bottom: 5vh;
-        padding: 2vh 2vw;
-        border-radius: 5px;
+        padding: 2vh 2vh;
+        border-radius: 12px;
+        border: 2px solid #150e41;
     }
 
     .brand-card .mdl-cell {
@@ -119,7 +120,7 @@
     }
 
     .brand-card button {
-        background-color: #161A1D !important;
+        background-color: #150e41 !important;
         color: #EEEEEE !important;
         width: 100%;
     }
@@ -133,20 +134,26 @@
 
     .profile-picture-display {
         border-radius: 50%;
-        width: 2.5vw;
+        width: 8vw;
     }
 
     .placeholder-profile-picture {
-        font-size: 2.5vw;
+        font-size: 8vw;
         color: #161A1D;
         border-radius: 50%;
     }
 
     .brand-card-top {
-        display: flex;
-        align-items: center;
         font-size: 2em;
         font-weight: 300;
+        text-align: center;
+        margin-bottom: 2vh;
+        color: #343434;
+    }
+
+    .brand-card-top div {
+        font-family: 'Montserrat', sans-serif;
+        margin-top: 2vh;
     }
 
     .website-wrapper i {
@@ -157,19 +164,20 @@
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
-        margin: auto;
-        margin-right: 10px;
     }
 
     .brand-card svg {
         width: 24px;
     }
 
+    .brand-card .mdl-grid .mdl-cell {
+        color: #343434;
+    }
+
     .insta-wrapper {
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
-        margin: auto;
     }
 
     .insta-wrapper a,

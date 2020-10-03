@@ -1,7 +1,7 @@
 {% extends 'influencer/base.html' %}
 {% block main %}
 <div class="container">
-    <div class="main-heading">Select Unlock Location</div>
+    <div class="main-heading">SELECT UNLOCK LOCATION</div>
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
@@ -13,7 +13,7 @@
 </script>
 <style>
     .container {
-        background-color: #EEEEEE;
+        background-color: #fff;
         margin: auto;
         width: fit-content;
         padding: 2vh 2vw;
@@ -21,21 +21,28 @@
     }
 
     #id_location {
-        background-color: #161A1D !important;
-        color: #EEEEEE !important;
         font-size: 1.3em;
         max-width: 50vw;
         overflow-x: hidden;
         padding: 1vh;
+        color: #515151;
+        margin-bottom: 2vh;
+        font-family: 'Montserrat', sans-serif;
     }
 
     input[type="submit"] {
-        width: 80%;
-        background-color: #161A1D !important;
-        color: #EEEEEE !important;
-        margin: auto;
-        margin-left: 10%;
-        margin-top: 2vh;
+        background-color: #0471ff !important;
+        color: #fff !important;
+        border-radius: 15px;
+        font-size: 2vh;
+        text-transform: none;
+        line-height: 2vh;
+        font-family: 'Montserrat', sans-serif !important;
+        height: 5vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
     }
 
     select {
@@ -43,10 +50,13 @@
     }
 
     .main-heading {
-        text-align: center;
         font-size: 3em;
         margin-bottom: 5vh;
         margin-top: 3vh;
+        color: #150E41;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: bold;
+        margin-bottom: 4vh;
     }
 </style>
 {% endblock %}

@@ -31,28 +31,28 @@
     </div>
     <hr />
     <div class="mdl-grid steps-grid">
-        <div class="mdl-cell mdl-cell--2-col">
+        <div class="mdl-cell mdl-cell--1-col">
             <button class="mdl-button mdl-js-button mdl-button--fab">
                 1
             </button>
         </div>
-        <div class="mdl-cell mdl-cell--10-col">
+        <div class="mdl-cell mdl-cell--11-col">
             Go around and click photos of you endorsing the brand.
         </div>
-        <div class="mdl-cell mdl-cell--2-col">
+        <div class="mdl-cell mdl-cell--1-col">
             <button class="mdl-button mdl-js-button mdl-button--fab">
                 2
             </button>
         </div>
-        <div class="mdl-cell mdl-cell--10-col">
+        <div class="mdl-cell mdl-cell--11-col">
             Choose your favourite pictures and create an Instagram post with these.
         </div>
-        <div class="mdl-cell mdl-cell--2-col select-ig-step">
+        <div class="mdl-cell mdl-cell--1-col select-ig-step">
             <button class="mdl-button mdl-js-button mdl-button--fab">
                 3
             </button>
         </div>
-        <div class="mdl-cell mdl-cell--10-col select-ig-step">
+        <div class="mdl-cell mdl-cell--11-col select-ig-step">
             Select this Instagram post.
         </div>
         <div class="mdl-cell mdl-cell--12-col">
@@ -64,13 +64,13 @@
                 </div>
             </div>
         </div>
-        <div class="mdl-cell mdl-cell--2-col">
+        <div class="mdl-cell mdl-cell--1-col">
             <button class="mdl-button mdl-js-button mdl-button--fab">
                 4
             </button>
         </div>
-        <div class="mdl-cell mdl-cell--10-col">
-            Before complete submission, make sure that you have selected the right Instagram post. This action cannot be
+        <div class="mdl-cell mdl-cell--11-col">
+            Make sure that you have selected the right Instagram post. This action cannot be
             undone.
         </div>
         <div class="mdl-cell mdl-cell--12-col">
@@ -86,7 +86,9 @@
 </div>
 {% endif %}
 <script>
+    $('main').css('background-color', '#fff');
     $('#post-top-nav-id').addClass('is-active');
+    $('.post-top-nav').addClass('is-active');
     {% if request.user|is_influencer_unlocked %}
     $(document).ready(function () {
         $.ajax({
@@ -133,16 +135,11 @@
     {% endif %}
 </script>
 <style>
-    .main-heading {
-        width: 60vw;
-        margin: auto;
-    }
-
     .container {
-        width: 60vw;
+        width: 65vw;
         margin: auto;
-        background-color: #EEEEEE;
         border-radius: 5px;
+        color: #515151;
     }
 
     .spinner-holder {
@@ -155,7 +152,7 @@
     }
 
     .picture-select {
-        width: 40vw;
+        min-width: 40vw;
         border-radius: 5px;
         background-color: white;
         min-height: 15vh;
@@ -176,25 +173,19 @@
         padding: 5px 5px;
         border-radius: 5px;
         background: linear-gradient(to bottom right, #F58529, #FEDA77, #DD2A7B, #8134AF, #515BD4);
+        margin-top: 5vh;
     }
 
     .main-heading {
-        width: 60vw;
+        width: 65vw;
         margin: auto;
         font-size: 3em;
         color: #EEEEEE;
         margin-top: 5vh;
-        margin-bottom: 5vh;
+        margin-bottom: 2vh;
         font-weight: 300;
-    }
-
-    .main-heading::after {
-        content: "";
-        display: block;
-        border-bottom: 2px solid #EEEEEE;
-        width: 10%;
-        position: relative;
-        bottom: -20px;
+        color: #150e41 !important;
+        font-family: 'Montserrat', sans-serif;
     }
 
     .message {
@@ -204,6 +195,7 @@
         line-height: 1;
         text-align: center;
         margin-top: 5vh;
+        font-family: 'Montserrat', sans-serif;
     }
 
     .message i {
@@ -213,29 +205,34 @@
 
     .heading {
         padding-top: 5vh;
-        margin-left: 5vw;
         font-size: 2em;
+        font-family: 'Montserrat', sans-serif;
     }
 
     .heading .mdl-cell {
         display: flex;
         align-items: center;
+        font-family: 'Montserrat', sans-serif;
     }
 
     .heading i {
-        font-size: 1em;
+        font-size: 1.5em;
         vertical-align: middle;
     }
 
     .sub-heading {
         margin-bottom: 2vh;
-        margin-left: 5vw;
         font-size: 2em;
         line-height: 1;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .sub-heading .mdl-cell {
+        font-family: 'Montserrat', sans-serif;
     }
 
     .sub-heading i {
-        font-size: 1em;
+        font-size: 1.5em;
         vertical-align: middle;
     }
 
@@ -245,8 +242,7 @@
     }
 
     .steps-grid {
-        padding: 2vh 2vw;
-        margin-bottom: ;
+        padding: 2vh 0;
     }
 
     .steps-grid .mdl-cell--2-col {
@@ -255,15 +251,17 @@
 
     .steps-grid .mdl-cell {
         margin-bottom: 4vh;
+        font-family: 'Montserrat', sans-serif;
     }
 
     .steps-grid button {
-        background-color: #161A1D !important;
-        color: #EEEEEE !important;
+        background-color: #fff !important;
+        color: #515151 !important;
         cursor: default;
+        border: 2px solid #515151;
     }
 
-    .steps-grid .mdl-cell--10-col {
+    .steps-grid .mdl-cell--11-col {
         display: flex;
         align-items: center;
         font-size: 2em;
@@ -283,10 +281,18 @@
     }
 
     .complete-btn {
-        width: 80%;
-        margin: auto;
-        background-color: #161A1D !important;
-        color: #EEEEEE !important;
+        background-color: #0471ff !important;
+        color: #fff !important;
+        border-radius: 15px;
+        font-size: 2vh;
+        text-transform: none;
+        line-height: 2vh;
+        font-family: 'Montserrat', sans-serif !important;
+        height: 5vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
     }
 
     #id_media_id, label[for="id_media_id"] {
