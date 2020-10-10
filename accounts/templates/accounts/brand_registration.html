@@ -1,5 +1,13 @@
 {% extends 'noauth/base.html' %}
 {% block main %}
+{% load static %}
+<div class="mobile-header">
+    <a href="{% url 'accounts:landing' %}">
+        <img src="{% static 'logo.png' %}" alt="Endorsity" class="logo-img" />
+        <div class="logo-text">Endorsity</div>
+        <!-- <span class="mdl-layout-title">Endorsity</span> -->
+    </a>
+</div>
 <div class="form-wrapper">
     <div class="heading">Brand Registration</div>
     <form method="post" class="register-form">
@@ -29,6 +37,16 @@
         new google.maps.places.Autocomplete(maps_input);
         $('#id_store_location').attr('placeholder', '');
     };
+    const mobJsFn = (mobJs) => {
+        if (mobJs.matches) { // If media query matches
+            $('.h-captcha').attr('data-size', 'compact');
+        } else {
+            $('.h-captcha').attr('data-size', 'normal');
+        }
+    };
+    var mobJs = window.matchMedia("(max-width: 900px)");
+    mobJsFn(mobJs);
+    mobJs.addListener(mobJsFn);
 </script>
 <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpgqiVV0SVKh5pRtddZkxtrMD4Gtty3xk&libraries=places&callback=initializeMaps"
@@ -92,6 +110,77 @@
         vertical-align: middle;
         padding-bottom: 3px;
         cursor: help;
+    }
+
+    .mobile-header {
+        display: none;
+    }
+
+    @media only screen and (max-width: 900px) {
+        .mdl-layout__drawer-button {
+            margin-top: 2.5vh;
+            border-radius: 50%;
+            background-color: #150E41;
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            border: 1px solid #fff;
+        }
+
+        .mobile-header {
+            display: block;
+            min-height: 13vh;
+            max-height: 13vh;
+        }
+
+        .mobile-header a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 3vh;
+            text-decoration: none;
+        }
+
+        .logo-img {
+            height: 40px;
+        }
+
+        .logo-text {
+            font-size: 4.5vh;
+            padding-left: 10px;
+            font-family: 'Quicksand', sans-serif;
+            color: #E0E0E0;
+        }
+
+        .heading {
+            font-size: 3vh;
+            line-height: 4vh;
+            padding: 0 2vw;
+            padding-top: 2vh;
+        }
+
+        .form-wrapper {
+            width: 90%;
+            margin: auto;
+            padding: 0;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .form-wrapper form {
+            padding: 0 2vw;
+            padding-bottom: 20px;
+        }
+
+        .h-captcha {
+            display: flex;
+            justify-content: center;
+        }
+
+        input.mdl-button {
+            width: 100%;
+            font-size: 3vh;
+        }
     }
 </style>
 {% endblock %}

@@ -1,11 +1,34 @@
 {% extends 'noauth/base.html' %}
 {% load static %}
 {% block main %}
+<div class="mobile-header">
+    <a href="{% url 'accounts:landing' %}">
+        <img src="{% static 'logo.png' %}" alt="Endorsity" class="logo-img" />
+        <div class="logo-text">Endorsity</div>
+        <!-- <span class="mdl-layout-title">Endorsity</span> -->
+    </a>
+</div>
 <div class="landing-circle"></div>
 <div class="landing-section">
     <div class="landing-wrapper">
         <div class="landing-heading">India's Most Rewarding Influencer Marketing Club</div>
         <div class="landing-subheading">Sign up to start your free trial today!</div>
+        <div class="signup-buttons">
+            <div class="half-wrapper">
+                <a href="{% url 'accounts:login' %}">
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                    Login or Sign Up
+                    </button>
+                </a>
+            </div>
+            <!-- <div class="half-wrapper">
+                <a href="{% url 'accounts:influencer_registration' %}">
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored inf-green-btn">
+                    Sign Up &#8212; Influencer
+                    </button>
+                </a>
+            </div> -->
+        </div>
     </div>
     <img src="{% static 'landing_graphic.png' %}" alt="landing graphcic" class="landing-graphic">
 </div>
@@ -13,7 +36,7 @@
     <div class="how-it-works-heading">How It Works</div>
     <div class="how-it-works-subheading">Lorem Ipsum Bla bla Bla bla Bla bla blah vlah<br />Bla bla blah vlah</div>
     <div class="mdl-grid how-it-works-grid">
-        <div class="mdl-cell mdl-cell--4-col">
+        <div class="mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--2-col-phone">
             <div class="how-it-works-circle">
                 <img src="{% static 'how-it-works-1.png' %}" alt="how it works step" class="how-it-works-img">
             </div>
@@ -21,7 +44,7 @@
                 Enroll For Verification
             </div>
         </div>
-        <div class="mdl-cell mdl-cell--4-col">
+        <div class="mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--2-col-phone">
             <div class="how-it-works-circle">
                 <img src="{% static 'how-it-works-2.png' %}" alt="how it works step" class="how-it-works-img">
             </div>
@@ -29,7 +52,7 @@
                 Once verified, browse through multiple deals, filtered based on city &amp; offering
             </div>
         </div>
-        <div class="mdl-cell mdl-cell--4-col">
+        <div class="mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--2-col-phone">
             <div class="how-it-works-circle">
                 <img src="{% static 'how-it-works-3.png' %}" alt="how it works" class="how-it-works-img">
             </div>
@@ -37,7 +60,7 @@
                 Unlock any deal if you would like to partner with the brand
             </div>
         </div>
-        <div class="mdl-cell mdl-cell--4-col">
+        <div class="mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--2-col-phone">
             <div class="how-it-works-circle">
                 <img src="{% static 'how-it-works-4.png' %}" alt="how it works" class="how-it-works-img">
             </div>
@@ -45,7 +68,7 @@
                 Visit the store &amp; experience their offerings, while clicking lots of photos
             </div>
         </div>
-        <div class="mdl-cell mdl-cell--4-col">
+        <div class="mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--2-col-phone">
             <div class="how-it-works-circle">
                 <img src="{% static 'how-it-works-5.png' %}" alt="how it works" class="how-it-works-img">
             </div>
@@ -53,7 +76,7 @@
                 Post your pictures on the linked Instagram account
             </div>
         </div>
-        <div class="mdl-cell mdl-cell--4-col">
+        <div class="mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--2-col-phone">
             <div class="how-it-works-circle">
                 <img src="{% static 'how-it-works-6.png' %}" alt="how it works" class="how-it-works-img">
             </div>
@@ -69,7 +92,7 @@
         Lorem Ipsum Bla bla Bla bla Bla bla blah vlah bla blah vlah<br />Bla bla blah vlah bla blah vlah
     </div>
     <div class="mdl-grid how-are-we-different-grid">
-        <div class="mdl-cell mdl-cell--3-col">
+        <div class="mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--2-col-phone">
             <div class="how-are-we-different-circle">
                 <img src="{% static 'how-are-we-different-1.png' %}" alt="how are we different"
                     class="how-are-we-different-img">
@@ -82,7 +105,7 @@
                 sed malesuada.
             </div>
         </div>
-        <div class="mdl-cell mdl-cell--3-col">
+        <div class="mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--2-col-phone">
             <div class="how-are-we-different-circle">
                 <img src="{% static 'how-are-we-different-2.png' %}" alt="how are we different"
                     class="how-are-we-different-img">
@@ -95,7 +118,7 @@
                 sed malesuada.
             </div>
         </div>
-        <div class="mdl-cell mdl-cell--3-col">
+        <div class="mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--2-col-phone">
             <div class="how-are-we-different-circle">
                 <img src="{% static 'how-are-we-different-3.png' %}" alt="how are we different"
                     class="how-are-we-different-img">
@@ -108,7 +131,7 @@
                 sed malesuada.
             </div>
         </div>
-        <div class="mdl-cell mdl-cell--3-col">
+        <div class="mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--2-col-phone">
             <div class="how-are-we-different-circle">
                 <img src="{% static 'how-are-we-different-4.png' %}" alt="how are we different"
                     class="how-are-we-different-img">
@@ -127,11 +150,39 @@
     <img src="{% static 'pricing-pattern.png' %}" alt="pattern" class="pricing-pattern" />
     <div class="pricing-heading">Pricing</div>
     <div class="pricing-subheading">
-        Maecenas vehicula sollicitudin lacus quis feugiat. Nulla ut consectetur tortor.<br />Nunc hendrerit vel sem
+        Maecenas vehicula sollicitudin lacus quis feugiat.<br />Nunc hendrerit vel sem
         sed malesuada.
     </div>
     <div class="pricing-grid mdl-grid">
-        <div class="mdl-cell mdl-cell--5-col pricing-grid-left-cell">
+        <div class="mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet mdl-cell--4-col-phone pricing-grid-right-cell">
+            <div class="mdl-grid">
+                <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone">
+                    <div class="pricing-circle">
+                        <img class="pricing-img" src="{% static 'pricing-1.png' %}" alt="pricing circle" />
+                    </div>
+                    <div class="pricing-text">Completely Free For Influencers</div>
+                </div>
+                <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone">
+                    <div class="pricing-circle">
+                        <img class="pricing-img" src="{% static 'pricing-2.png' %}" alt="pricing circle" />
+                    </div>
+                    <div class="pricing-text">No hidden charges</div>
+                </div>
+                <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone">
+                    <div class="pricing-circle">
+                        <img class="pricing-img" src="{% static 'pricing-3.png' %}" alt="pricing circle" />
+                    </div>
+                    <div class="pricing-text">Unlimited influencers after subscription</div>
+                </div>
+                <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone">
+                    <div class="pricing-circle">
+                        <img class="pricing-img" src="{% static 'pricing-4.png' %}" alt="pricing circle" />
+                    </div>
+                    <div class="pricing-text">No credit card required for trial</div>
+                </div>
+            </div>
+        </div>
+        <div class="mdl-cell mdl-cell--5-col mdl-cell--8-col-tablet mdl-cell--4-col-phone pricing-grid-left-cell">
             <div class="pricing-card">
                 <div class="pricing-card-heading">Premium</div>
                 <hr class="pricing-card-hr" />
@@ -149,34 +200,6 @@
                     <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
                         Learn More
                     </button>
-                </div>
-            </div>
-        </div>
-        <div class="mdl-cell mdl-cell--7-col pricing-grid-right-cell">
-            <div class="mdl-grid">
-                <div class="mdl-cell mdl-cell--6-col">
-                    <div class="pricing-circle">
-                        <img class="pricing-img" src="{% static 'pricing-1.png' %}" alt="pricing circle" />
-                    </div>
-                    <div class="pricing-text">Completely Free For Influencers</div>
-                </div>
-                <div class="mdl-cell mdl-cell--6-col">
-                    <div class="pricing-circle">
-                        <img class="pricing-img" src="{% static 'pricing-2.png' %}" alt="pricing circle" />
-                    </div>
-                    <div class="pricing-text">No hidden charges</div>
-                </div>
-                <div class="mdl-cell mdl-cell--6-col">
-                    <div class="pricing-circle">
-                        <img class="pricing-img" src="{% static 'pricing-3.png' %}" alt="pricing circle" />
-                    </div>
-                    <div class="pricing-text">Unlimited influencers after subscription</div>
-                </div>
-                <div class="mdl-cell mdl-cell--6-col">
-                    <div class="pricing-circle">
-                        <img class="pricing-img" src="{% static 'pricing-4.png' %}" alt="pricing circle" />
-                    </div>
-                    <div class="pricing-text">No credit card required for trial</div>
                 </div>
             </div>
         </div>
@@ -728,6 +751,203 @@
     .contact-section button {
         background-color: #4a4c89 !important;
         height: 4vh;
+    }
+
+    .signup-buttons {
+        display: none;
+    }
+
+    .mobile-header {
+        display: none;
+    }
+
+    @media only screen and (max-width: 900px) {
+        .landing-heading {
+            font-size: 4vh;
+            line-height: 5vh;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .landing-subheading {
+            display: none;
+        }
+
+        .landing-wrapper {
+            width: 100%;
+            padding-left: 0;
+            padding-top: 5vh;
+        }
+
+        .signup-buttons {
+            display: flex;
+            margin-top: 10px;
+        }
+
+        .signup-buttons .half-wrapper {
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .signup-buttons .half-wrapper a,
+        .signup-buttons .half-wrapper button {
+            width: 100%;
+        }
+
+        .landing-graphic {
+            width: 100vw;
+        }
+
+        .mobile-header {
+            display: block;
+            min-height: 13vh;
+            max-height: 13vh;
+        }
+
+        .mobile-header a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 3vh;
+            text-decoration: none;
+        }
+
+        .logo-img {
+            height: 40px;
+        }
+
+        button.inf-green-btn {
+            background-color: #4cbb2c !important;
+        }
+
+        .mdl-layout__drawer-button {
+            margin-top: 2.5vh;
+            border-radius: 50%;
+            background-color: #150E41;
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            border: 1px solid #fff;
+        }
+
+        .mdl-layout__drawer-button>i {
+            font-size: 24px;
+        }
+
+        .how-it-works-section {
+            max-height: fit-content;
+        }
+
+        .how-it-works-circle {
+            width: 18vh;
+            height: 18vh;
+        }
+
+        .how-it-works-grid {
+            width: 95vw;
+            margin: auto;
+            margin-top: 0;
+        }
+
+        .how-it-works-img {
+            width: 9vh;
+        }
+
+        .how-it-works-step {
+            width: 18vh;
+        }
+
+        .how-are-we-different-section {
+            max-height: fit-content;
+        }
+
+        .how-are-we-different-heading {
+            font-size: 4vh;
+            line-height: 5vh;
+            padding-top: 5vh;
+        }
+
+        .how-are-we-different-subheading {
+            padding-top: 2vh;
+        }
+
+        .how-it-works-heading {
+            font-size: 4vh;
+            line-height: 5vh;
+        }
+
+        .how-are-we-different-circle {
+            width: 18vh;
+            height: 18vh;
+        }
+
+        .how-are-we-different-img {
+            height: 12vh;
+        }
+
+        .how-are-we-different-step {
+            width: 100%;
+        }
+
+        .how-are-we-different-substep {
+            width: 100%;
+        }
+
+        .how-are-we-different-grid {
+            width: 95vw;
+            margin: auto;
+            margin-top: 0;
+        }
+
+        .pricing-section {
+            max-height: fit-content;
+        }
+
+        .pricing-feature-list {
+            margin-left: 8.5vw;
+        }
+
+        .pricing-heading {
+            font-size: 4vh;
+        }
+
+        .pricing-card {
+            width: 100%;
+        }
+
+        .pricing-grid {
+            width: 95vw;
+            padding-top: 2vh;
+        }
+
+        .pricing-card-hr {
+            width: 30vw;
+            margin-left: initial;
+            margin: auto;
+            margin-top: 3vh;
+        }
+
+        .pricing-card-price {
+            padding-top: 5vh;
+        }
+
+        .pricing-img {
+            height: 14vw;
+        }
+
+        .pricing-circle {
+            width: 25vw;
+            height: 25vw;
+        }
+
+        .pricing-text {
+            width: 100%;
+        }
+
+        .faq-section {
+            max-height: fit-content;
+        }
     }
 </style>
 {% endblock %}
