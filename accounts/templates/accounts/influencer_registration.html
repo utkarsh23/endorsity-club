@@ -24,6 +24,7 @@
 </div>
 <script>
     $('p input').addClass('mdl-textfield__input');
+    $('input').attr('autocomplete', 'off');
     $('label[for="id_phone_number"]').html('Phone number (10-digit):');
     const mobJsFn = (mobJs) => {
         if (mobJs.matches) { // If media query matches

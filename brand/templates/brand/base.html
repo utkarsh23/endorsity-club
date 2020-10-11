@@ -5,6 +5,8 @@
 <html>
 
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css" />
@@ -262,9 +264,97 @@
             padding-left: 2vw;
         }
 
-        @media only screen and (max-width: 600px) {
+        @media only screen and (max-width: 900px) {
             .top-menu {
                 display: block;
+            }
+
+            .mdl-layout__drawer.is-visible {
+                width: 50vw;
+            }
+
+            .mdl-layout__drawer.is-visible .mdl-navigation__link {
+                padding: 0;
+            }
+
+            .mdl-layout__header-row {
+                margin-bottom: 10px;
+            }
+
+            .mdl-layout__header-row .mdl-navigation__link {
+                display: none;
+            }
+
+            .mdl-layout-spacer {
+                display: none;
+            }
+
+            header.mdl-layout__header {
+                margin-top: 0;
+            }
+
+            .logo-container {
+                margin: auto;
+            }
+
+            .logo-text {
+                font-size: 25px;
+            }
+
+            .logo-img {
+                height: 35px;
+            }
+
+            .top-menu {
+                width: 95%;
+                margin: auto;
+                display: flex;
+                justify-content: center;
+                margin-bottom: 10px;
+                background: transparent;
+                border: none;
+            }
+
+            .top-menu>div {
+                margin-right: 4px;
+                margin-left: 4px;
+                padding: 6px;
+                border-radius: 10px;
+                color: #ffffff;
+                background-color: #3b4877;
+            }
+
+            .top-menu a {
+                font-family: 'Montserrat', sans-serif;
+            }
+
+            .top-menu i {
+                font-size: 1.2em;
+            }
+
+            .top-menu .is-active {
+                background-color: #0471ff;
+            }
+
+            div.mdl-layout__drawer-button {
+                margin-top: 8px !important;
+            }
+
+            .qr-btn i.material-icons {
+                font-size: 20px !important;
+            }
+
+            #notifications {
+                font-size: 20px;
+            }
+
+            .mdl-layout__drawer-button>i {
+                font-size: 30px;
+            }
+
+            .mdl-layout__drawer-button {
+                width: 35px;
+                height: 35px;
             }
         }
     </style>
@@ -364,23 +454,23 @@
                 <li class="mdl-menu__item view-all-notifs">View All Notifications</li>
             </a>
         </ul>
-        <div class="top-menu mdl-grid">
-            <div class="mdl-cell mdl-cell--4-col campaigns-top-nav">
+        <div class="top-menu">
+            <div class="campaigns-top-nav">
                 <a href="{% url 'brand:campaign' %}">
                     <i class="material-icons">campaign</i>
-                    &nbsp;CAMPAIGN
+                    &nbsp;Campaign
                 </a>
             </div>
-            <div class="mdl-cell mdl-cell--4-col influencers-top-nav">
+            <div class="influencers-top-nav">
                 <a href="{% url 'brand:influencers' %}">
                     <i class="material-icons">people</i>
-                    &nbsp;INFLUENCERS
+                    &nbsp;Influencers
                 </a>
             </div>
-            <div class="mdl-cell mdl-cell--4-col profile-top-nav">
+            <div class="profile-top-nav">
                 <a href="{% url 'brand:profile' %}">
                     <i class="material-icons">account_circle</i>
-                    &nbsp;PROFILE
+                    &nbsp;Profile
                 </a>
             </div>
         </div>
