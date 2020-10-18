@@ -4,7 +4,7 @@
 {% block main %}
 <div class="container">
     <div class="mdl-grid main-grid">
-        <div class="mdl-cell mdl-cell--3-col">
+        <div class="mdl-cell mdl-cell--3-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
             <div class="first-section">
                 {% if request.user.is_brand %}
                     {% if request.user.get_profile_picture %}
@@ -150,22 +150,22 @@
                         <div class="mdl-cell mdl-cell--7-col">${result['html']}</div>
                         <div class="mdl-cell mdl-cell--5-col">
                             <div class="mdl-grid">
-                                <div class="mdl-cell mdl-cell--2-col">
+                                <div class="mdl-cell mdl-cell--2-col mdl-cell--1-col-tablet mdl-cell--1-col-phone">
                                     <i class="material-icons">access_time</i>
                                 </div>
-                                <div class="mdl-cell mdl-cell--10-col">{{ endorsement.created_at|timezone:"Asia/Kolkata" }}</div>
-                                <div class="mdl-cell mdl-cell--2-col">
+                                <div class="mdl-cell mdl-cell--10-col mdl-cell--7-col-tablet mdl-cell--3-col-phone">{{ endorsement.created_at|timezone:"Asia/Kolkata" }}</div>
+                                <div class="mdl-cell mdl-cell--2-col mdl-cell--1-col-tablet mdl-cell--1-col-phone">
                                     <i class="material-icons">location_on</i>
                                 </div>
-                                <div class="mdl-cell mdl-cell--10-col">{{ endorsement.location.name }}</div>
+                                <div class="mdl-cell mdl-cell--10-col mdl-cell--7-col-tablet mdl-cell--3-col-phone">{{ endorsement.location.name }}</div>
                                 <div class="mdl-cell mdl-cell--12-col stat-wrapper">
                                     <div class="mdl-grid">
-                                        <div class="mdl-cell mdl-cell--3-col">
+                                        <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
                                             <div class="img-cover">
                                                 <img src="{% static 'engagement-campaign.png' %}" alt="engagement symbol" />
                                             </div>
                                         </div>
-                                        <div class="mdl-cell mdl-cell--9-col">
+                                        <div class="mdl-cell mdl-cell--9-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
                                             <div class="stat-heading">Engagement</div>
                                             <div class="stat-number">200{{ post.engagement }}</div>
                                         </div>
@@ -173,12 +173,12 @@
                                 </div>
                                 <div class="mdl-cell mdl-cell--12-col stat-wrapper">
                                     <div class="mdl-grid">
-                                        <div class="mdl-cell mdl-cell--3-col">
+                                        <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
                                             <div class="img-cover">
                                                 <img src="{% static 'impressions-campaign.png' %}" alt="engagement symbol" />
                                             </div>
                                         </div>
-                                        <div class="mdl-cell mdl-cell--9-col">
+                                        <div class="mdl-cell mdl-cell--9-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
                                             <div class="stat-heading">Impressions</div>
                                             <div class="stat-number">200{{ post.impressions }}</div>
                                         </div>
@@ -186,12 +186,12 @@
                                 </div>
                                 <div class="mdl-cell mdl-cell--12-col stat-wrapper">
                                     <div class="mdl-grid">
-                                        <div class="mdl-cell mdl-cell--3-col">
+                                        <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
                                             <div class="img-cover">
                                                 <img src="{% static 'reach-campaign.png' %}" alt="engagement symbol" />
                                             </div>
                                         </div>
-                                        <div class="mdl-cell mdl-cell--9-col">
+                                        <div class="mdl-cell mdl-cell--9-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
                                             <div class="stat-heading">Reach</div>
                                             <div class="stat-number">200{{ post.reach }}</div>
                                         </div>
@@ -632,6 +632,121 @@
         border-radius: 15px;
         text-align: center;
         margin-top: 1.5vh !important;
+    }
+
+    @media only screen and (max-width: 900px) {
+        .container {
+            width: 100vw;
+        }
+
+        .mdl-tabs__tab-bar {
+            position: initial;
+            height: fit-content;
+        }
+
+        .first-section {
+            position: initial;
+            min-height: 0;
+            width: 100%;
+            padding-bottom: 20px;
+            border-radius: 15px;
+        }
+
+        .profile-picture-display {
+            width: 50%;
+        }
+
+        #influencer-posts-panel, #locations-panel {
+            padding-top: 15px;
+        }
+
+        .location-card .mdl-grid {
+            padding: 0;
+        }
+
+        .location-heading {
+            font-size: 20px;
+            margin-bottom: 15px !important;
+        }
+
+        iframe {
+            min-width: 0 !important;
+        }
+
+        .card-header .mdl-cell {
+            font-size: 25px;
+            text-align: left;
+        }
+
+        .card-header .mdl-cell:first-child {
+            text-align: right;
+        }
+
+        .post-container .mdl-grid {
+            margin: 8px;
+        }
+
+        .post-container .mdl-grid {
+            margin: 0;
+        }
+
+        .post-container .mdl-grid .mdl-cell--1-col {
+            width: 15%;
+            font-size: 20px;
+        }
+
+        .post-container .mdl-grid .mdl-cell--11-col {
+            width: 70%;
+            font-size: 20px;
+        }
+
+        .post-container .mdl-grid .mdl-cell i {
+            font-size: 25px;
+        }
+
+        .post-container .mdl-cell .mdl-grid {
+            padding: 0;
+        }
+
+        .post-container .mdl-cell .mdl-grid .stat-heading {
+            font-size: 15px;
+        }
+
+        .post-container .mdl-cell .mdl-grid .stat-number {
+            font-size: 30px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+
+        .post-container .mdl-grid .mdl-cell--10-col {
+            font-size: 15px;
+        }
+
+        .img-cover {
+            width: 25px;
+            height: 25px;
+        }
+
+        .insta-space {
+            font-size: 15px;
+        }
+
+        .insta-space svg {
+            max-width: unset;
+            width: 22px;
+        }
+
+        .website-space {
+            font-size: 15px;
+        }
+
+        .post-container hr {
+            margin: 10px;
+        }
+
+        .placeholder-profile-picture {
+            font-size: 120px;
+        }
     }
 </style>
 {% endblock %}

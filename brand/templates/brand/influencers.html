@@ -17,23 +17,25 @@
             {% for inf in your_influencers %}
             <div class="influencer-card">
                 <div class="mdl-grid">
-                    <div class="mdl-cell mdl-cell--2-col">
+                    <div class="mdl-cell mdl-cell--2-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
                         {% if inf.influencer.user.get_profile_picture %}
                         <img class="profile-picture-display" src="{{ inf.influencer.user.get_profile_picture.url }}" />
                         {% else %}
                         <i class="material-icons placeholder-profile-picture">account_circle</i>
                         {% endif %}
                     </div>
-                    <div class="mdl-cell mdl-cell--10-col">
+                    <div class="mdl-cell mdl-cell--10-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
                         <div class="mdl-grid">
                             <div class="mdl-cell mdl-cell--12-col name-cell">
                                 {{ inf.influencer.first_name }} {{ inf.influencer.last_name }}
                                 {% get_encoded_pk inf.influencer.user as encoded_pk %}
-                                <a href="{% url 'brand:influencer_analytics' encoded_pk %}">
-                                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                                        View Influencer Profile
-                                    </button>
-                                </a>
+                                <div>
+                                    <a href="{% url 'brand:influencer_analytics' encoded_pk %}">
+                                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                                            View Influencer Profile
+                                        </button>
+                                    </a>
+                                </div>
                             </div>
                             <hr />
                             <div class="mdl-cell mdl-cell--6-col insta-cell">
@@ -75,7 +77,7 @@
                         $(`.all-influencer-container`).append(`
                             <div class="influencer-card">
                                 <div class="mdl-grid">
-                                    <div class="mdl-cell mdl-cell--2-col">
+                                    <div class="mdl-cell mdl-cell--2-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
                                         ${
                                             (result[influencer]['fields']['profile_picture'])
                                             ? `
@@ -86,15 +88,17 @@
                                             : '<div class="placeholder-wrapper"><i class="material-icons placeholder-profile-picture">account_circle</i></div>'
                                         }
                                     </div>
-                                    <div class="mdl-cell mdl-cell--10-col">
+                                    <div class="mdl-cell mdl-cell--10-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
                                         <div class="mdl-grid">
                                             <div class="mdl-cell mdl-cell--12-col name-cell">
                                                 ${result[influencer]['fields']['first_name']} ${result[influencer]['fields']['last_name']}
-                                                <a href="/brand/influencer/${result[influencer]['fields']['user_encoded_pk']}/analytics/">
-                                                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                                                        View Influencer Profile
-                                                    </button>
-                                                </a>
+                                                <div>
+                                                    <a href="/brand/influencer/${result[influencer]['fields']['user_encoded_pk']}/analytics/">
+                                                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                                                            View Influencer Profile
+                                                        </button>
+                                                    </a>
+                                                </div>
                                             </div>
                                             <hr />
                                             <div class="mdl-cell mdl-cell--6-col insta-cell">
@@ -123,14 +127,30 @@
         };
         $(window).data('page_no', 1);
         add_influencer_data();
-        $('main.mdl-layout__content').data('ajaxready', true).scroll(function (e) {
-            if ($(window).data('ajaxready') === false) return;
+        function changeOnSmallScreen(x) {
+            if (x.matches) {
+                $('main.mdl-layout__content').data('ajaxready', true).scroll(function (e) {
+                    if ($(window).data('ajaxready') === false) return;
 
-            if ($(this).scrollTop() + $(this).innerHeight() >= ($(this)[0].scrollHeight) - 100) {
-                $(window).data('ajaxready', false);
-                add_influencer_data();
+                    if ($(this).scrollTop() + $(this).innerHeight() >= ($(this)[0].scrollHeight) - 0) {
+                        $(window).data('ajaxready', false);
+                        add_influencer_data();
+                    }
+                });
+            } else {
+                $('main.mdl-layout__content').data('ajaxready', true).scroll(function (e) {
+                    if ($(window).data('ajaxready') === false) return;
+
+                    if ($(this).scrollTop() + $(this).innerHeight() >= ($(this)[0].scrollHeight) - 100) {
+                        $(window).data('ajaxready', false);
+                        add_influencer_data();
+                    }
+                });
             }
-        });
+        }
+        var x = window.matchMedia("(max-width: 900px)")
+        changeOnSmallScreen(x);
+        x.addListener(changeOnSmallScreen);
 </script>
 <style>
     .container {
@@ -212,7 +232,7 @@
         font-family: 'Montserrat', sans-serif;
     }
 
-    .name-cell a {
+    .name-cell div {
         margin-left: auto;
     }
 
@@ -273,6 +293,61 @@
         text-align: center;
         font-size: 2em;
         padding: 5vh;
+    }
+
+    @media only screen and (max-width: 900px) {
+        .container {
+            width: 95vw;
+        }
+
+        .mdl-tabs__tab-bar {
+            justify-content: center;
+        }
+
+        hr {
+            display: none;
+        }
+
+        .influencer-card .mdl-cell {
+            display: flex;
+            justify-content: center;
+        }
+
+        .profile-picture-display {
+            width: 50%;
+        }
+
+        .mdl-cell.name-cell {
+            font-size: 30px;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .name-cell div {
+            margin-top: 10px;
+        }
+
+        .name-cell button {
+            font-size: 15px;
+        }
+
+        .insta-cell {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0;
+        }
+
+        .followers-cell {
+            display: flex;
+            align-items: center;
+            margin-top: 0;
+        }
+
+        .spinner-wrapper {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            padding-top: 0;
+        }
     }
 </style>
 {% endblock %}
