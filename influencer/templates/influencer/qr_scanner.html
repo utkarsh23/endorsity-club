@@ -42,7 +42,7 @@
             });
             if (code) {
                 if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(code.data) === true)
-                    window.location.href = `/influencer/unlock/${code.data}/`;
+                    setTimeout(() => { window.location.href = `/influencer/unlock/${code.data}/` }, 0);
             }
         }
         requestAnimationFrame(tick);
@@ -68,6 +68,17 @@
         font-size: 3em;
         margin-top: 5vh;
         color: #EEEEEE;
+    }
+
+    @media only screen and (max-width: 900px) {
+        .main-heading {
+            font-size: 25px;
+        }
+
+        #webcam-canvas {
+            width: 80vw;
+            height: 80vw;
+        }
     }
 </style>
 {% endblock %}

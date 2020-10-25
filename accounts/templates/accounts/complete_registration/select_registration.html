@@ -10,7 +10,7 @@
             </button>
         </a>
         <a href="{% url 'accounts:complete_influencer_reg' %}">
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent inf-button">
                 <i class="material-icons">how_to_reg</i>
                 &nbsp;&nbsp;I'm An Influencer
             </button>
@@ -19,26 +19,49 @@
 </div>
 <style>
     .container {
-        background-color: #EEEEEE;
+        background-color: #fff;
         border-radius: 5px;
         color: #161A1D;
         width: 40vw;
-        margin-left: 30vw;
+        margin: auto;
         margin-top: 10vh;
         padding: 2vh 2vw;
     }
 
     .heading {
-        text-align: center;
-        font-size: 2em;
-        margin-bottom: 2vh;
+        font-size: 25px;
+        line-height: 25px;
+        margin-bottom: 3vh;
+        font-family: 'Montserrat', sans-serif;
+        text-transform: uppercase;
+        color: #150e41;
+        margin-top: 2vh;
+        margin-bottom: 4vh;
+        font-weight: bold;
     }
 
     .container .mdl-button {
-        color: #EEEEEE !important;
-        background-color: #161A1D !important;
-        margin-top: 2vh;
+        background-color: #0471ff !important;
+        color: #fff !important;
+        font-family: 'Montserrat', sans-serif !important;
+        padding: 1vh !important;
+        height: auto;
+        text-align: center;
+        border-radius: 10px;
+        text-transform: none;
+        font-size: 2.5vh;
         width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .container .mdl-button.inf-button {
+        background-color: #4cbb2c !important;
+    }
+
+    @media only screen and (max-width: 900px) {
+        .container {
+            width: 80vw;
+        }
     }
 </style>
 {% endblock %}

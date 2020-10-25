@@ -144,7 +144,8 @@
     }
 
     .brand-card-top {
-        font-size: 2em;
+        font-size: 30px;
+        line-height: 30px;
         font-weight: 300;
         text-align: center;
         margin-bottom: 2vh;
@@ -205,6 +206,20 @@
 
     .mdl-spinner__layer {
         border-color: #EEEEEE !important;
+    }
+
+    @media only screen and (max-width: 900px) {
+        .container {
+            width: 90vw;
+        }
+
+        .profile-picture-display {
+            width: 100px;
+        }
+
+        .placeholder-profile-picture {
+            font-size: 100px;
+        }
     }
 </style>
 {% endblock %}

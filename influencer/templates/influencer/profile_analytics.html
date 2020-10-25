@@ -4,7 +4,7 @@
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <div class="container">
     <div class="mdl-grid main-grid">
-        <div class="mdl-cell mdl-cell--3-col">
+        <div class="mdl-cell mdl-cell--3-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
             <div class="first-section">
                 {% if not request.user.is_brand %}
                     {% if request.user.get_profile_picture %}
@@ -99,24 +99,24 @@
                             Top 3 cities that audience belongs to.
                         </div>
                         <div class="mdl-grid cities-grid">
-                            <div class="mdl-cell mdl-cell--2-col">
+                            <div class="mdl-cell mdl-cell--2-col mdl-cell--3-col-tablet mdl-cell--1-col-phone">
                                 <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
                                     1
                                 </button>
                             </div>
-                            <div class="mdl-cell mdl-cell--10-col">{{ audience_city_stats.0.0 }}</div>
-                            <div class="mdl-cell mdl-cell--2-col">
+                            <div class="mdl-cell mdl-cell--10-col mdl-cell--5-col-tablet mdl-cell--3-col-phone">{{ audience_city_stats.0.0 }}</div>
+                            <div class="mdl-cell mdl-cell--2-col mdl-cell--3-col-tablet mdl-cell--1-col-phone">
                                 <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
                                     2
                                 </button>
                             </div>
-                            <div class="mdl-cell mdl-cell--10-col">{{ audience_city_stats.1.0 }}</div>
-                            <div class="mdl-cell mdl-cell--2-col">
+                            <div class="mdl-cell mdl-cell--10-col mdl-cell--5-col-tablet mdl-cell--3-col-phone">{{ audience_city_stats.1.0 }}</div>
+                            <div class="mdl-cell mdl-cell--2-col mdl-cell--3-col-tablet mdl-cell--1-col-phone">
                                 <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
                                     3
                                 </button>
                             </div>
-                            <div class="mdl-cell mdl-cell--10-col">{{ audience_city_stats.2.0 }}</div>
+                            <div class="mdl-cell mdl-cell--10-col mdl-cell--5-col-tablet mdl-cell--3-col-phone">{{ audience_city_stats.2.0 }}</div>
                         </div>
                     </div>
                     <div class="stat-section">
@@ -406,6 +406,7 @@
 
     .cities-grid .mdl-cell .mdl-button {
         background-color: #150E41;
+        color: #fff !important;
     }
 
     .details .name {
@@ -507,6 +508,93 @@
         margin-top: 1.5vh !important;
         background-color: #3b4877;
         border: 1px solid #3b4877;
+    }
+
+    @media only screen and (max-width: 900px) {
+        .container {
+            width: 100vw;
+        }
+
+        .mdl-tabs__tab-bar {
+            position: initial;
+            height: fit-content;
+        }
+
+        .first-section {
+            position: initial;
+            min-height: 0;
+            width: 100%;
+            padding-bottom: 20px;
+            border-radius: 15px;
+        }
+
+        .profile-picture-wrapper {
+            width: 150px;
+            height: 150px;
+        }
+
+        .profile-picture-display {
+            width: 100%;
+        }
+
+        .img-cover {
+            width: 25px;
+            height: 25px;
+        }
+
+        .insta-space {
+            font-size: 15px;
+        }
+
+        .insta-space svg {
+            max-width: unset;
+            width: 22px;
+        }
+
+        .instalink-space {
+            font-size: 15px;
+        }
+
+        .trending-space {
+            font-size: 15px;
+        }
+
+        .trending-space i.info-icon {
+            padding-bottom: 0;
+        }
+
+        .mdl-tabs__tab {
+            overflow: initial;
+            margin-bottom: 5px;
+        }
+
+        .mdl-tabs__tab-bar {
+            padding-top: 0;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .mdl-tabs__panel {
+            padding-top: 0;
+        }
+
+        .cities-grid {
+            max-width: 100%;
+            width: 100%;
+        }
+
+        .panel-description {
+            font-size: 13px;
+        }
+
+        .cities-grid>.mdl-cell {
+            font-size: 20px;
+        }
+
+        .panel-heading {
+            line-height: 4.5vh;
+        }
     }
 </style>
 {% endblock %}

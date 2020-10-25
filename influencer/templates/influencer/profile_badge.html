@@ -6,7 +6,7 @@
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <div class="container">
     <div class="mdl-grid main-grid">
-        <div class="mdl-cell mdl-cell--3-col">
+        <div class="mdl-cell mdl-cell--3-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
             <div class="first-section">
                 {% if not request.user.is_brand %}
                     {% if request.user.get_profile_picture %}
@@ -527,6 +527,71 @@
         margin-top: 1.5vh !important;
         background-color: #3b4877;
         border: 1px solid #3b4877;
+    }
+
+    @media only screen and (max-width: 900px) {
+        .container {
+            width: 100vw;
+        }
+
+        .mdl-tabs__tab-bar {
+            position: initial;
+            height: fit-content;
+        }
+
+        .first-section {
+            position: initial;
+            min-height: 0;
+            width: 100%;
+            padding-bottom: 20px;
+            border-radius: 15px;
+        }
+
+        .profile-picture-wrapper {
+            width: 150px;
+            height: 150px;
+        }
+
+        .profile-picture-display {
+            width: 100%;
+        }
+
+        .insta-space {
+            font-size: 15px;
+        }
+
+        .insta-space svg {
+            max-width: unset;
+            width: 22px;
+        }
+
+        .instalink-space {
+            font-size: 15px;
+        }
+
+        .trending-space {
+            font-size: 15px;
+        }
+
+        .trending-space i.info-icon {
+            padding-bottom: 0;
+        }
+
+        .mdl-tabs__tab {
+            overflow: initial;
+            margin-bottom: 5px;
+        }
+
+        .mdl-tabs__tab-bar {
+            padding-top: 0;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .mdl-tabs__panel {
+            padding-top: 0;
+        }
     }
 </style>
 {% endblock %}

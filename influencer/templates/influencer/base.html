@@ -247,6 +247,14 @@
             font-family: 'Montserrat', sans-serif;
         }
 
+        .qr-scanner-btn {
+            display: none;
+        }
+
+        .post-btn {
+            display: none;
+        }
+
         @media only screen and (max-width: 900px) {
             .top-menu {
                 display: block;
@@ -339,6 +347,20 @@
             button.sidenav-btn {
                 height: 60px;
             }
+
+            .qr-scanner-btn {
+                display: initial;
+                margin-top: 1.2vh;
+            }
+
+            .post-btn {
+                display: initial;
+                margin-top: 1.2vh;
+            }
+
+            .post-btn i {
+                color: #fbc02d;
+            }
         }
     </style>
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
@@ -368,11 +390,21 @@
                         &nbsp;&nbsp;Unlock
                     </button>
                 </a>
+                <a class="qr-scanner-btn" href="{% url 'influencer:qr_scanner' %}">
+                    <button class="mdl-button mdl-js-button mdl-button--icon">
+                        <i class="material-icons">qr_code_scanner</i>
+                    </button>
+                </a>
                 {% else %}
                 <a href="{% url 'influencer:post' %}" class="mdl-navigation__link unlock-anchor">
                     <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored action-required">
                         <i class="material-icons">warning</i>
                         &nbsp;&nbsp;Action Required
+                    </button>
+                </a>
+                <a class="post-btn" href="{% url 'influencer:post' %}">
+                    <button class="mdl-button mdl-js-button mdl-button--icon">
+                        <i class="material-icons">warning</i>
                     </button>
                 </a>
                 {% endif %}

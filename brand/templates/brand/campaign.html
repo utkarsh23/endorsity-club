@@ -265,7 +265,7 @@
     $('.campaigns-top-nav').addClass('is-active');
     $('.post-section').each(function(index) {
         $.ajax({
-            url: `https://api.instagram.com/oembed?url=${$(`#insta-embed-${index}`).attr('data-instalink')}`,
+            url: `https://graph.facebook.com/v8.0/instagram_oembed?url=${$(`#insta-embed-${index}`).attr('data-instalink')}&access_token={% get_access_token %}`,
             async: true,
             success: function (result) {
                 $(`#insta-embed-${index} .spinner-wrapper`).remove();

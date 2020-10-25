@@ -6,22 +6,6 @@
         Connecting to facebook failed.<br />
         Please try again. Make sure that you provide all the required permissions while connecting. If problem persists, do contact us and our support team will help you out.<br /><br />
     </div>
-    <div class="mdl-grid">
-        <div class="mdl-cell mdl-cell--6-col">
-            <a href="{% url 'accounts:contact_us' %}">
-                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                    Contact Us
-                </button>
-            </a>
-        </div>
-        <div class="mdl-cell mdl-cell--6-col">
-            <a href="{% url 'accounts:landing' %}">
-                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                    Go Back
-                </button>
-            </a>
-        </div>
-    </div>
 </div>
 <style>
     .container {
@@ -45,6 +29,14 @@
         background-color: #161A1D !important;
         color: #EEEEEE !important;
         width: 100%;
+    }
+
+    @media only screen and (max-width: 900px) {
+        .container {
+            width: 80vw;
+            margin: auto;
+            margin-top: 15px;
+        }
     }
 </style>
 {% endblock %}

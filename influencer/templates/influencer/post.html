@@ -14,46 +14,46 @@
 <div class="main-heading">Endorsement Post</div>
 <div class="container">
     <div class="heading mdl-grid">
-        <div class="mdl-cell mdl-cell--1-col">
+        <div class="mdl-cell mdl-cell--1-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
             <i class="material-icons">local_offer</i>
         </div>
-        <div class="mdl-cell mdl-cell--11-col">
+        <div class="mdl-cell mdl-cell--11-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
             {{ post.campaign.brand.name }}
         </div>
     </div>
     <div class="sub-heading mdl-grid">
-        <div class="mdl-cell mdl-cell--1-col">
+        <div class="mdl-cell mdl-cell--1-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
             <i class="material-icons">location_on</i>
         </div>
-        <div class="mdl-cell mdl-cell--11-col">
+        <div class="mdl-cell mdl-cell--11-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
             {{ post.location }}
         </div>
     </div>
     <hr />
     <div class="mdl-grid steps-grid">
-        <div class="mdl-cell mdl-cell--1-col">
+        <div class="mdl-cell mdl-cell--1-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
             <button class="mdl-button mdl-js-button mdl-button--fab">
                 1
             </button>
         </div>
-        <div class="mdl-cell mdl-cell--11-col">
+        <div class="mdl-cell mdl-cell--11-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
             Go around and click photos of you endorsing the brand.
         </div>
-        <div class="mdl-cell mdl-cell--1-col">
+        <div class="mdl-cell mdl-cell--1-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
             <button class="mdl-button mdl-js-button mdl-button--fab">
                 2
             </button>
         </div>
-        <div class="mdl-cell mdl-cell--11-col">
+        <div class="mdl-cell mdl-cell--11-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
             Choose your favourite pictures and create an Instagram post with these.
         </div>
-        <div class="mdl-cell mdl-cell--1-col select-ig-step">
+        <div class="mdl-cell mdl-cell--1-col mdl-cell--2-col-tablet mdl-cell--1-col-phone select-ig-step">
             <button class="mdl-button mdl-js-button mdl-button--fab">
                 3
             </button>
         </div>
-        <div class="mdl-cell mdl-cell--11-col select-ig-step">
-            Select this Instagram post.
+        <div class="mdl-cell mdl-cell--11-col mdl-cell--6-col-tablet mdl-cell--3-col-phone select-ig-step">
+            Select from your most recent Instagram posts shown below.
         </div>
         <div class="mdl-cell mdl-cell--12-col">
             <div class="picture-select-wrapper">
@@ -64,12 +64,12 @@
                 </div>
             </div>
         </div>
-        <div class="mdl-cell mdl-cell--1-col">
+        <div class="mdl-cell mdl-cell--1-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
             <button class="mdl-button mdl-js-button mdl-button--fab">
                 4
             </button>
         </div>
-        <div class="mdl-cell mdl-cell--11-col">
+        <div class="mdl-cell mdl-cell--11-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
             Make sure that you have selected the right Instagram post. This action cannot be
             undone.
         </div>
@@ -92,7 +92,7 @@
     {% if request.user|is_influencer_unlocked %}
     $(document).ready(function () {
         $.ajax({
-            url: "/influencer/fetch-ig-posts",
+            url: "/influencer/fetch-ig-posts/",
             async: true,
             success: function (result) {
                 $(".picture-select .spinner-holder").remove();
@@ -318,6 +318,50 @@
         font-size: 5em;
         -webkit-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%);
+    }
+
+    @media only screen and (max-width: 900px) {
+        .main-heading {
+            width: 95%;
+            font-size: 25px;
+            line-height: 25px;
+        }
+
+        .container {
+            width: 95%;
+        }
+
+        .heading {
+            padding: 0;
+        }
+
+        .sub-heading {
+            padding: 0;
+        }
+
+        .heading .mdl-cell--1-col-phone, .sub-heading .mdl-cell--1-col-phone {
+            display: flex;
+            justify-content: center;
+        }
+
+        .heading .mdl-cell, .sub-heading .mdl-cell {
+            font-size: 18px;
+        }
+
+        .heading i, .sub-heading i {
+            font-size: 25px;
+        }
+
+        .mdl-button--fab {
+            min-width: 28px;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+        }
+
+        .steps-grid .mdl-cell--11-col {
+            font-size: 18px;
+        }
     }
 </style>
 {% endblock %}

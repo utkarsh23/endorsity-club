@@ -1,6 +1,7 @@
 {% extends base_template %}
 {% load tz %}
 {% load static %}
+{% load brand_tags %}
 {% block main %}
 <div class="container">
     <div class="mdl-grid main-grid">
@@ -128,7 +129,7 @@
             </div>
         `);
         $.ajax({
-            url: `https://api.instagram.com/oembed?url=${link}`,
+            url: `https://graph.facebook.com/v8.0/instagram_oembed?url=${link}&access_token={% get_access_token %}`,
             async: true,
             success: function (result) {
                 $("#post-container-{{ forloop.counter }} .loader-container").remove();
