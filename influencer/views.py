@@ -13,6 +13,8 @@ from django.views.generic.base import TemplateView, View
 from django.views.generic.edit import FormView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 
 from django_celery_beat.models import PeriodicTask, IntervalSchedule
 
@@ -45,6 +47,7 @@ from influencer.tasks import (
 )
 
 from notifications.models import Notification
+from notifications.utils import create_and_broadcast_notification
 
 
 class FacebookConnectView(NotFbConnectedInfluencerLoginRequiredMixin, TemplateView):
@@ -376,6 +379,9 @@ class PostView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, FormView):
         )
         stop_update_time = datetime.datetime.now() + datetime.timedelta(days=30, minutes=30)
         delete_update_post_stats.apply_async((fb_permissions.influencer.user.pk, post.id), eta=stop_update_time)
+        message = f"You have a new endorsement from {fb_permissions.ig_username}!"
+        link = f"/brand/influencer/{urlsafe_base64_encode(force_bytes(influencer.user.pk))}/endorsements/"
+        create_and_broadcast_notification(post.campaign.brand.user.pk, message, link)
         return super().form_valid(form)
 
 

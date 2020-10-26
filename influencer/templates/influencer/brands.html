@@ -17,7 +17,6 @@
                 cache: false,
                 url: `/influencer/fetch-brands/${ $(window).data('page_no') }/`,
                 success: function (result) {
-                    console.log($(window).data('page_no'));
                     for (var brand = 0; brand < result.length; brand++) {
                         console.log(result[brand]);
                         $(`.container`).append(`
