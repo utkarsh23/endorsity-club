@@ -312,6 +312,8 @@ class BrandUnlockView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, FormVi
         return form_class(**self.get_form_kwargs(), brand_uuid=self.kwargs['brand_uuid'])
 
     def form_valid(self, form):
+        if (Influencer.objects.get(user=self.request.user).is_unlocked):
+            return redirect(reverse_lazy('influencer:post'))
         location_uuid = form.cleaned_data['location']
         location = Location.objects.get(id=location_uuid)
         if not location.brand.is_subscription_active:
@@ -440,5 +442,5 @@ class BrandProfileView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, Templ
         context['brand'] = brand
         context['locations'] = Location.objects.filter(brand=brand, active=True)
         context['endorsements'] = (EndorsingPost.objects
-            .filter(campaign__brand__user=brand.user).order_by('-created_at'))
+            .filter(campaign__brand__user=brand.user, complete=True).order_by('-created_at'))
         return context

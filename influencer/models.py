@@ -79,7 +79,7 @@ class EndorsingPost(models.Model):
 
 
 @receiver(models.signals.post_delete, sender=Influencer)
-def auto_delete_celery_task_on_delete(sender, instance, **kwargs):
+def auto_delete_influencer_statistics_on_delete(sender, instance, **kwargs):
     user_pk = instance.user.pk
     celery_influencer_statistics_periodic_task = PeriodicTask.objects.filter(
         name=f'Influencer {user_pk} Update Influencer Statistics'

@@ -59,7 +59,7 @@ from accounts.utils import (
 )
 
 from brand.models import Campaign
-from brand.tasks import end_subscription, notify_influencers
+from brand.tasks import end_subscription, notify_influencers, notify_add_profile_picture
 
 from notifications.models import Notification
 
@@ -226,6 +226,7 @@ class BrandCreationView(MultiModelFormView):
         )
         end_subscription.apply_async(args=[user.pk], eta=end_time)
         notify_influencers.delay(user.pk)
+        notify_add_profile_picture.delay(user.pk)
         return super().forms_valid(forms)
 
 
@@ -350,7 +351,8 @@ class CompleteBrandRegistrationView(UnregisteredLoginRequiredMixin, FormView):
             end_time=end_time,
         )
         end_subscription.apply_async(args=[user.pk], eta=end_time)
-        notify_influencers.delay(args[user.pk])
+        notify_influencers.delay(user.pk)
+        notify_add_profile_picture.delay(user.pk)
         return super().form_valid(form)
 
 

@@ -17,5 +17,6 @@ class ActiveLocationsForm(forms.Form):
         self.fields['location'] = forms.MultipleChoiceField(
             choices=location_choices,
             widget=forms.CheckboxSelectMultiple,
+            required=False,
         )
         self.initial['location'] = [location.id for location in locations if location.active]

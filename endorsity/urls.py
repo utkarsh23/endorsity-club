@@ -24,7 +24,7 @@ from importlib import import_module
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('SVqekyep318CwgdxLFDxG5YUuOJZEUI0uaJYkePvAgbHejIa3cKLbyQ/', admin.site.urls), # ramdom string for security reasons
     path('socialaccount/signup/', RedirectView.as_view(url=reverse_lazy('accounts:account_exists')), name='socialaccount_signup'),
     path('brand/', include('brand.urls')),
     path('influencer/', include('influencer.urls')),

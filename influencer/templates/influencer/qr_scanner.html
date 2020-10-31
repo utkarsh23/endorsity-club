@@ -21,12 +21,14 @@
         canvas.stroke();
     }
 
+    var lock = false;
     // Use facingMode: environment to attemt to get the front camera on phones
     navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function (stream) {
         video.srcObject = stream;
         video.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
         video.play();
-        requestAnimationFrame(tick);
+        if (!lock)
+            requestAnimationFrame(tick);
     });
 
     function tick() {
@@ -40,9 +42,11 @@
             var code = jsQR(imageData.data, imageData.width, imageData.height, {
                 inversionAttempts: "dontInvert",
             });
-            if (code) {
+            if (code && !lock) {
+                lock = true;
                 if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(code.data) === true)
-                    setTimeout(() => { window.location.href = `/influencer/unlock/${code.data}/` }, 0);
+                    window.location.href = `/influencer/unlock/${code.data}/`;
+                setTimeout(() => { lock = false; }, 10000)
             }
         }
         requestAnimationFrame(tick);

@@ -1,5 +1,5 @@
 const notifSocket = new WebSocket(
-    "ws://" + window.location.host + "/ws/notifications/" // protocol -> ws:// ---> In Current Development
+    "wss://" + window.location.host + "/ws/notifications/" // ws:// for local dev, wss:// for prod
 ),
 notif_functions = {
     new_notifications_received: new_notifications_received,

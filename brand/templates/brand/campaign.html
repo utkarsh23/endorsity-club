@@ -1,5 +1,5 @@
 {% extends 'brand/base.html' %}
-
+{% load influencer_tags %}
 {% load brand_tags %}
 {% load static %}
 {% load tz %}
@@ -199,7 +199,7 @@
                                     </div>
                                     <div class="mdl-cell mdl-cell--9-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
                                         <div class="stat-heading">Engagement</div>
-                                        <div class="stat-number">200{{ post.engagement }}</div>
+                                        <div class="stat-number">{{ post.engagement|readable_metric }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -212,7 +212,7 @@
                                     </div>
                                     <div class="mdl-cell mdl-cell--9-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
                                         <div class="stat-heading">Impressions</div>
-                                        <div class="stat-number">200{{ post.impressions }}</div>
+                                        <div class="stat-number">{{ post.impressions|readable_metric }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -225,7 +225,7 @@
                                     </div>
                                     <div class="mdl-cell mdl-cell--9-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
                                         <div class="stat-heading">Reach</div>
-                                        <div class="stat-number">200{{ post.reach }}</div>
+                                        <div class="stat-number">{{ post.reach|readable_metric }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -234,8 +234,19 @@
                             <div class="mdl-cell mdl-cell--12-col stat-heading">Reach</div>
                             <div class="mdl-cell mdl-cell--12-col stat-number">200{{ post.reach }}</div> -->
                             {% if post.media_type == 'VIDEO' %}
-                            <div class="mdl-cell mdl-cell--12-col stat-heading">Views</div>
-                            <div class="mdl-cell mdl-cell--12-col stat-number">200{{ post.video_views }}</div>
+                                <div class="mdl-cell mdl-cell--12-col stat-wrapper">
+                                    <div class="mdl-grid">
+                                        <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
+                                            <div class="img-cover">
+                                                <img class="video-img" src="{% static 'visibility.svg' %}" alt="engagement symbol" />
+                                            </div>
+                                        </div>
+                                        <div class="mdl-cell mdl-cell--9-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
+                                            <div class="stat-heading">Views</div>
+                                            <div class="stat-number">{{ post.video_views|readable_metric }}</div>
+                                        </div>
+                                    </div>
+                                </div>
                             {% endif %}
                         </div>
                     </div>
@@ -509,6 +520,11 @@
         color: #EEEEEE !important;
     }
 
+    .video-img {
+        max-width: 100%;
+        opacity: 0.4;
+    }
+
     @media only screen and (max-width: 900px) {
         .container {
             width: 95vw;
@@ -603,6 +619,10 @@
 
         .separator-cell {
             display: none;
+        }
+
+        .video-img {
+            max-width: 150%;
         }
     }
 </style>

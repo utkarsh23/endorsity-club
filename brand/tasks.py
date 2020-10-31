@@ -19,6 +19,12 @@ def end_subscription(user_pk):
     brand.save()
 
 @app.task
+def notify_add_profile_picture(user_pk):
+    message = "Welcome to Endorsity! Add your brand logo here."
+    link = "/profile_picture_change/"
+    create_and_broadcast_notification(user_pk, message, link)
+
+@app.task
 def notify_influencers(user_pk):
     channel_layer = get_channel_layer()
     user_model = get_user_model()

@@ -1,5 +1,6 @@
 {% extends base_template %}
 {% load brand_tags %}
+{% load influencer_tags %}
 {% load tz %}
 {% load static %}
 {% block main %}
@@ -159,7 +160,7 @@
                                         </div>
                                         <div class="mdl-cell mdl-cell--9-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
                                             <div class="stat-heading">Engagement</div>
-                                            <div class="stat-number">200{{ post.engagement }}</div>
+                                            <div class="stat-number">{{ endorsement.engagement|readable_metric }}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -172,7 +173,7 @@
                                         </div>
                                         <div class="mdl-cell mdl-cell--9-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
                                             <div class="stat-heading">Impressions</div>
-                                            <div class="stat-number">200{{ post.impressions }}</div>
+                                            <div class="stat-number">{{ endorsement.impressions|readable_metric }}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -185,13 +186,24 @@
                                         </div>
                                         <div class="mdl-cell mdl-cell--9-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
                                             <div class="stat-heading">Reach</div>
-                                            <div class="stat-number">200{{ post.reach }}</div>
+                                            <div class="stat-number">{{ endorsement.reach|readable_metric }}</div>
                                         </div>
                                     </div>
                                 </div>
                                 {% if endorsement.media_type == 'VIDEO' %}
-                                <div class="mdl-cell mdl-cell--12-col stat-heading">Views</div>
-                                <div class="mdl-cell mdl-cell--12-col stat-number">200{{ endorsement.video_views }}</div>
+                                <div class="mdl-cell mdl-cell--12-col stat-wrapper">
+                                    <div class="mdl-grid">
+                                        <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
+                                            <div class="img-cover">
+                                                <img class="video-img" src="{% static 'visibility.svg' %}" alt="engagement symbol" />
+                                            </div>
+                                        </div>
+                                        <div class="mdl-cell mdl-cell--9-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
+                                            <div class="stat-heading">Views</div>
+                                            <div class="stat-number">{{ endorsement.video_views|readable_metric }}</div>
+                                        </div>
+                                    </div>
+                                </div>
                                 {% endif %}
                             </div>
                         </div>
@@ -608,6 +620,11 @@
         border: 1px solid #3b4877;
     }
 
+    .video-img {
+        max-width: 100%;
+        opacity: 0.4;
+    }
+
     @media only screen and (max-width: 900px) {
         .container {
             width: 100vw;
@@ -669,7 +686,7 @@
         }
 
         .mdl-tabs__panel {
-            padding-top: 0;
+            padding-top: 20px;
         }
 
         .post-container .mdl-grid .mdl-cell--1-col {
@@ -716,6 +733,10 @@
         .img-cover {
             width: 25px;
             height: 25px;
+        }
+
+        .video-img {
+            max-width: 150%;
         }
     }
 </style>
