@@ -43,7 +43,7 @@
                     <div class="mdl-cell mdl-cell--12-col website-space">
                         <div class="inner-content">
                             <i class="material-icons">language</i>
-                            <a href="{{ brand.website }}" target="_blank">
+                            <a href="{{ brand.website }}" target="_blank" rel="noopener noreferrer">
                                 {{ brand.website|slice:":25" }}{% if brand.website|length >= 25 %}...{% endif %}
                             </a>
                         </div>
@@ -85,6 +85,7 @@
                             </div>
                             <div class="location-link mdl-cell--4-col">
                                 <a target="_blank"
+                                    rel="noopener noreferrer"
                                     href="https://www.google.com/maps/search/?api=1&query={{ location.latitude }}%2C{{ location.longitude }}">
                                     <button
                                         class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored location-btn">

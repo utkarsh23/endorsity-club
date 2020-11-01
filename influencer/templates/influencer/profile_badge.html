@@ -51,7 +51,7 @@
                     <div class="mdl-cell mdl-cell--12-col instalink-space">
                         <div class="inner-content">
                             <i class="material-icons">open_in_new</i>
-                            <a href="https://instagram.com/{{ fb_permissions.ig_username }}" target="_blank">
+                            <a href="https://instagram.com/{{ fb_permissions.ig_username }}" rel="noopener noreferrer">
                                 instagram.com/{{ fb_permissions.ig_username|slice:":11" }}{% if brand.website|length >= 11 %}...{% endif %}
                             </a>
                         </div>
