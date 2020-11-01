@@ -40,7 +40,7 @@ urlpatterns = [
             'filters': {
                 'is_verified': True,
             },
-            'order_by': [],
+            'order_by': ['-user__created_at'],
             'custom_serializer': influencers_view_serializer,
         },
         name="fetch_influencers",

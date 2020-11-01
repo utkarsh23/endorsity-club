@@ -54,7 +54,7 @@ urlpatterns = [
             'filters': {
                 'is_subscription_active': True,
             },
-            'order_by': [],
+            'order_by': ['-user__created_at'],
             'custom_serializer': brands_view_serializer,
         },
         name="fetch_brands",

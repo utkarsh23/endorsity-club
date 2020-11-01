@@ -2,9 +2,9 @@
 {% block main %}
 <div class="container-wrapper">
     <div class="container mdl-grid"></div>
-    <div class="spinner-wrapper">
-        <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner"></div>
-    </div>
+    <button id="load-more" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+        Load More
+    </button>
 </div>
 <script>
     $(document).ready(function() {
@@ -12,13 +12,16 @@
         $('#brands-top-nav-id').addClass('is-active');
         $('.brands-top-nav').addClass('is-active');
         var add_brand_data = () => {
-            $('.container-wrapper .mdl-spinner').addClass(`is-active`);
+            $('#load-more').attr("disabled", true);
             $.ajax({
                 cache: false,
                 url: `/influencer/fetch-brands/${ $(window).data('page_no') }/`,
                 success: function (result) {
+                    if (result.length === 0) {
+                        $('#load-more').html('No more results.');
+                        return;
+                    }
                     for (var brand = 0; brand < result.length; brand++) {
-                        console.log(result[brand]);
                         $(`.container`).append(`
                             <div class="brand-card mdl-cell mdl-cell--4-col">
                                 <div class="brand-card-top">
@@ -80,22 +83,14 @@
                             </div>
                         `);
                     }
-                    $('.container-wrapper .mdl-spinner').removeClass(`is-active`);
-                    $(window).data('ajaxready', true);
+                    $('#load-more').attr("disabled", false);
                     $(window).data('page_no', $(window).data('page_no') + 1);
                 }
             });
         };
         $(window).data('page_no', 1);
         add_brand_data();
-        $('main.mdl-layout__content').data('ajaxready', true).scroll(function (e) {
-            if ($(window).data('ajaxready') === false) return;
-
-            if ($(this).scrollTop() + $(this).innerHeight() >= ($(this)[0].scrollHeight) - 100) {
-                $(window).data('ajaxready', false);
-                add_brand_data();
-            }
-        });
+        $('#load-more').click(() => {add_brand_data();});
     });
 </script>
 <style>
@@ -193,18 +188,16 @@
         width: 100%;
     }
 
-    .spinner-wrapper {
-        width: 100%;
-        text-align: center;
-        margin-bottom: 5vh;
+    #load-more {
+        width: 80%;
+        margin-left: 10%;
+        background-color: #0471ff !important;
+        color: #fff !important;
+        margin-bottom: 20px;
     }
 
-    .mdl-spinner {
-        color: #EEEEEE;
-    }
-
-    .mdl-spinner__layer {
-        border-color: #EEEEEE !important;
+    #load-more:disabled {
+        background-color: #bdbdbd !important;
     }
 
     @media only screen and (max-width: 900px) {
