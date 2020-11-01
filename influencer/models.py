@@ -86,3 +86,12 @@ def auto_delete_influencer_statistics_on_delete(sender, instance, **kwargs):
     )
     if celery_influencer_statistics_periodic_task.exists():
         celery_influencer_statistics_periodic_task.delete()
+
+
+@receiver(models.signals.post_delete, sender=EndorsingPost)
+def auto_delete_influencer_post_celery_task(sender, instance, **kwargs):
+    celery_influencer_post_periodic_task = PeriodicTask.objects.filter(
+        name=f'Influencer {instance.influencer.user.pk} Update Post {instance.id} Statistics'
+    )
+    if celery_influencer_post_periodic_task.exists():
+        celery_influencer_post_periodic_task.delete()

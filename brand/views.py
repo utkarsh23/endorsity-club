@@ -6,6 +6,7 @@ import urllib.parse
 
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
+from django.http import JsonResponse
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
 from django.views.generic.base import TemplateView, View
@@ -13,6 +14,7 @@ from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 
+from accounts.mixins import RegisteredLoginRequiredMixin
 from accounts.models import (
     Brand,
     Location,
@@ -223,3 +225,13 @@ class EditActiveLocationsView(RegisteredBrandLoginRequiredMixin, FormView):
             active_location.active = True
             active_location.save()
         return super().form_valid(form)
+
+
+class FetchInstaEmbedPost(RegisteredLoginRequiredMixin, View):
+
+    def get(self, request, insta_url_encoded, *args, **kwargs):
+        uri = (settings.FACEBOOK_GRAPH_URI +
+            f'instagram_oembed?url={force_text(urlsafe_base64_decode(insta_url_encoded))}' +
+            f'&access_token={settings.FACEBOOK_KEY}|{settings.FACEBOOK_CLIENT_TOKEN}')
+        data = json.loads(requests.get(uri).text)
+        return JsonResponse(data)

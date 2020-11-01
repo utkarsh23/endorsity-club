@@ -15,6 +15,7 @@ from brand.views import (
     InfluencerBadgeView,
     FetchInfluencersInfiniteAPIView,
     EditActiveLocationsView,
+    FetchInstaEmbedPost,
 )
 
 
@@ -28,6 +29,7 @@ urlpatterns = [
     path('influencer/<str:influencer_pk>/analytics/', InfluencerAnalyticsView.as_view(), name="influencer_analytics"),
     path('influencer/<str:influencer_pk>/endorsements/', InfluencerEndorsementsView.as_view(), name="influencer_endorsements"),
     path('influencer/<str:influencer_pk>/badge/', InfluencerBadgeView.as_view(), name="influencer_badge"),
+    path('fetch-insta-html/<insta_url_encoded>/', FetchInstaEmbedPost.as_view(), name="brand_insta_html"),
     path(
         'fetch-influencers/<int:page_no>/',
         FetchInfluencersInfiniteAPIView.as_view(),

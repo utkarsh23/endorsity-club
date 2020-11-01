@@ -13,11 +13,12 @@ from django.views.generic.base import TemplateView, View
 from django.views.generic.edit import FormView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 from django_celery_beat.models import PeriodicTask, IntervalSchedule
 
+from accounts.mixins import RegisteredLoginRequiredMixin
 from accounts.models import (
     Brand,
     FacebookPermissions,
@@ -444,3 +445,12 @@ class BrandProfileView(VerifiedAndFbConnectedInfluencerLoginRequiredMixin, Templ
         context['endorsements'] = (EndorsingPost.objects
             .filter(campaign__brand__user=brand.user, complete=True).order_by('-created_at'))
         return context
+
+class FetchInstaEmbedPost(RegisteredLoginRequiredMixin, View):
+
+    def get(self, request, insta_url_encoded, *args, **kwargs):
+        uri = (settings.FACEBOOK_GRAPH_URI +
+            f'instagram_oembed?url={force_text(urlsafe_base64_decode(insta_url_encoded))}' +
+            f'&access_token={settings.FACEBOOK_KEY}|{settings.FACEBOOK_CLIENT_TOKEN}')
+        data = json.loads(requests.get(uri).text)
+        return JsonResponse(data)

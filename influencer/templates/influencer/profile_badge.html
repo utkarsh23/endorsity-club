@@ -162,62 +162,6 @@
         $('.profile-top-nav').addClass('is-active');
         $('#profile-top-nav-id').addClass('is-active');
     {% endif %}
-
-    {% for endorsement in endorsements %}
-    var link = "{{ endorsement.media_embed_url }}";
-    $("#endorsements-panel").append(`
-            <div class="post-container" id="post-container-{{ forloop.counter }}">
-                <div class="loader-container">
-                    <div class="spinner-holder">
-                        <div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color is-active"></div>
-                    </div>
-                </div>
-                <hr class="post-separator" />
-            </div>
-        `);
-    $.ajax({
-        url: `https://api.instagram.com/oembed?url=${link}`,
-        async: true,
-        success: function (result) {
-            $("#post-container-{{ forloop.counter }} .loader-container").remove();
-            $("#post-container-{{ forloop.counter }}").prepend(`
-                    <div class="mdl-grid">
-                        <div class="mdl-cell mdl-cell--1-col brand-name">
-                            {% if endorsement.campaign.brand.user.get_profile_picture %}
-                            <img class="brand-picture-display"
-                                src="{{ endorsement.campaign.brand.user.get_profile_picture.url }}" />
-                            {% else %}
-                            <i class="material-icons">local_offer</i>
-                            {% endif %}
-                        </div>
-                        <div class="mdl-cell mdl-cell--11-col brand-name">{{ endorsement.campaign.brand.name }}</div>
-                        <hr />
-                        <div class="mdl-cell mdl-cell--1-col">
-                            <i class="material-icons">access_time</i>
-                        </div>
-                        <div class="mdl-cell mdl-cell--11-col">{{ endorsement.created_at|timezone:"Asia/Kolkata" }}</div>
-                        <div class="mdl-cell mdl-cell--1-col">
-                            <i class="material-icons">location_on</i>
-                        </div>
-                        <div class="mdl-cell mdl-cell--11-col">{{ endorsement.location.name }}</div>
-                    </div>
-                    ${result['html']}
-                `);
-        }
-    });
-    {% if forloop.last %}
-    $("div.post-container:last-child hr").remove();
-    {% endif %}
-    {% empty %}
-    $("#endorsements-panel").append(`
-            <div class="no-posts">
-                <div>
-                    <i class="material-icons">hourglass_empty</i><br />
-                    No Data
-                </div>
-            </div>
-        `);
-    {% endfor %}
 </script>
 <style>
     .container {

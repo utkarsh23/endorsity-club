@@ -20,6 +20,7 @@ from influencer.views import (
     FetchIGPostThumbnailView,
     FetchBrandsInfiniteAPIView,
     BrandProfileView,
+    FetchInstaEmbedPost,
 )
 
 
@@ -37,6 +38,7 @@ urlpatterns = [
     path('unlock/<uuid:brand_uuid>/', BrandUnlockView.as_view(), name="brand_unlock"),
     path('post/', PostView.as_view(), name="post"),
     path('fetch-ig-posts/', FetchRecentIGPostsView.as_view(), name="fetch_ig_posts"),
+    path('fetch-insta-html/<insta_url_encoded>/', FetchInstaEmbedPost.as_view(), name="inf_insta_html"),
     path(
         'fetch-ig-post-thumbnail/<str:media_id>/',
         FetchIGPostThumbnailView.as_view(),
