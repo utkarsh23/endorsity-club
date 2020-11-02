@@ -16,10 +16,6 @@ def is_subscription_active(user):
     return Brand.objects.get(user=user).is_subscription_active
 
 @register.simple_tag
-def get_access_token():
-    return settings.FACEBOOK_KEY + '|' + settings.FACEBOOK_CLIENT_TOKEN
-
-@register.simple_tag
 def posts(campaign):
     return EndorsingPost.objects.filter(campaign=campaign, complete=True).count()
 

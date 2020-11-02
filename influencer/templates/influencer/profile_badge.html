@@ -264,7 +264,9 @@
         background-color: #fff;
         z-index: 99999;
         padding-bottom: 1vh;
-        border-bottom: 1px solid #828282;
+        -webkit-box-shadow: 0 6px 6px -5px #777;
+        -moz-box-shadow: 0 6px 6px -5px #777;
+        box-shadow: 0 6px 6px -5px #777;
         padding-top: 2vh;
         padding-left: 1vw;
     }
@@ -481,6 +483,10 @@
         .mdl-tabs__tab-bar {
             position: initial;
             height: fit-content;
+            border-bottom: 1px solid #828282;
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            box-shadow: none;
         }
 
         .first-section {
