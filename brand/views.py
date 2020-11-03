@@ -121,7 +121,7 @@ class InitiateCampaignView(RegisteredBrandLoginRequiredMixin, View):
             )
             brand.is_subscription_active = True
             brand.save()
-            end_subscription.apply_async(args=[brand.user.pk], eta=end_time)
+            # end_subscription.apply_async(args=[brand.user.pk], eta=end_time)
         return redirect(reverse_lazy('brand:campaign'))
 
 

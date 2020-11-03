@@ -224,7 +224,7 @@ class BrandCreationView(MultiModelFormView):
             start_time=start_time,
             end_time=end_time,
         )
-        end_subscription.apply_async(args=[user.pk], eta=end_time)
+        # end_subscription.apply_async(args=[user.pk], eta=end_time)
         notify_influencers.delay(user.pk)
         notify_add_profile_picture.delay(user.pk)
         return super().forms_valid(forms)

@@ -102,174 +102,163 @@
 </div>
 {% endcomment %}
 <div class="container">
-    {% if current_campaign %}
-        <div class="current-campaign">
-            <div class="mdl-grid top-grid">
-                <div class="mdl-cell mdl-cell--4-col left-align">
-                    <i class="material-icons active-icon">fiber_manual_record</i>
-                    &nbsp;&nbsp;Campaign Active
-                </div>
-                <div class="mdl-cell mdl-cell--4-col center-align">
-                    <i class="material-icons">dynamic_feed</i>
-                    &nbsp;&nbsp;{% posts current_campaign %} influencer posts
-                </div>
-                <div class="mdl-cell mdl-cell--4-col right-align">
-                    <i class="material-icons">event_busy</i>
-                    &nbsp;&nbsp;Ends on
-                    {{ current_campaign.end_time|timezone:"Asia/Kolkata"|date:"j N Y" }}
+    <div class="current-campaign">
+        <div class="mdl-grid top-grid">
+            <div class="mdl-cell mdl-cell--4-col left-align">
+                <i class="material-icons active-icon">fiber_manual_record</i>
+                &nbsp;&nbsp;Campaign Active
+            </div>
+            <div class="mdl-cell mdl-cell--4-col center-align">
+                <i class="material-icons">dynamic_feed</i>
+                &nbsp;&nbsp;{% posts current_campaign %} influencer posts
+            </div>
+            <div class="mdl-cell mdl-cell--4-col right-align">
+                <i class="material-icons">event_busy</i>
+                &nbsp;&nbsp;Ends on
+                {{ current_campaign.end_time|timezone:"Asia/Kolkata"|date:"j N Y" }}
+            </div>
+        </div>
+    </div>
+    <div class="header">
+        <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--7-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone ">
+                Action Locations
+            </div>
+            <div class="mdl-cell mdl-cell--5-col-desktop mdl-cell--2-col-tablet mdl-cell--1-col-phone ">
+                <div class="edit-btn-wrapper">
+                    <a class="edit-location-anchor" href="{% url 'brand:edit_active_locations' %}">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                            <i class="material-icons edit-location-btn">edit</i>
+                            &nbsp;&nbsp;Edit Active Locations
+                        </button>
+                    </a>
                 </div>
             </div>
         </div>
-        <div class="header">
-            <div class="mdl-grid">
-                <div class="mdl-cell mdl-cell--7-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone ">
-                    Action Locations
-                </div>
-                <div class="mdl-cell mdl-cell--5-col-desktop mdl-cell--2-col-tablet mdl-cell--1-col-phone ">
-                    <div class="edit-btn-wrapper">
-                        <a class="edit-location-anchor" href="{% url 'brand:edit_active_locations' %}">
-                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                                <i class="material-icons edit-location-btn">edit</i>
-                                &nbsp;&nbsp;Edit Active Locations
-                            </button>
-                        </a>
-                    </div>
-                </div>
+    </div>
+    <div class="mdl-grid location-grid">
+        {% for location in locations %}
+            <div class="mdl-cell mdl-cell--11-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
+                {{ location.name }}
             </div>
-        </div>
-        <div class="mdl-grid location-grid">
-            {% for location in locations %}
-                <div class="mdl-cell mdl-cell--11-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
-                    {{ location.name }}
-                </div>
-                <div class="mdl-cell mdl-cell--1-col-desktop mdl-cell--2-col-tablet mdl-cell--1-col-phone">
-                    {% if location.active %}
-                    <i class="material-icons toggle-on">toggle_on</i>
-                    {% else %}
-                    <i class="material-icons toggle-off">toggle_off</i>
-                    {% endif %}
-                </div>
-                {% if not forloop.last %}
-                <hr />
+            <div class="mdl-cell mdl-cell--1-col-desktop mdl-cell--2-col-tablet mdl-cell--1-col-phone">
+                {% if location.active %}
+                <i class="material-icons toggle-on">toggle_on</i>
+                {% else %}
+                <i class="material-icons toggle-off">toggle_off</i>
                 {% endif %}
-            {% endfor %}
-        </div>
-        <div class="header">Influencer Posts</div>
-        {% for post in posts %}
-            <div class="post-section">
-                <div class="mdl-grid post-section-top-grid">
-                    <div class="mdl-cell mdl-cell--1-col mdl-cell--1-col-tablet mdl-cell--1-col-phone">
-                        {% if post.influencer.user.get_profile_picture %}
-                        <img class="profile-picture-display" src="{{ post.influencer.user.get_profile_picture.url }}" />
-                        {% else %}
-                        <i class="material-icons placeholder-profile-picture">account_circle</i>
-                        {% endif %}
-                    </div>
-                    <div class="mdl-cell mdl-cell--11-col mdl-cell--7-col-tablet mdl-cell--3-col-phone">
-                        &nbsp;&nbsp;{{ post.influencer.first_name }} {{ post.influencer.last_name }}
-                    </div>
-                </div>
-                <div class="mdl-grid">
-                    <div
-                        id="insta-embed-{{ forloop.counter0 }}"
-                        class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-cell--4-col-phone"
-                        data-instalink="{{ post.media_embed_url }}"
-                    >
-                        <div class="spinner-wrapper">
-                            <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
-                        </div>
-                    </div>
-                    <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-cell--4-col-phone post-right-side">
-                        <div class="mdl-grid">
-                            <div class="mdl-cell mdl-cell--1-col mdl-cell--1-col-tablet mdl-cell--1-col-phone">
-                                <i class="material-icons">access_time</i>
-                            </div>
-                            <div class="mdl-cell mdl-cell--11-col mdl-cell--7-col-tablet mdl-cell--3-col-phone">{{ post.created_at|timezone:"Asia/Kolkata" }}</div>
-                            <div class="mdl-cell mdl-cell--1-col mdl-cell--1-col-tablet mdl-cell--1-col-phone">
-                                <i class="material-icons">location_on</i>
-                            </div>
-                            <div class="mdl-cell mdl-cell--11-col mdl-cell--7-col-tablet mdl-cell--3-col-phone">{{ post.location.name }}</div>
-                            <div class="mdl-cell mdl-cell--12-col separator-cell"></div>
-                            <div class="mdl-cell mdl-cell--12-col">
-                                <div class="mdl-grid">
-                                    <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
-                                        <div class="img-cover">
-                                            <img src="{% static 'engagement-campaign.png' %}" alt="engagement symbol" />
-                                        </div>
-                                    </div>
-                                    <div class="mdl-cell mdl-cell--9-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
-                                        <div class="stat-heading">Engagement</div>
-                                        <div class="stat-number">{{ post.engagement|readable_metric }}</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mdl-cell mdl-cell--12-col">
-                                <div class="mdl-grid">
-                                    <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
-                                        <div class="img-cover">
-                                            <img src="{% static 'impressions-campaign.png' %}" alt="engagement symbol" />
-                                        </div>
-                                    </div>
-                                    <div class="mdl-cell mdl-cell--9-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
-                                        <div class="stat-heading">Impressions</div>
-                                        <div class="stat-number">{{ post.impressions|readable_metric }}</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mdl-cell mdl-cell--12-col">
-                                <div class="mdl-grid">
-                                    <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
-                                        <div class="img-cover">
-                                            <img src="{% static 'reach-campaign.png' %}" alt="engagement symbol" />
-                                        </div>
-                                    </div>
-                                    <div class="mdl-cell mdl-cell--9-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
-                                        <div class="stat-heading">Reach</div>
-                                        <div class="stat-number">{{ post.reach|readable_metric }}</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- <div class="mdl-cell mdl-cell--12-col stat-heading">Impressions</div>
-                            <div class="mdl-cell mdl-cell--12-col stat-number">200{{ post.impressions }}</div>
-                            <div class="mdl-cell mdl-cell--12-col stat-heading">Reach</div>
-                            <div class="mdl-cell mdl-cell--12-col stat-number">200{{ post.reach }}</div> -->
-                            {% if post.media_type == 'VIDEO' %}
-                                <div class="mdl-cell mdl-cell--12-col stat-wrapper">
-                                    <div class="mdl-grid">
-                                        <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
-                                            <div class="img-cover">
-                                                <img class="video-img" src="{% static 'visibility.svg' %}" alt="engagement symbol" />
-                                            </div>
-                                        </div>
-                                        <div class="mdl-cell mdl-cell--9-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
-                                            <div class="stat-heading">Views</div>
-                                            <div class="stat-number">{{ post.video_views|readable_metric }}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
             </div>
             {% if not forloop.last %}
             <hr />
             {% endif %}
-        {% empty %}
-            <div class="empty-posts">
-                No posts yet.
-            </div>
         {% endfor %}
-    {% else %}
-        <div class="inactive-campaign">
-            Campaign Inactive.<br />
-            <a href="{% url 'brand:initiate_campaign' %}">
-                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                    Start Campaign
-                </button>
-            </a>
+    </div>
+    <div class="header">Influencer Posts</div>
+    {% for post in posts %}
+        <div class="post-section">
+            <div class="mdl-grid post-section-top-grid">
+                <div class="mdl-cell mdl-cell--1-col mdl-cell--1-col-tablet mdl-cell--1-col-phone">
+                    {% if post.influencer.user.get_profile_picture %}
+                    <img class="profile-picture-display" src="{{ post.influencer.user.get_profile_picture.url }}" />
+                    {% else %}
+                    <i class="material-icons placeholder-profile-picture">account_circle</i>
+                    {% endif %}
+                </div>
+                <div class="mdl-cell mdl-cell--11-col mdl-cell--7-col-tablet mdl-cell--3-col-phone">
+                    &nbsp;&nbsp;{{ post.influencer.first_name }} {{ post.influencer.last_name }}
+                </div>
+            </div>
+            <div class="mdl-grid">
+                <div
+                    id="insta-embed-{{ forloop.counter0 }}"
+                    class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-cell--4-col-phone"
+                    data-instalink="{{ post.media_embed_url }}"
+                >
+                    <div class="spinner-wrapper">
+                        <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
+                    </div>
+                </div>
+                <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-cell--4-col-phone post-right-side">
+                    <div class="mdl-grid">
+                        <div class="mdl-cell mdl-cell--1-col mdl-cell--1-col-tablet mdl-cell--1-col-phone">
+                            <i class="material-icons">access_time</i>
+                        </div>
+                        <div class="mdl-cell mdl-cell--11-col mdl-cell--7-col-tablet mdl-cell--3-col-phone">{{ post.created_at|timezone:"Asia/Kolkata" }}</div>
+                        <div class="mdl-cell mdl-cell--1-col mdl-cell--1-col-tablet mdl-cell--1-col-phone">
+                            <i class="material-icons">location_on</i>
+                        </div>
+                        <div class="mdl-cell mdl-cell--11-col mdl-cell--7-col-tablet mdl-cell--3-col-phone">{{ post.location.name }}</div>
+                        <div class="mdl-cell mdl-cell--12-col separator-cell"></div>
+                        <div class="mdl-cell mdl-cell--12-col">
+                            <div class="mdl-grid">
+                                <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
+                                    <div class="img-cover">
+                                        <img src="{% static 'engagement-campaign.png' %}" alt="engagement symbol" />
+                                    </div>
+                                </div>
+                                <div class="mdl-cell mdl-cell--9-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
+                                    <div class="stat-heading">Engagement</div>
+                                    <div class="stat-number">{{ post.engagement|readable_metric }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mdl-cell mdl-cell--12-col">
+                            <div class="mdl-grid">
+                                <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
+                                    <div class="img-cover">
+                                        <img src="{% static 'impressions-campaign.png' %}" alt="engagement symbol" />
+                                    </div>
+                                </div>
+                                <div class="mdl-cell mdl-cell--9-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
+                                    <div class="stat-heading">Impressions</div>
+                                    <div class="stat-number">{{ post.impressions|readable_metric }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mdl-cell mdl-cell--12-col">
+                            <div class="mdl-grid">
+                                <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
+                                    <div class="img-cover">
+                                        <img src="{% static 'reach-campaign.png' %}" alt="engagement symbol" />
+                                    </div>
+                                </div>
+                                <div class="mdl-cell mdl-cell--9-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
+                                    <div class="stat-heading">Reach</div>
+                                    <div class="stat-number">{{ post.reach|readable_metric }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="mdl-cell mdl-cell--12-col stat-heading">Impressions</div>
+                        <div class="mdl-cell mdl-cell--12-col stat-number">200{{ post.impressions }}</div>
+                        <div class="mdl-cell mdl-cell--12-col stat-heading">Reach</div>
+                        <div class="mdl-cell mdl-cell--12-col stat-number">200{{ post.reach }}</div> -->
+                        {% if post.media_type == 'VIDEO' %}
+                            <div class="mdl-cell mdl-cell--12-col stat-wrapper">
+                                <div class="mdl-grid">
+                                    <div class="mdl-cell mdl-cell--3-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
+                                        <div class="img-cover">
+                                            <img class="video-img" src="{% static 'visibility.svg' %}" alt="engagement symbol" />
+                                        </div>
+                                    </div>
+                                    <div class="mdl-cell mdl-cell--9-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
+                                        <div class="stat-heading">Views</div>
+                                        <div class="stat-number">{{ post.video_views|readable_metric }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
         </div>
-    {% endif %}
+        {% if not forloop.last %}
+        <hr />
+        {% endif %}
+    {% empty %}
+        <div class="empty-posts">
+            No posts yet.
+        </div>
+    {% endfor %}
 </div>
 <script src="https://cdn.jsdelivr.net/npm/js-base64@3.5.2/base64.min.js"></script>
 <script>
