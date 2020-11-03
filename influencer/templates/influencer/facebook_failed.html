@@ -4,8 +4,14 @@
     <div class="i-container"><i class="material-icons">error_outline</i></div><br />
     <div class="heading">
         Connecting to facebook failed.<br />
-        Please try again. Make sure that you provide all the required permissions while connecting. If problem persists, do contact us and our support team will help you out.<br /><br />
+        We require that you have atleast 10,000 instagram followers.<br />
+        Make sure that you provide all the required permissions while connecting. If problem persists, do contact us and our support team will help you out.<br /><br />
     </div>
+    <a href="{% url 'influencer:fb_connect' %}">
+        <button class="fb-button mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+            Try Again
+        </button>
+    </a>
 </div>
 <style>
     .container {
@@ -27,9 +33,18 @@
     }
 
     .container .mdl-button {
-        background-color: #161A1D !important;
-        color: #EEEEEE !important;
+        background-color: #0471ff !important;
+        color: #fff !important;
+        font-family: 'Montserrat', sans-serif !important;
+        padding: 1vh !important;
+        height: auto;
+        text-align: center;
+        border-radius: 10px;
+        text-transform: none;
+        font-size: 2.5vh;
         width: 100%;
+        margin-top: 15px;
+        margin-bottom: 15px;
     }
 
     @media only screen and (max-width: 900px) {

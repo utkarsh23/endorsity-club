@@ -1,6 +1,7 @@
 {% extends 'influencer/base.html' %}
 
 {% load influencer_tags %}
+{% load static %}
 {% block main %}
 {% if not request.user|is_influencer_unlocked %}
 <div class="container">
@@ -11,22 +12,30 @@
     </div>
 </div>
 {% else %}
-<div class="main-heading">Endorsement Post</div>
 <div class="container">
-    <div class="heading mdl-grid">
-        <div class="mdl-cell mdl-cell--1-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
-            <i class="material-icons">local_offer</i>
+    <div class="unlock-details">
+        <div class="unlock-amount category-{{ post.influencer|influencer_category }}">
+            <img src="{% static 'verified.gif' %}" alt="unlock" />
+            <br />
+            &#x20B9; {{ post.influencer|influencer_discount }}<span><br />off on your bill as a
+            <span class="category category-{{ post.influencer|influencer_category }}">{{ post.influencer|influencer_category }}</span>
+            influencer.</span><br />
         </div>
-        <div class="mdl-cell mdl-cell--11-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
-            {{ post.campaign.brand.name }}
+        <div class="heading mdl-grid">
+            <div class="mdl-cell mdl-cell--1-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
+                <i class="material-icons">local_offer</i>
+            </div>
+            <div class="mdl-cell mdl-cell--11-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
+                {{ post.campaign.brand.name }}
+            </div>
         </div>
-    </div>
-    <div class="sub-heading mdl-grid">
-        <div class="mdl-cell mdl-cell--1-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
-            <i class="material-icons">location_on</i>
-        </div>
-        <div class="mdl-cell mdl-cell--11-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
-            {{ post.location }}
+        <div class="sub-heading mdl-grid">
+            <div class="mdl-cell mdl-cell--1-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
+                <i class="material-icons">location_on</i>
+            </div>
+            <div class="mdl-cell mdl-cell--11-col mdl-cell--6-col-tablet mdl-cell--3-col-phone">
+                {{ post.location }}
+            </div>
         </div>
     </div>
     <hr />
@@ -225,6 +234,7 @@
         font-size: 2em;
         line-height: 1;
         font-family: 'Montserrat', sans-serif;
+        text-align: left;
     }
 
     .sub-heading .mdl-cell {
@@ -320,6 +330,56 @@
         transform: translate(-50%, -50%);
     }
 
+    .unlock-details {
+        margin: auto;
+        margin-top: 5vh;
+        margin-bottom: 5vh;
+        border-radius: 15px;
+        text-align: center;
+    }
+
+    .unlock-details img {
+        width: 200px;
+        margin: auto;
+        margin-bottom: 20px;
+        margin-top: 20px;
+    }
+
+    .unlock-amount {
+        font-size: 55px;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .unlock-amount span {
+        font-size: 30px;
+        font-family: 'Montserrat', sans-serif;
+        color: #515151;
+    }
+
+    .unlock-message {
+        text-align: left;
+        font-size: 15px;
+        line-height: 17px;
+        padding: 10px;
+    }
+
+    .category {
+        text-transform: uppercase;
+        font-weight: bold;
+    }
+
+    .category-gold {
+        color: #CAA655 !important;
+    }
+
+    .category-silver {
+        color: #474747 !important;
+    }
+
+    .category-bronze {
+        color: #7B4921 !important;
+    }
+
     @media only screen and (max-width: 900px) {
         .main-heading {
             width: 95%;
@@ -361,6 +421,19 @@
 
         .steps-grid .mdl-cell--11-col {
             font-size: 18px;
+        }
+
+        .unlock-details img {
+            width: 40vw;
+        }
+
+        .unlock-amount span {
+            font-size: 20px;
+        }
+
+        .unlock-amount {
+            font-size: 40px;
+            margin-bottom: 30px;
         }
     }
 </style>

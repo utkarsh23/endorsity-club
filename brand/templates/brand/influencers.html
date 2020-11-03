@@ -72,13 +72,11 @@
             cache: false,
             url: `/brand/fetch-influencers/${ $(window).data('page_no') }/`,
             success: function (result) {
-                console.log($(window).data('page_no'));
                 if (result.length === 0) {
                     $('#load-more').html('No more results.');
                     return;
                 }
                 for (var influencer = 0; influencer < result.length; influencer++) {
-                    console.log(result[influencer]);
                     $(`.all-influencer-container`).append(`
                         <div class="influencer-card">
                             <div class="mdl-grid">

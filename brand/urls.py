@@ -34,8 +34,8 @@ urlpatterns = [
         'fetch-influencers/<int:page_no>/',
         FetchInfluencersInfiniteAPIView.as_view(),
         kwargs={
-            'initial_count': 10,
-            'paginator_count': 5,
+            'initial_count': 12,
+            'paginator_count': 12,
             'db_model': Influencer,
             'filters': {
                 'is_verified': True,

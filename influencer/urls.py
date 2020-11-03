@@ -48,8 +48,8 @@ urlpatterns = [
         'fetch-brands/<int:page_no>/',
         FetchBrandsInfiniteAPIView.as_view(),
         kwargs={
-            'initial_count': 10,
-            'paginator_count': 5,
+            'initial_count': 12,
+            'paginator_count': 12,
             'db_model': Brand,
             'filters': {
                 'is_subscription_active': True,

@@ -166,6 +166,9 @@ class FacebookConfirmationView(NotFbConnectedInfluencerLoginRequiredMixin, View)
             fb_permissions.ig_username = ig_username
             fb_permissions.ig_follower_count = ig_follower_count
 
+            if int(ig_follower_count) < settings.BRONZE_CATEGORY[0]:
+                return redirect(reverse_lazy('influencer:fb_failed'))
+
             # save instagram profile picture
             image = requests.get(ig_user_info_response['profile_picture_url'])
             img_temp = NamedTemporaryFile(delete=True)
