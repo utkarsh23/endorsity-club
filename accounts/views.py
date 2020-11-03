@@ -184,6 +184,7 @@ class BrandCreationView(MultiModelFormView):
                 f'&key={settings.GOOGLE_MAPS_SERVER_API_KEY}')
             resp = json.loads(requests.get(GEOCODE_URI).text)
             lat_lng = resp['results'][0]['geometry']['location']
+            city = ''
             for component in resp['results'][0]['address_components']:
                 if 'locality' in component['types']:
                     city = component['long_name']
@@ -350,7 +351,7 @@ class CompleteBrandRegistrationView(UnregisteredLoginRequiredMixin, FormView):
             start_time=start_time,
             end_time=end_time,
         )
-        end_subscription.apply_async(args=[user.pk], eta=end_time)
+        # end_subscription.apply_async(args=[user.pk], eta=end_time)
         notify_influencers.delay(user.pk)
         notify_add_profile_picture.delay(user.pk)
         return super().form_valid(form)
