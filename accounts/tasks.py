@@ -65,6 +65,6 @@ def send_activation_email(user_pk, site):
     send_mail(
         subject,
         message,
-        'no-reply@endorsity.in',
+        settings.DEFAULT_FROM_EMAIL,
         [user.email],
     )
