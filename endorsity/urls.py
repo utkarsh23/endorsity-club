@@ -17,7 +17,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include, reverse_lazy
-from django.views.generic.base import RedirectView
+from django.views.generic.base import RedirectView, TemplateView
 
 from allauth.socialaccount import providers
 from importlib import import_module
@@ -28,7 +28,8 @@ urlpatterns = [
     path('socialaccount/signup/', RedirectView.as_view(url=reverse_lazy('accounts:account_exists')), name='socialaccount_signup'),
     path('brand/', include('brand.urls')),
     path('influencer/', include('influencer.urls')),
-    path("notifications/", include('notifications.urls')),
+    path('notifications/', include('notifications.urls')),
+    path('privacy-policy/', TemplateView.as_view(template_name='noauth/privacy_policy.html'), name='privacy_policy'),
     path('', include('accounts.urls', namespace='accounts')),
 ]
 
