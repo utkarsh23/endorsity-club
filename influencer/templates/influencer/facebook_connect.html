@@ -1,4 +1,5 @@
 {% extends 'influencer/inactive_base.html' %}
+{% load static %}
 {% block main %}
 <div class="container">
     <div class="i-container"><i class="material-icons">integration_instructions</i></div><br />
@@ -28,6 +29,7 @@
                 <div class="button-container">
                     <a href="{% url 'influencer:fb_verification' %}">
                         <button class="fb-button mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                            <img class="fb-img-width" src="{% static 'fb_logo.png' %}" />&nbsp;&nbsp;&nbsp;
                             Connect To Facebook
                         </button>
                     </a>
@@ -81,12 +83,16 @@
     }
 
     .container .fb-button {
-        background-color: #4267B2 !important;
-        color: #ffffff !important;
+        color: rgb(24, 119, 242) !important;
+        background-color: #ffffff !important;
     }
 
     .button-container {
         text-align: center;
+    }
+
+    .fb-img-width {
+        width: 40px;
     }
 
     @media only screen and (max-width: 900px) {
