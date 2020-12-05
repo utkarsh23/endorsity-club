@@ -17,26 +17,27 @@
 
 <body>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500&family=Eczar&family=Rubik:wght@300;400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500&family=Montserrat:wght@500&display=swap');
 
         * {
-            font-family: 'Rubik', sans-serif;
-            font-weight: 400;
+            font-family: 'Quicksand', sans-serif;
         }
 
         button {
             color: #EEEEEE !important;
-            font-family: 'Rubik', sans-serif !important;
+            font-family: 'Quicksand', sans-serif !important;
             padding-top: 1px !important;
         }
 
         button.mdl-button--colored {
-            color: #161A1D !important;
-            background-color: #EEEEEE !important;
+            color: #fff !important;
+            background-color: #0471ff !important;
+            border-radius: 15px;
+            font-weight: bold;
         }
 
         body {
-            background-color: #161A1D;
+            background-color: #150E41;
         }
 
         .mdl-layout__header {
@@ -58,19 +59,10 @@
         }
 
         .logo-text {
-            font-size: 2em;
+            font-size: 4.5vh;
             padding-left: 10px;
-            font-family: 'Roboto Slab', serif;
+            font-family: 'Quicksand', sans-serif;
             color: #E0E0E0;
-        }
-
-        .mdl-layout__drawer-button {
-            margin-top: 4.5vh;
-        }
-
-        .mdl-layout__drawer-button>i {
-            font-size: 1.2em;
-            color: #EEEEEE;
         }
 
         .mdl-menu a {
@@ -82,57 +74,122 @@
             vertical-align: middle;
             font-size: 1.3em;
         }
+
+        .mdl-layout__drawer.is-visible {
+            width: 15vw;
+        }
+
+        .mdl-layout__header-row {
+            padding: 0 2vw 0 6vw;
+            margin-bottom: 3.5vh;
+        }
+
+        .mdl-layout__drawer-button {
+            margin-top: 38px;
+            height: 7vh;
+            width: 7vh;
+        }
+
+        .mdl-layout__drawer-button>i {
+            font-size: 6vh;
+            color: #EEEEEE;
+        }
+
+        .logo-menu-container {
+            margin: 4vh 1vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .logo-menu-img {
+            height: 10vh;
+        }
+
+        button.logout-btn {
+            color: #b71c1c !important;
+            text-transform: none !important;
+            font-family: 'Montserrat', sans-serif !important;
+            font-size: 3vh;
+        }
+
+        @media only screen and (max-width: 900px) {
+            .logo-text {
+                font-size: 30px;
+            }
+
+            .logo-img {
+                height: 40px;
+            }
+
+            .mdl-layout__drawer-button>i {
+                font-size: 35px;
+            }
+
+            .mdl-layout__drawer-button {
+                width: 35px;
+                height: 35px;
+            }
+
+            button.sidenav-btn {
+                height: 60px;
+            }
+
+            div.mdl-layout__drawer-button {
+                margin-top: calc(3vh + 8px) !important;
+                margin-left: 10px !important;
+            }
+
+            .mdl-layout__drawer.is-visible {
+                width: 50vw;
+            }
+
+            .mdl-layout__drawer.is-visible .mdl-navigation__link {
+                padding: 0;
+            }
+
+            .logo-menu-container {
+                margin: 4vh 1vw;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-decoration: none;
+                border-radius: 5px;
+            }
+
+            .logo-menu-img {
+                height: 10vh;
+            }
+
+            .logo-container {
+                margin: auto;
+            }
+        }
     </style>
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
         <header class="mdl-layout__header">
-            <div class="mdl-layout__header-row">
+            <div class="mdl-layout__header-row logo-container">
                 <a href="{% url 'accounts:landing' %}" class="logo-container">
                     <img src="{% static 'logo.png' %}" alt="Endorsity" class="logo-img" />
-                    <div class="logo-text">ENDORSITY</div>
+                    <div class="logo-text">Endorsity</div>
                 </a>
                 <div class="mdl-layout-spacer"></div>
-                <a href="{% url 'accounts:landing' %}?view=how-it-works" class="mdl-navigation__link">
-                    <button class="mdl-button mdl-js-button">
-                        <i class="material-icons">engineering</i>
-                        &nbsp;How It Works
-                    </button>
-                </a>
-                <a href="{% url 'accounts:landing' %}?view=how-are-we-different" class="mdl-navigation__link">
-                    <button class="mdl-button mdl-js-button">
-                        <i class="material-icons">wb_incandescent</i>
-                        &nbsp;How Are We Different
-                    </button>
-                </a>
-                <a href="{% url 'accounts:landing' %}?view=pricing" class="mdl-navigation__link">
-                    <button class="mdl-button mdl-js-button">
-                        <i class="material-icons">monetization_on</i>
-                        &nbsp;Pricing
-                    </button>
-                </a>
-                <a href="{% url 'accounts:landing' %}?view=faq" class="mdl-navigation__link">
-                    <button class="mdl-button mdl-js-button">
-                        <i class="material-icons">help</i>
-                        &nbsp;FAQ
-                    </button>
-                </a>
-                <a href="{% url 'accounts:landing' %}?view=contact" class="mdl-navigation__link">
-                    <button class="mdl-button mdl-js-button">
-                        <i class="material-icons">question_answer</i>
-                        &nbsp;Contact Us
-                    </button>
-                </a>
-                <button id="settings-menu" class="mdl-button mdl-js-button mdl-button--icon">
-                    <i class="material-icons">account_circle</i>
-                </button>
             </div>
         </header>
-        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="settings-menu">
-            <a href="{% url 'accounts:logout' %}">
-                <li class="mdl-menu__item">
-                    Logout
-                </li>
-            </a>
-        </ul>
+        <div class="mdl-layout__drawer">
+            <div class="logo-menu-container">
+                <img src="{% static 'logo.png' %}" alt="Endorsity" class="logo-menu-img" />
+            </div>
+            <nav class="mdl-navigation">
+                <a href="{% url 'accounts:logout' %}" class="mdl-navigation__link">
+                    <button class="mdl-button mdl-js-button logout-btn">
+                        Logout
+                    </button>
+                </a>
+            </nav>
+        </div>
         <main class="mdl-layout__content">
             <div class="page-content">
                 {% block main %}{% endblock %}

@@ -18,14 +18,14 @@
 </div>
 <style>
     .container {
-        background-color: #EEEEEE;
-        color: #161A1D;
+        background-color: #fff;
+        color: #150E41;
         padding: 2vh 2vh;
         width: 40vw;
         margin-left: 30vw;
         border-radius: 5px;
         font-size: 1.5em;
-        margin-top: 10vh;
+        margin-top: 5vh;
     }
 
     .i-container>i {
@@ -35,12 +35,22 @@
     }
 
     .container .mdl-button {
-        background-color: #161A1D !important;
-        color: #EEEEEE !important;
+        color: #fff !important;
+        background-color: #0471ff !important;
+        border-radius: 15px;
+        font-weight: bold;
     }
 
     .button-container {
         text-align: center;
+    }
+
+    @media only screen and (max-width: 900px) {
+        .container {
+            width: 80vw;
+            margin: auto;
+            margin-top: 5vh;
+        }
     }
 </style>
 {% endblock %}

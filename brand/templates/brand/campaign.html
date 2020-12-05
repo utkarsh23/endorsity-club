@@ -104,19 +104,19 @@
 <div class="container">
     <div class="current-campaign">
         <div class="mdl-grid top-grid">
-            <div class="mdl-cell mdl-cell--4-col left-align">
+            <div class="mdl-cell mdl-cell--6-col left-align">
                 <i class="material-icons active-icon">fiber_manual_record</i>
                 &nbsp;&nbsp;Campaign Active
             </div>
-            <div class="mdl-cell mdl-cell--4-col center-align">
+            <div class="mdl-cell mdl-cell--6-col center-align">
                 <i class="material-icons">dynamic_feed</i>
                 &nbsp;&nbsp;{% posts current_campaign %} influencer posts
             </div>
-            <div class="mdl-cell mdl-cell--4-col right-align">
+            <!-- <div class="mdl-cell mdl-cell--4-col right-align">
                 <i class="material-icons">event_busy</i>
                 &nbsp;&nbsp;Ends on
                 {{ current_campaign.end_time|timezone:"Asia/Kolkata"|date:"j N Y" }}
-            </div>
+            </div> -->
         </div>
     </div>
     <div class="header">
@@ -294,7 +294,7 @@
 
     .current-campaign .top-grid i {
         vertical-align: middle;
-        font-size: 1em;
+        font-size: 20px;
     }
 
     .active-icon {
@@ -302,7 +302,7 @@
     }
 
     .current-campaign .top-grid {
-        font-size: 1.5em;
+        font-size: 15px;
     }
 
     .current-campaign .top-grid .mdl-cell {
@@ -329,7 +329,7 @@
     }
 
     .header {
-        font-size: 2.5em;
+        font-size: 30px;
         font-weight: 300;
         margin-top: 5vh;
         padding-bottom: 2vh;
@@ -358,7 +358,7 @@
     }
 
     .location-grid .mdl-cell--11-col-desktop {
-        font-size: 1.5em;
+        font-size: 20px;
         line-height: 1;
     }
 
@@ -405,7 +405,7 @@
     }
 
     .post-section-top-grid .mdl-cell--11-col {
-        font-size: 2.5em;
+        font-size: 30px;
         font-weight: 300;
         font-family: 'Montserrat', sans-serif
     }
@@ -441,7 +441,7 @@
     }
 
     .post-right-side {
-        font-size: 1.5em;
+        font-size: 20px;
         color: #515151;
     }
 

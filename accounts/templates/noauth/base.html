@@ -121,10 +121,11 @@
 
             nav.mdl-navigation button.mdl-button {
                 color: #161A1D !important;
+                font-size: 0.9em !important;
             }
 
             nav.mdl-navigation button.mdl-button>i {
-                font-size: 20px !important;
+                font-size: 17px !important;
             }
 
             nav.mdl-navigation a {
@@ -190,7 +191,7 @@
         </header>
         <div class="mdl-layout__drawer">
             <div class="logo-menu-container">
-                <img src="{% static 'logo.png' %}" alt="Endorsity" class="logo-menu-img" />
+                <a href="/"><img src="{% static 'logo.png' %}" alt="Endorsity" class="logo-menu-img" /></a>
             </div>
             <nav class="mdl-navigation">
                 <a href="{% url 'accounts:landing' %}?view=how-it-works" class="mdl-navigation__link">

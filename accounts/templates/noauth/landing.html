@@ -297,7 +297,7 @@
     </div>
 </div>
 <div class="contact-footer">
-    Copyright 2020 | All Rights Reserved
+    Made with&nbsp;<span class="heart">&#x2764;</span>&nbsp;in &#x1f1EE;&#x1f1f3;
     <div><a href="{% url 'privacy_policy' %}">Privacy Policy</a></div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11"></script>
@@ -824,6 +824,10 @@
         display: none;
     }
 
+    .heart {
+        color: #e53935;
+    }
+
     @media only screen and (max-width: 900px) {
         .landing-heading {
             font-size: 4vh;
@@ -833,8 +837,8 @@
         }
 
         .landing-section {
-            max-height: 81vh;
-            min-height: 81vh;
+            max-height: fit-content;
+            min-height: fit-content;
         }
 
         .landing-subheading {
@@ -844,7 +848,7 @@
         .landing-wrapper {
             width: 100%;
             padding-left: 0;
-            padding-top: 7vh;
+            padding-top: 3vh;
         }
 
         .signup-buttons {
@@ -865,6 +869,8 @@
 
         .landing-graphic {
             width: 100vw;
+            position: unset;
+            margin-top: 7vh;
         }
 
         .mobile-header {
@@ -1019,6 +1025,8 @@
 
         .contact-heading {
             text-align: center;
+            padding-top: 15px;
+            font-size: 30px;
         }
 
         .contact-content-wrapper {

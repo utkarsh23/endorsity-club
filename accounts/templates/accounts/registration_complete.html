@@ -1,5 +1,13 @@
 {% extends 'noauth/base.html' %}
+{% load static %}
 {% block main %}
+<div class="mobile-header">
+    <a href="{% url 'accounts:landing' %}">
+        <img src="{% static 'logo.png' %}" alt="Endorsity" class="logo-img" />
+        <div class="logo-text">Endorsity</div>
+        <!-- <span class="mdl-layout-title">Endorsity</span> -->
+    </a>
+</div>
 <div class="container">
     <i class="material-icons">check_circle</i><br /><br />
     Great! You have successfully registered.<br /><br />
@@ -23,6 +31,42 @@
 
     .container i {
         font-size: 4em;
+    }
+
+    .mobile-header {
+        display: none;
+    }
+
+    @media only screen and (max-width: 900px) {
+        .container {
+            width: 80vw;
+            margin: auto;
+            margin-top: 10vh;
+        }
+
+        .mdl-layout__drawer-button {
+            margin-top: 2.5vh;
+            border-radius: 50%;
+            background-color: #150E41;
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            border: 1px solid #fff;
+        }
+
+        .mobile-header {
+            display: block;
+            min-height: 13vh;
+            max-height: 13vh;
+        }
+
+        .mobile-header a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 3vh;
+            text-decoration: none;
+        }
     }
 </style>
 {% endblock %}
