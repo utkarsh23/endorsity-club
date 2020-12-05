@@ -39,6 +39,7 @@ urlpatterns = [
             'db_model': Influencer,
             'filters': {
                 'is_verified': True,
+                'user__is_test_account': False
             },
             'order_by': ['-user__created_at'],
             'custom_serializer': influencers_view_serializer,

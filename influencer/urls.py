@@ -52,7 +52,8 @@ urlpatterns = [
             'paginator_count': 12,
             'db_model': Brand,
             'filters': {
-                'is_subscription_active': True,
+                # 'is_subscription_active': True,
+                'user__is_test_account': False,
             },
             'order_by': ['-user__created_at'],
             'custom_serializer': brands_view_serializer,

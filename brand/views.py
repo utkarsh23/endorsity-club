@@ -131,7 +131,7 @@ class InfluencersView(RegisteredBrandLoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['your_influencers'] = (EndorsingPost.objects
-            .filter(campaign__brand__user=self.request.user, complete=True)
+            .filter(campaign__brand__user=self.request.user, complete=True, influencer__user__is_test_account=False)
             .distinct('influencer'))
         return context
 

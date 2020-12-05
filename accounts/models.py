@@ -37,6 +37,7 @@ class User(AbstractBaseUser):
     is_account_activated = models.BooleanField(default=True)
     is_google_account = models.BooleanField(default=True)
     is_registered = models.BooleanField(default=False)
+    is_test_account = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     profile_picture = models.ImageField(upload_to=get_profile_picture_path, blank=True, null=True)
 
