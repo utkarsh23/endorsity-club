@@ -39,6 +39,10 @@
         </div>
     </div>
     <hr />
+    <div class="guidelines-heading">Guidelines</div>
+    <div class="guidelines-content">{{ post.campaign.brand.guidelines  }}</div>
+    <hr />
+    <div class="guidelines-heading">Instructions</div>
     <div class="mdl-grid steps-grid">
         <div class="mdl-cell mdl-cell--1-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
             <button class="mdl-button mdl-js-button mdl-button--fab">
@@ -207,6 +211,18 @@
         font-family: 'Montserrat', sans-serif;
     }
 
+    .guidelines-heading {
+        font-size: 35px;
+        font-family: 'Montserrat', sans-serif;
+        margin-bottom: 4vh;
+    }
+
+    .guidelines-content {
+        white-space: pre-wrap;
+        font-size: 18px;
+        font-family: 'Montserrat', sans-serif;
+    }
+
     .message i {
         font-size: 3em;
         margin-bottom: 2vh;
@@ -247,8 +263,8 @@
     }
 
     hr {
-        margin-top: 0;
-        margin-bottom: 2vh;
+        margin-top: 4vh;
+        margin-bottom: 4vh;
     }
 
     .steps-grid {
@@ -404,8 +420,13 @@
             justify-content: center;
         }
 
+        .guidelines-content {
+            padding: 5px;
+        }
+
         .heading .mdl-cell, .sub-heading .mdl-cell {
             font-size: 18px;
+            text-align: left;
         }
 
         .heading i, .sub-heading i {

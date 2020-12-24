@@ -84,7 +84,7 @@ class BrandCreationForm(forms.ModelForm):
 
     class Meta(object):
         model = Brand
-        fields = ['name', 'phone_number', 'website', 'instagram_handle']
+        fields = ['name', 'phone_number', 'website', 'instagram_handle', 'guidelines']
 
     def clean_phone_number(self):
         phone_number = self.cleaned_data.get("phone_number")
@@ -114,7 +114,7 @@ class BrandChangeForm(forms.ModelForm):
 
     class Meta(object):
         model = Brand
-        fields = ['name', 'phone_number', 'website', 'instagram_handle']
+        fields = ['name', 'phone_number', 'website', 'instagram_handle', 'guidelines']
 
     def clean_phone_number(self):
         phone_number = self.cleaned_data.get("phone_number")

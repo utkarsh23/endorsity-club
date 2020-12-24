@@ -94,6 +94,7 @@ class Brand(models.Model):
     website = models.URLField(max_length=200, blank=True, null=True)
     instagram_handle = models.CharField(max_length=100, blank=True, null=True)
     is_subscription_active = models.BooleanField(default=False)
+    guidelines = models.TextField()
 
     def __str__(self):
         return self.user.email
